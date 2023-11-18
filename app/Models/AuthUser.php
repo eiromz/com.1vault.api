@@ -17,9 +17,12 @@ class AuthUser extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'is_owner',
+        'otp',
+        'otp_expires_at',
+        'role'
     ];
 
     protected $table = 'auth_users';
