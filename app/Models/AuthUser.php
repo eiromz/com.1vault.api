@@ -22,7 +22,9 @@ class AuthUser extends Model
         'is_owner',
         'otp',
         'otp_expires_at',
-        'role'
+        'role',
+        'referral_code',
+        'status'
     ];
 
     protected $table = 'auth_users';
@@ -34,6 +36,7 @@ class AuthUser extends Model
      */
     protected $hidden = [
         'password',
+        'transaction_pin',
         'remember_token',
     ];
 
@@ -44,6 +47,12 @@ class AuthUser extends Model
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'otp_expires_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function knowYourCustomer()
+    {
+        return $this->hasMany(KnowYourCustomer::class,'auth_user_id');
+    }
 }
