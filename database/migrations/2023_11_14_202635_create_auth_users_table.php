@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->index();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone_number', 15);
-            $table->string('password');
+            $table->string('phone_number', 15)->nullable();
+            $table->string('password')->nullable();
             $table->string('role')
                 ->default('business_owner')
                 ->comment('business_owner,employee,admin');
@@ -36,12 +36,12 @@ return new class extends Migration
                 ->unique()
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');
             $table->string('transaction_pin',6)->nullable();
-            $table->string('referral_code',7)->nullable();
+            $table->string('referral_code',7);
+            $table->rememberToken();
             $table->string('otp', 6)->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
-            $table->rememberToken();
             $table->softDeletesTz();
         });
     }

@@ -1,6 +1,10 @@
 <?php
 
-use App\Models\User;
+use App\Models\AuthUser as User;
+
+//test if models can be populated for auth_user
+//test if models can be populated for wallet
+//test if models can be populated for subscription.
 
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
