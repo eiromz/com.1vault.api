@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('know_your_customers', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->foreignUuid('auth_user_id');
+            $table->foreignUuid('customer_id');
             $table->string('doc_type');
             $table->string('doc_number')->unique();
             $table->string('doc_img');

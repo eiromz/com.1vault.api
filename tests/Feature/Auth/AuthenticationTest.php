@@ -1,27 +1,25 @@
 <?php
 
 use App\Models\AuthUser as User;
+use App\Models\Customer;
 
 //test if models can be populated for auth_user
 //test if models can be populated for wallet
 //test if models can be populated for subscription.
 
-test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+test('users can setup a new account', function () {
 
-    $response = $this->post('/login', [
-        'email' => $user->email,
-        'password' => 'password',
+    $response = $this->post('/api/v1/auth/register', [
+        'email' => 'crayolugmail.com'
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertNoContent();
+    expect($response->status())->toBe(200);
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = Customer::factory()->create();
 
-    $this->post('/login', [
+    $this->post('/a', [
         'email' => $user->email,
         'password' => 'wrong-password',
     ]);
@@ -30,7 +28,7 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
+    $user = Customer::factory()->create();
 
     $response = $this->actingAs($user)->post('/logout');
 

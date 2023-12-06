@@ -18,4 +18,16 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('test',function(){
+    return (new \Src\Customer\Domain\Mail\VerificationEmail('123456'))
+        ->to('crayolu@gmail.com');
+});
+
 Route::get('/', WelcomeController::class);
+
+Route::prefix('v1')->middleware('json.response')->group(function(){
+    require __DIR__.'/api/v1/customer.php';
+    require __DIR__.'/api/v1/payment.php';
+    require __DIR__.'/api/v1/service.php';
+});

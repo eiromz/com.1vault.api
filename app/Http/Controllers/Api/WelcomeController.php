@@ -58,6 +58,6 @@ class WelcomeController extends Controller
      */
     public function __invoke()
     {
-        return "welcome to the land of the living";
+        return "Api services for 1vault africa";
     }
 }

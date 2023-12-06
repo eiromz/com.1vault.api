@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->foreignUuid('auth_user_id');
+            $table->foreignUuid('customer_id');
             $table->string('firstname');
             $table->string('lastname');
             $table->string('business_name')->nullable();
