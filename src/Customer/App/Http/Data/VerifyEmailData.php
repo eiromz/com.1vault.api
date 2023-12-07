@@ -35,7 +35,7 @@ class VerifyEmailData extends Data
     /**
      * @throws Exception
      */
-    public function verifyUserEmail()
+    public function execute()
     {
         $this->customer = Customer::where('email',$this->email)
             ->where('otp',$this->otp)->firstOrFail();
@@ -47,6 +47,6 @@ class VerifyEmailData extends Data
         $this->customer->email_verified_at = now();
         $this->customer->status = AccountStatus::ACTIVE->value;
 
-        return $this->customer;
+        return $this->customer->save();
     }
 }

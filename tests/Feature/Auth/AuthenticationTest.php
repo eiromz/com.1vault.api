@@ -3,10 +3,15 @@
 use App\Models\AuthUser as User;
 use App\Models\Customer;
 
-test('Customers can setup a new account', function () {
+test('Customer can resend otp', function () {
 
-    $response = $this->post('/api/v1/auth/register', [
-        'email' => 'crayolu@gmail.com'
+    $customer = Customer::factory()->create([
+        'otp_expires_at'     => now()->addMinutes(15),
+        'email_verified_at'  => now(),
+    ]);
+
+    $response = $this->post('/api/v1/auth/resend-otp', [
+        'email' => $customer->email
     ]);
 
     expect($response->status())->toBe(200);
@@ -21,6 +26,15 @@ test('Verify Customer Email', function () {
     $response = $this->post('/api/v1/auth/verify-email', [
         'email' => $customer->email,
         'otp'   => $customer->otp,
+    ]);
+
+    expect($response->status())->toBe(200);
+});
+
+test('Customers can setup a new account', function () {
+
+    $response = $this->post('/api/v1/auth/register', [
+        'email' => 'crayolu@gmail.com'
     ]);
 
     expect($response->status())->toBe(200);

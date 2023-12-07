@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('doc_number')->unique();
             $table->string('doc_img');
             $table->string('selfie')->nullable();
+            $table->foreignUuid('approved_by_admin')->nullable();
             $table->tinyInteger('status')
                 ->comment('pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5,failed');
             $table->timestamp('created_at')->useCurrent();

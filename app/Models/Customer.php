@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Customer extends Model
+
+class Customer extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable,HasUuids;
 
@@ -33,6 +35,14 @@ class Customer extends Model
     ];
 
     protected $table = 'customers';
+
+    CONST OWNER_ABILITIES = [
+        'wallets','customer','services'
+    ];
+
+    CONST COLLABORATOR_ABILITIES = [
+        'customer','services'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
