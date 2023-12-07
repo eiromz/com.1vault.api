@@ -26,7 +26,7 @@ Route::get('test',function(){
 
 Route::get('/', WelcomeController::class);
 
-Route::prefix('v1')->middleware('json.response')->group(function(){
+Route::prefix('v1')->middleware(['json.response'])->group(function(){
     require __DIR__.'/api/v1/customer.php';
     require __DIR__.'/api/v1/payment.php';
     require __DIR__.'/api/v1/service.php';

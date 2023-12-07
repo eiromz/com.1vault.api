@@ -3,14 +3,24 @@
 use App\Models\AuthUser as User;
 use App\Models\Customer;
 
-//test if models can be populated for auth_user
-//test if models can be populated for wallet
-//test if models can be populated for subscription.
-
-test('users can setup a new account', function () {
+test('Customers can setup a new account', function () {
 
     $response = $this->post('/api/v1/auth/register', [
-        'email' => 'crayolugmail.com'
+        'email' => 'crayolu@gmail.com'
+    ]);
+
+    expect($response->status())->toBe(200);
+});
+
+test('Verify Customer Email', function () {
+
+    $customer = Customer::factory()->create([
+        'otp_expires_at' => now()->addMinutes(15)
+    ]);
+
+    $response = $this->post('/api/v1/auth/verify-email', [
+        'email' => $customer->email,
+        'otp'   => $customer->otp,
     ]);
 
     expect($response->status())->toBe(200);

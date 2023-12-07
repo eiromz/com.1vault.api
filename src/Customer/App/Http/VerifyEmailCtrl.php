@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Src\Customer\App\Http;
+namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DomainBaseCtrl;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Src\Customer\App\Http\Data\VerifyEmailData;
@@ -12,11 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class VerifyEmailCtrl extends DomainBaseCtrl
 {
-    public function store(VerifyEmailData $request): \Illuminate\Http\JsonResponse
+    /**
+     * @throws \Exception
+     */
+    public function store(VerifyEmailData $request): JsonResponse
     {
         $request->toArray();
-        $request->newCustomerInstance()->populate()->save();
-
+        $request->verifyUserEmail()->save();
 
         return jsonResponse(Response::HTTP_OK,$request->customer);
     }

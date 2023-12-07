@@ -29,11 +29,11 @@ class CustomerFactory extends Factory
             'is_owner'                  => true,
             'is_member'                 => false,
             'status'                    => true,
-            'ACCOUNTID'                 => '1V'.randomAuthCode().'AF',
+            'ACCOUNTID'                 => generateAccountId(),
             'transaction_pin'           => 123456,
             'referral_code'             => Str::random(7),
-            'otp'                       => randomAuthCode(),
-            'otp_expires_at'            => now()->addMinutes(15),
+            'otp'                       => generateOtpCode(),
+            'otp_expires_at'            => null,
         ];
     }
 }
