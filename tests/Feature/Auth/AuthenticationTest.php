@@ -5,9 +5,10 @@ use App\Models\Customer;
 
 test('Customer can resend otp', function () {
 
+    //only resend otp for emails that have not been verified
     $customer = Customer::factory()->create([
         'otp_expires_at'     => now()->addMinutes(15),
-        'email_verified_at'  => now(),
+        'email_verified_at'  => null,
     ]);
 
     $response = $this->post('/api/v1/auth/resend-otp', [

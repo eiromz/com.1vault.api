@@ -4,7 +4,10 @@ namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
+use DB;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -23,16 +26,9 @@ class ResendOtpCtrl extends DomainBaseCtrl
                 'email' => ['required','email','exists:App\Models\Customer,email']
             ]);
 
-            $customer = Customer::query()->select(['email','otp','otp_expires_at'])
-                ->where('email',$request->email)
-                ->whereNull('email_verified_at')
-                ->firstOrFail();
+            $customer = $this->getCustomerInfo($request->email);
 
-            if($customer->otp_expires_at->isPast()){
-                $customer->otp = generateOtpCode();
-                $customer->otp_expires_at = now()->addMinutes(15);
-                $customer->save();
-            }
+            $this->otpHasExpired($customer);
 
             Mail::to($customer->email)->queue(new VerificationEmail($customer->otp));
 
@@ -44,5 +40,23 @@ class ResendOtpCtrl extends DomainBaseCtrl
                 'message' => 'Email already verified'
             ]);
         }
+    }
+
+    private function getCustomerInfo($email): Model|Builder
+    {
+        return  Customer::query()->select(['email','otp','otp_expires_at'])
+            ->where('email',$email)
+            ->whereNull('email_verified_at')
+            ->firstOrFail();
+    }
+
+    private function otpHasExpired($customer) : void{
+        DB::beginTransaction();
+            if($customer->otp_expires_at->isPast()){
+                $customer->otp = generateOtpCode();
+                $customer->otp_expires_at = now()->addMinutes(15);
+                $customer->save();
+            }
+        DB::commit();
     }
 }

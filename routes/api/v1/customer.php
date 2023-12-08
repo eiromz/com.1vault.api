@@ -11,6 +11,6 @@ Route::post('auth/verify-email',[VerifyEmailCtrl::class,'store']);
 Route::post('auth/resend-otp',ResendOtpCtrl::class);
 //resend otp
 
-Route::middleware('email.hasBeenVerified')->group(function(){
+Route::middleware(['email.hasBeenVerified','auth:sanctum'])->group(function(){
     Route::post('auth/complete-profile', CompleteCustomerProfileCtrl::class);
 });

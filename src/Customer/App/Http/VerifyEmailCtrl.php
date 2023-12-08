@@ -26,10 +26,11 @@ class VerifyEmailCtrl extends DomainBaseCtrl
 
         $customer = Customer::where('email',$request->customer->email)->first();
 
-        $token = $customer->createToken('usernam',Customer::OWNER_ABILITIES)->plainTextToken;
+        $token = $customer->createToken($name,Customer::OWNER_ABILITIES)->plainTextToken;
 
-        return jsonResponse(Response::HTTP_OK,$token);
+        $customer = $request->customer;
+        $customer->token = $token;
 
-        return jsonResponse(Response::HTTP_OK,$request->customer);
+        return jsonResponse(Response::HTTP_OK,$customer);
     }
 }
