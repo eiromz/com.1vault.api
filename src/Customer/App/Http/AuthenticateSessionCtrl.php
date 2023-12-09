@@ -20,9 +20,11 @@ class AuthenticateSessionCtrl extends DomainBaseCtrl
     {
         $request->authenticate();
 
+        $name = createNameForToken($request->email);
+
         $token = auth()->user()->createToken($name,Customer::OWNER_ABILITIES)->plainTextToken;
 
-        return jsonResponse(ResponseAlias::HTTP_OK,'Welcome');
+        return jsonResponse(ResponseAlias::HTTP_OK,$token);
     }
 
     /**

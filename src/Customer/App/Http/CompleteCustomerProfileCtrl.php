@@ -17,7 +17,7 @@ class CompleteCustomerProfileCtrl extends DomainBaseCtrl
     public function __invoke(CompleteCustomerProfileData $request): \Illuminate\Http\JsonResponse
     {
 
-        $this->customer = is_null($this->customer) ?: auth()->user();
+        $this->customer =  auth()->user();
         $request->toArray();
         $request->execute($this->customer);
         return jsonResponse(Response::HTTP_OK,$this->customer->load('profile'));
