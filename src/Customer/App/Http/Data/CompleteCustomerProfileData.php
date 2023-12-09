@@ -29,7 +29,7 @@ class CompleteCustomerProfileData extends Data
     #[Min(11)]
     public string $phone_number;
 
-    #[Password(min: 8, mixedCase: true, numbers: true, symbols: false, uncompromised: true, uncompromisedThreshold: 0)]
+    #[Password(min: 8, mixedCase: true, numbers: true, symbols: true, uncompromised: true, uncompromisedThreshold: 0)]
     #[Confirmed]
     public string $password;
 
@@ -47,8 +47,9 @@ class CompleteCustomerProfileData extends Data
     public function execute($customer): void
     {
         try {
+            $this->updatePassword($customer);
+
             DB::beginTransaction();
-                $this->updatePassword($customer);
 
                  Profile::query()->createOrFirst([
                     'customer_id'   =>  $customer->id,
@@ -69,6 +70,7 @@ class CompleteCustomerProfileData extends Data
 
     public function updatePassword($customer): void
     {
+        $customer = Customer::query()->find($customer->id);
         $customer->password = Hash::make($this->password);
         $customer->phone_number = $this->phone_number;
         $customer->save();
