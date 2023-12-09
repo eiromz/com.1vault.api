@@ -22,11 +22,11 @@ class VerifyEmailCtrl extends DomainBaseCtrl
         $request->toArray();
         $request->execute();
 
-        $name = str_replace('@','',$request->customer->email);
-
         $customer = Customer::where('email',$request->customer->email)->first();
 
-        $token = $customer->createToken($name,Customer::OWNER_ABILITIES)->plainTextToken;
+        $token = $customer->createToken(
+            createNameForToken($request->customer->email),Customer::OWNER_ABILITIES
+        )->plainTextToken;
 
         $customer = $request->customer;
         $customer->token = $token;

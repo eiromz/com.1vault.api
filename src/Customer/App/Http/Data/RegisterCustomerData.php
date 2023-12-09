@@ -37,8 +37,7 @@ class RegisterCustomerData extends Data
     public ?string $referral_code;
     #[StringType]
     public ?string $otp;
-    #[StringType]
-    public ?string $ACCOUNTID;
+
     public ?object $customer;
 
     public function newCustomerInstance(): object|null

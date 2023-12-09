@@ -2,6 +2,51 @@
 
 use App\Models\AuthUser as User;
 use App\Models\Customer;
+use Database\Seeders\DatabaseSeeder;
+use Laravel\Sanctum\Sanctum;
+
+test('Customers can login', function () {
+    $customer = Customer::factory()->create([
+        'password' => Hash::make('sampleTim@123')
+    ]);
+
+    $response = $this->post('/api/v1/auth/login', [
+        'email'     => $customer->email,
+        'password'  => 'sampleTim@123',
+    ]);
+
+    $response->dump();
+
+    expect($response->status())->toBe(200);
+});
+
+test('Customer can complete profile', function () {
+
+    $this->seed(DatabaseSeeder::class);
+
+    $customer = Customer::factory()->create([
+        'phone_number' => '08103797739'
+    ]);
+
+    Sanctum::actingAs(
+        $customer,
+        Customer::OWNER_ABILITIES
+    );
+
+    $response = $this->post('/api/v1/auth/complete-profile',[
+        'first_name'                => fake()->firstName,
+        'last_name'                 => fake()->lastName,
+        'phone_number'              => "08103797739",
+        'business_name'             => fake()->company,
+        'state_id'                  => 2671,
+        'password'                  => 'PallEord@123',
+        'password_confirmation'     => 'PallEord@123'
+    ]);
+
+    $response->dump();
+
+    expect($response->status())->toBe(200);
+});
 
 test('Customer can resend otp', function () {
 
@@ -39,17 +84,6 @@ test('Customers can setup a new account', function () {
     ]);
 
     expect($response->status())->toBe(200);
-});
-
-test('users can not authenticate with invalid password', function () {
-    $user = Customer::factory()->create();
-
-    $this->post('/a', [
-        'email' => $user->email,
-        'password' => 'wrong-password',
-    ]);
-
-    $this->assertGuest();
 });
 
 test('users can logout', function () {

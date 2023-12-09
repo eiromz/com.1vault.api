@@ -9,7 +9,7 @@ class DomainBaseCtrl extends Controller
 
     public function __construct()
     {
-        $this->auth = auth()?->user()?->load('profile');
-        $this->customer = $this->auth;
+        $this->auth         = auth()->user()?->load('profile');
+        $this->customer     = $this->auth;
     }
 }

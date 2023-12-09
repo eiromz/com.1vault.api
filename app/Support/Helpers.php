@@ -48,9 +48,9 @@ if (! function_exists('generateAccountId')) {
 
 if (! function_exists('jsonResponse')) {
     /**
-     * Generate random auth code.
-     *
-     * @throws Exception
+     * @param $statusCode
+     * @param $data
+     * @return JsonResponse
      */
     function jsonResponse($statusCode, $data): JsonResponse
     {
@@ -58,5 +58,18 @@ if (! function_exists('jsonResponse')) {
             'status' => $statusCode,
             'data' => $data,
         ], $statusCode);
+    }
+}
+
+if (! function_exists('createNameForToken')) {
+    /**
+     * @param $email
+     * @return array|string|string[]
+     */
+    function createNameForToken($email): array|string
+    {
+        $identifier = str_replace('@','',$email);
+        $unix = now()->unix();
+        return "{$identifier}{$unix}";
     }
 }

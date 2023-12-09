@@ -23,7 +23,7 @@ class CustomerFactory extends Factory
             'email'                     => fake()->email,
             'email_verified_at'         => now(),
             'phone_number'              => fake()->phoneNumber,
-            'password'                  => Hash::make('password'),
+            'password'                  => null,
             'role'                      => Role::BUSINESS_OWNER->value,
             'accept_terms_conditions'   => true,
             'is_owner'                  => true,

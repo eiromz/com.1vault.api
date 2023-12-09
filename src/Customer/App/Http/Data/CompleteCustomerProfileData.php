@@ -3,61 +3,74 @@
 namespace Src\Customer\App\Http\Data;
 
 use App\Models\Customer;
-use Spatie\LaravelData\Attributes\Validation\BooleanType;
-use Spatie\LaravelData\Attributes\Validation\Email;
-use Spatie\LaravelData\Attributes\Validation\IntegerType;
+use App\Models\Profile;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Spatie\LaravelData\Attributes\Validation\Confirmed;
+use Spatie\LaravelData\Attributes\Validation\Exists;
+use Spatie\LaravelData\Attributes\Validation\Min;
+use Spatie\LaravelData\Attributes\Validation\Password;
 use Spatie\LaravelData\Attributes\Validation\Required;
-use Spatie\LaravelData\Attributes\Validation\StringType;
-use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
-use Src\Customer\App\Enum\AccountStatus;
-use Src\Customer\App\Enum\Role;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompleteCustomerProfileData extends Data
 {
-    #[StringType]
     #[Required]
-    public bool $first_name = true;
-    #[BooleanType]
-    public bool $is_member = false;
-    #[IntegerType]
-    public int $status = AccountStatus::PENDING->value;
-    #[BooleanType]
-    public bool $accept_terms_conditions = true;
-    #[StringType]
-    public string $role = Role::BUSINESS_OWNER->value;
-    #[StringType]
-    public ?string $referral_code;
-    #[StringType]
-    public ?string $otp;
-    #[StringType]
-    public ?string $ACCOUNTID;
-    public ?object $customer;
+    #[Min(3)]
+    public string $first_name;
 
-    public function newCustomerInstance()
+    #[Required]
+    #[Min(3)]
+    public string $last_name;
+
+    #[Required]
+    #[Min(11)]
+    public string $phone_number;
+
+    #[Password(min: 8, mixedCase: true, numbers: true, symbols: false, uncompromised: true, uncompromisedThreshold: 0)]
+    #[Confirmed]
+    public string $password;
+
+    #[Required]
+    #[Min(3)]
+    public ?string $business_name = 'N/A';
+
+    #[Required]
+    #[Exists('states', 'id')]
+    public int $state_id;
+
+    /**
+     * @throws Exception
+     */
+    public function execute($customer): void
     {
-        $this->referral_code = generateReferralCode();
-        $this->otp = generateOtpCode();
-        $this->ACCOUNTID = generateAccountId();
+        try {
+            DB::beginTransaction();
+                $this->updatePassword($customer);
 
-        $this->customer = new Customer();
+                 Profile::query()->createOrFirst([
+                    'customer_id'   =>  $customer->id,
+                    'firstname'     =>  $this->first_name,
+                    'lastname'      =>  $this->last_name,
+                    'business_name' =>  $this->business_name,
+                    'country_id'    =>  160,
+                    'state_id'      =>  $this->state_id,
+                ]);
 
-        return $this;
+            DB::commit();
+        }
+        catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception('Failed to update customer profile',Response::HTTP_BAD_REQUEST);
+        }
     }
 
-    public function populate()
+    public function updatePassword($customer): void
     {
-        return $this->customer->fill([
-            'email'     => $this->email,
-            'role'          => $this->role,
-            'accept_terms_conditions' => $this->accept_terms_conditions,
-            'is_owner'      => $this->is_owner,
-            'is_member'     => $this->is_member,
-            'status'        => $this->status,
-            'ACCOUNTID'         => $this->ACCOUNTID,
-            'referral_code' => $this->referral_code,
-            'otp' => $this->otp,
-            'otp_expires_at' => now()->addMinutes(15),
-        ]);
+        $customer->password = Hash::make($this->password);
+        $customer->phone_number = $this->phone_number;
+        $customer->save();
     }
 }
