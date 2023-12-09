@@ -24,20 +24,20 @@ class AuthenticateSessionCtrl extends DomainBaseCtrl
 
         $token = auth()->user()->createToken($name,Customer::OWNER_ABILITIES)->plainTextToken;
 
-        return jsonResponse(ResponseAlias::HTTP_OK,$token);
+        return jsonResponse(ResponseAlias::HTTP_OK,[
+            'token' => $token
+        ]);
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): Response
+    public function destroy(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
+        $request->user()->currentAccessToken()->delete();
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return response()->noContent();
+        return jsonResponse(ResponseAlias::HTTP_OK,[
+            'message' => "You have been logged out of your account!"
+        ]);
     }
 }

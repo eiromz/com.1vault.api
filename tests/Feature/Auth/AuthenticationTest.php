@@ -5,6 +5,29 @@ use App\Models\Customer;
 use Database\Seeders\DatabaseSeeder;
 use Laravel\Sanctum\Sanctum;
 
+test('Customers can logout', function () {
+    $this->seed(DatabaseSeeder::class);
+
+    $customer = Customer::factory()->create([
+        'phone_number' => '08103797739',
+        'password' => Hash::make('sampleTim@123')
+    ]);
+
+    Sanctum::actingAs(
+        $customer,
+        Customer::OWNER_ABILITIES
+    );
+
+    $response = $this->post('/api/v1/auth/logout', [
+        'email'     => $customer->email,
+        'password'  => 'sampleTim@123',
+    ]);
+
+    $response->dump();
+
+    expect($response->status())->toBe(200);
+});
+
 test('Customers can login', function () {
     $customer = Customer::factory()->create([
         'password' => Hash::make('sampleTim@123')
