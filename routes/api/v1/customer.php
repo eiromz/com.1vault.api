@@ -15,5 +15,5 @@ Route::post('auth/resend-otp',ResendOtpCtrl::class);
 
 Route::middleware(['email.hasBeenVerified','auth:sanctum'])->group(function(){
     Route::post('auth/complete-profile', CompleteCustomerProfileCtrl::class);
-    Route::get('auth/logout',[AuthenticateSessionCtrl::class,'destroy']);
+    Route::post('auth/logout',[AuthenticateSessionCtrl::class,'destroy']);
 });
