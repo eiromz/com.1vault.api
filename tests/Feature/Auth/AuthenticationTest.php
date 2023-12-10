@@ -18,10 +18,7 @@ test('Customers can logout', function () {
         Customer::OWNER_ABILITIES
     );
 
-    $response = $this->post('/api/v1/auth/logout', [
-        'email'     => $customer->email,
-        'password'  => 'sampleTim@123',
-    ]);
+    $response = $this->get('/api/v1/auth/logout');
 
     $response->dump();
 

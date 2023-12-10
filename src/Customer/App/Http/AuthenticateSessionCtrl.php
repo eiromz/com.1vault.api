@@ -34,7 +34,7 @@ class AuthenticateSessionCtrl extends DomainBaseCtrl
      */
     public function destroy(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        auth()->user()->tokens()->delete();
 
         return jsonResponse(ResponseAlias::HTTP_OK,[
             'message' => "You have been logged out of your account!"

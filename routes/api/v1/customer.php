@@ -10,10 +10,10 @@ use Src\Customer\App\Http\AuthenticateSessionCtrl;
 Route::post('auth/register',[RegisterCustomerCtrl::class,'store']);
 Route::post('auth/verify-email',[VerifyEmailCtrl::class,'store']);
 Route::post('auth/login',[AuthenticateSessionCtrl::class,'store']);
-Route::post('auth/logout',[AuthenticateSessionCtrl::class,'destroy']);
 Route::post('auth/resend-otp',ResendOtpCtrl::class);
 //resend otp
 
 Route::middleware(['email.hasBeenVerified','auth:sanctum'])->group(function(){
     Route::post('auth/complete-profile', CompleteCustomerProfileCtrl::class);
+    Route::get('auth/logout',[AuthenticateSessionCtrl::class,'destroy']);
 });
