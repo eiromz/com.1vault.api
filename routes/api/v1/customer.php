@@ -7,6 +7,7 @@ use Src\Customer\App\Http\ResendOtpCtrl;
 use Src\Customer\App\Http\VerifyEmailCtrl;
 use Src\Customer\App\Http\ForgotPasswordCtrl;
 use Src\Customer\App\Http\VerifyOtpCtrl;
+use Src\Customer\App\Http\ResetPasswordCtrl;
 
 Route::post('auth/register', [RegisterCustomerCtrl::class, 'store']);
 Route::post('auth/verify-email', [VerifyEmailCtrl::class, 'store']);
@@ -14,7 +15,7 @@ Route::post('auth/login', [AuthenticateSessionCtrl::class, 'store']);
 Route::post('auth/resend-otp', ResendOtpCtrl::class);
 Route::post('auth/forgot-password', ForgotPasswordCtrl::class);
 Route::post('auth/verify-otp',VerifyOtpCtrl::class);
-//Route::post('auth/reset-password', [ResetPasswordCtrl::class]);
+Route::post('auth/reset-password', [ResetPasswordCtrl::class]);
 //resend otp
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {

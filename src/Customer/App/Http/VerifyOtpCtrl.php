@@ -26,7 +26,7 @@ class VerifyOtpCtrl extends DomainBaseCtrl
         $this->otpHasExpired($customer);
 
         if($customer->otp_expires_at->isPast()) {
-            return jsonResponse(Response::HTTP_OK, [
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => "Otp expired, please check your registered email for a new otp."
             ]);
         }
