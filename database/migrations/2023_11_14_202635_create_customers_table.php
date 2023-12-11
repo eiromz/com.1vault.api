@@ -33,11 +33,11 @@ return new class extends Migration
                 ->default(1)
 
                 ->comment('pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5');
-            $table->string('ACCOUNTID',12)
+            $table->string('ACCOUNTID', 12)
                 ->unique()
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');
-            $table->string('transaction_pin',6)->nullable();
-            $table->string('referral_code',7);
+            $table->string('transaction_pin', 6)->nullable();
+            $table->string('referral_code', 7);
             $table->rememberToken();
             $table->string('otp', 6)->nullable();
             $table->timestamp('otp_expires_at')->nullable();

@@ -21,20 +21,21 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('test',function(){
+Route::get('test', function () {
     return (new \Src\Customer\Domain\Mail\VerificationEmail('123456'))
         ->to('crayolu@gmail.com');
 });
 
 Route::get('/', WelcomeController::class);
 
-Route::prefix('v1')->middleware(['json.response'])->group(function(){
+Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/customer.php';
     require __DIR__.'/api/v1/payment.php';
     require __DIR__.'/api/v1/service.php';
 });
 
-Route::get('v1/states', function(){
-    $state = State::query()->select(['id','name'])->where('country_id',160)->get();
-    return jsonResponse(Response::HTTP_OK,$state);
+Route::get('v1/states', function () {
+    $state = State::query()->select(['id', 'name'])->where('country_id', 160)->get();
+
+    return jsonResponse(Response::HTTP_OK, $state);
 });

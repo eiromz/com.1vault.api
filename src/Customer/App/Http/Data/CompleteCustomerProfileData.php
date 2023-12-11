@@ -51,20 +51,19 @@ class CompleteCustomerProfileData extends Data
 
             DB::beginTransaction();
 
-                 Profile::query()->createOrFirst([
-                    'customer_id'   =>  $customer->id,
-                    'firstname'     =>  $this->first_name,
-                    'lastname'      =>  $this->last_name,
-                    'business_name' =>  $this->business_name,
-                    'country_id'    =>  160,
-                    'state_id'      =>  $this->state_id,
-                ]);
+            Profile::query()->createOrFirst([
+                'customer_id' => $customer->id,
+                'firstname' => $this->first_name,
+                'lastname' => $this->last_name,
+                'business_name' => $this->business_name,
+                'country_id' => 160,
+                'state_id' => $this->state_id,
+            ]);
 
             DB::commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception('Failed to update customer profile',Response::HTTP_BAD_REQUEST);
+            throw new Exception('Failed to update customer profile', Response::HTTP_BAD_REQUEST);
         }
     }
 

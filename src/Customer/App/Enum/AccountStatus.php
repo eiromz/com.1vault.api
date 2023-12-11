@@ -2,7 +2,7 @@
 
 namespace Src\Customer\App\Enum;
 
-enum AccountStatus:int
+enum AccountStatus: int
 {
     case PENDING = 0;
     case ACTIVE = 1;

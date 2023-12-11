@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
 /**
  * @OA\Info(
  *      version="1.0.0",
@@ -14,13 +14,16 @@ use Illuminate\Http\Request;
  *      },
  *      title="1vault Api",
  *      description="1vault api documentation",
+ *
  *      @OA\Contact(
  *          email="dev@1vault.africa"
  *      ),
+ *
  *     @OA\License(
  *         name="Apache 2.0",
  *         url="https://www.apache.org/licenses/LICENSE-2.0.html"
  *     ),
+ *
  *     @OA\PathItem(
  *       path="/"
  *     )
@@ -28,7 +31,6 @@ use Illuminate\Http\Request;
  */
 class WelcomeController extends Controller
 {
-
     /**
      * @OA\Get(
      *     path="/pet/{petId}",
@@ -36,12 +38,14 @@ class WelcomeController extends Controller
      *     description="Returns a single pet",
      *     operationId="getPetById",
      *     tags={"pet"},
+     *
      *     @OA\Parameter(
      *         description="ID of pet to return",
      *         in="path",
      *         name="petId",
      *         required=true,
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="successful operation",
@@ -58,6 +62,6 @@ class WelcomeController extends Controller
      */
     public function __invoke()
     {
-        return "Api services for 1vault africa";
+        return 'Api services for 1vault africa';
     }
 }

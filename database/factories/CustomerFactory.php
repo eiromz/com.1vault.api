@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Src\Customer\App\Enum\Role;
 
@@ -20,20 +19,20 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'email'                     => fake()->email,
-            'email_verified_at'         => now(),
-            'phone_number'              => fake()->phoneNumber,
-            'password'                  => null,
-            'role'                      => Role::BUSINESS_OWNER->value,
-            'accept_terms_conditions'   => true,
-            'is_owner'                  => true,
-            'is_member'                 => false,
-            'status'                    => true,
-            'ACCOUNTID'                 => generateAccountId(),
-            'transaction_pin'           => 123456,
-            'referral_code'             => Str::random(7),
-            'otp'                       => generateOtpCode(),
-            'otp_expires_at'            => null,
+            'email' => fake()->email,
+            'email_verified_at' => now(),
+            'phone_number' => fake()->phoneNumber,
+            'password' => null,
+            'role' => Role::BUSINESS_OWNER->value,
+            'accept_terms_conditions' => true,
+            'is_owner' => true,
+            'is_member' => false,
+            'status' => true,
+            'ACCOUNTID' => generateAccountId(),
+            'transaction_pin' => 123456,
+            'referral_code' => Str::random(7),
+            'otp' => generateOtpCode(),
+            'otp_expires_at' => null,
         ];
     }
 }

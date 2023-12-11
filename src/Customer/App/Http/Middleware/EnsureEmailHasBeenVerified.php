@@ -3,8 +3,6 @@
 namespace Src\Customer\App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +15,7 @@ class EnsureEmailHasBeenVerified
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(is_null($request->user()->email_verified_at)) {
+        if (is_null($request->user()->email_verified_at)) {
             return response()->json(['message' => 'Your email address is not verified.'], 409);
         }
 

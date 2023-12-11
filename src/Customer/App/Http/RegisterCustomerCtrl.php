@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 class RegisterCustomerCtrl extends DomainBaseCtrl
 {
     /**
-     * @param RegisterCustomerData $request
-     * @return JsonResponse
      * @throws Exception
      */
     public function store(RegisterCustomerData $request): JsonResponse
@@ -24,6 +22,6 @@ class RegisterCustomerCtrl extends DomainBaseCtrl
 
         Mail::to($request->customer->email)->queue(new VerificationEmail($request->customer->otp));
 
-        return jsonResponse(Response::HTTP_OK,$request->customer);
+        return jsonResponse(Response::HTTP_OK, $request->customer);
     }
 }

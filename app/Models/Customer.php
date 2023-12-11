@@ -4,18 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
 
 class Customer extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasUuids;
+    use HasApiTokens, HasFactory, HasUuids,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,17 +31,17 @@ class Customer extends Authenticatable
         'referral_code',
         'account_number',
         'ACCOUNTID',
-        'status'
+        'status',
     ];
 
     protected $table = 'customers';
 
-    CONST OWNER_ABILITIES = [
-        'wallets','customer','services'
+    const OWNER_ABILITIES = [
+        'wallets', 'customer', 'services',
     ];
 
-    CONST COLLABORATOR_ABILITIES = [
-        'customer','services'
+    const COLLABORATOR_ABILITIES = [
+        'customer', 'services',
     ];
 
     /**
@@ -71,11 +68,11 @@ class Customer extends Authenticatable
 
     public function knowYourCustomer(): HasMany
     {
-        return $this->hasMany(KnowYourCustomer::class,'customer_id');
+        return $this->hasMany(KnowYourCustomer::class, 'customer_id');
     }
 
     public function profile(): HasOne
     {
-        return $this->hasOne(Profile::class,'customer_id');
+        return $this->hasOne(Profile::class, 'customer_id');
     }
 }

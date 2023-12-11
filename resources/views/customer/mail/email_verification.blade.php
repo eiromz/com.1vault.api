@@ -2,7 +2,7 @@
 <h1>VERIFICATION EMAIL</h1>
 
 <p>Thank you for choosing {{ config('app.name') }}.</p>
-<p>Use the OTP below to complete your Sign Up.</p>
+<p>Please find your Otp Below </p>
 
 <x-mail::panel>
 <h2>OTP : {{ $otp }} </h2>

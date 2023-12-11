@@ -2,14 +2,10 @@
 
 namespace Src\Customer\App\Http;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Src\Customer\App\Http\Data\VerifyEmailData;
-use Src\Customer\Domain\Mail\VerificationEmail;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerifyEmailCtrl extends DomainBaseCtrl
@@ -22,15 +18,15 @@ class VerifyEmailCtrl extends DomainBaseCtrl
         $request->toArray();
         $request->execute();
 
-        $customer = Customer::where('email',$request->customer->email)->first();
+        $customer = Customer::where('email', $request->customer->email)->first();
 
         $token = $customer->createToken(
-            createNameForToken($request->customer->email),Customer::OWNER_ABILITIES
+            createNameForToken($request->customer->email), Customer::OWNER_ABILITIES
         )->plainTextToken;
 
         $customer = $request->customer;
         $customer->token = $token;
 
-        return jsonResponse(Response::HTTP_OK,$customer);
+        return jsonResponse(Response::HTTP_OK, $customer);
     }
 }
