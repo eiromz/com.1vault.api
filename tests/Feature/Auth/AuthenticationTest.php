@@ -34,7 +34,9 @@ describe('Auth Routes', function () {
     test('Customers reset password using otp', function () {
 
         $response = $this->post('/api/v1/auth/reset-password', [
-            'email' => $this->customer->email,
+            'email'     => $this->customer->email,
+            'password'  => "sampleTim@123",
+            'password_confirmation' => "sampleTim@123",
         ]);
 
         expect($response->status())->toBe(200);
@@ -138,3 +140,8 @@ describe('Auth Routes', function () {
         $response->assertNoContent();
     });
 });
+
+
+//User flow for axa mansards
+//Notifications update is pending on the mobile side
+//Exporting proper data from the damin dashboard has been tested and will be moved to the

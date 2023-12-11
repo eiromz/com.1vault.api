@@ -31,7 +31,7 @@ class ResetPasswordCtrl extends DomainBaseCtrl
             ]);
         }
 
-        Mail::to($customer->email)->queue(new VerificationEmail($customer->otp));
+        //Mail::to($customer->email)->queue(new VerificationEmail($customer->otp));
 
         return jsonResponse(Response::HTTP_OK, [
             'message' => "Successfully Updated Your Password"

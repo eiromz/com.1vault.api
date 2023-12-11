@@ -15,7 +15,7 @@ Route::post('auth/login', [AuthenticateSessionCtrl::class, 'store']);
 Route::post('auth/resend-otp', ResendOtpCtrl::class);
 Route::post('auth/forgot-password', ForgotPasswordCtrl::class);
 Route::post('auth/verify-otp',VerifyOtpCtrl::class);
-Route::post('auth/reset-password', [ResetPasswordCtrl::class]);
+Route::post('auth/reset-password', ResetPasswordCtrl::class);
 //resend otp
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
