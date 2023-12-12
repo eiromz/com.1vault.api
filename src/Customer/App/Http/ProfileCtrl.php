@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileCtrl extends DomainBaseCtrl
 {
+    /**
+     * TODO refactor this method using form request
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $profile = Profile::where('customer_id',auth()->user()->id)->with(['state','customer'])->first();
@@ -28,7 +32,7 @@ class ProfileCtrl extends DomainBaseCtrl
             'firstname'         =>  ['required','string'],
             'lastname'          =>  ['required','string'],
             'phone_number'      =>  ['required','string'],
-            'email'             =>  ['required','unique:App\Models\Customer,email'],
+            'email'             =>  ['nullable','unique:App\Models\Customer,email'],
             'firebase_token'    =>  ['nullable','string'],
             'business_name'     =>  ['nullable','string'],
             'business_physical_address' =>  ['nullable','string'],
@@ -36,10 +40,12 @@ class ProfileCtrl extends DomainBaseCtrl
             'business_logo'     =>  ['nullable','string'],
         ]);
 
+        $emailIsSame = $request->email !== auth()->user()->email;
+
         $customer = Customer::findOrFail($request->user()->id);
         $customer->fill($request->only(['email','phone_number','firebase_token']));
 
-        if($customer->isDirty('email')){
+        if($emailIsSame && $customer->isDirty('email')){
             $customer->email_verified_at = null;
         }
 

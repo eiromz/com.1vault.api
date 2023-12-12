@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Customer;
+use App\Models\Profile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,5 +26,17 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             StateSeeder::class,
         ]);
+
+        $customer = Customer::factory()->create([
+            'password' => Hash::make('sampleTim@123'),
+            'phone_number' => '08103797739',
+            'otp_expires_at' => now(),
+            'email' => 'crayolu@gmail.com'
+        ]);
+
+        Profile::factory()->create([
+            'customer_id' => $customer->id
+        ]);
+
     }
 }
