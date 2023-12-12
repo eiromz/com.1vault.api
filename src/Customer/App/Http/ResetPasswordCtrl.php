@@ -5,9 +5,11 @@ namespace Src\Customer\App\Http;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
 use Hash;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use Src\Customer\Domain\Mail\ResetPasswordMail;
 use Src\Customer\Domain\Mail\VerificationEmail;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +33,7 @@ class ResetPasswordCtrl extends DomainBaseCtrl
             ]);
         }
 
-        //Mail::to($customer->email)->queue(new VerificationEmail($customer->otp));
+        Mail::to($customer->email)->queue(new ResetPasswordMail($customer->email));
 
         return jsonResponse(Response::HTTP_OK, [
             'message' => "Successfully Updated Your Password"

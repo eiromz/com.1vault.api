@@ -19,6 +19,25 @@ describe('Auth Routes', function () {
         ]);
     });
 
+    //delete account
+    //set transaction pin
+    //change transaction pin
+    //change password : current password => new password , password_confirmation
+    //fetch profile information
+    //update profile information
+    //forgot pin
+    test('Customers can view their profile',function(){
+        $response = $this->actingAs($this->customer)->get('/api/v1/profile');
+        $response->dd();
+        expect($response->status())->toBe(200);
+    });
+
+    test('Customers can delete account', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/delete-account');
+
+        expect($response->status())->toBe(200);
+    });
+
     test('Customers verify otp', function () {
 
         $response = $this->post('/api/v1/auth/verify-otp', [
@@ -47,8 +66,6 @@ describe('Auth Routes', function () {
         $response = $this->post('/api/v1/auth/forgot-password', [
             'email' => $this->customer->email,
         ]);
-
-        $response->dump();
 
         expect($response->status())->toBe(200);
     });

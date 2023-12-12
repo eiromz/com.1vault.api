@@ -3,19 +3,20 @@
 namespace Src\Customer\Domain\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationEmail extends Mailable
+class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(protected string $otp)
+    public function __construct(protected string $email)
     {
         //
     }
@@ -26,7 +27,7 @@ class VerificationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Verification Otp',
+            subject: 'Reset Password Mail'
         );
     }
 
@@ -36,9 +37,9 @@ class VerificationEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown : 'customer.mail.email_verification',
-            with: [
-                'otp' => $this->otp,
+            markdown : 'customer.mail.password-reset-mail',
+            with : [
+                'email' => $this->email,
             ]
         );
     }

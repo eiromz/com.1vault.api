@@ -8,6 +8,7 @@ use Src\Customer\App\Http\VerifyEmailCtrl;
 use Src\Customer\App\Http\ForgotPasswordCtrl;
 use Src\Customer\App\Http\VerifyOtpCtrl;
 use Src\Customer\App\Http\ResetPasswordCtrl;
+use Src\Customer\App\Http\ProfileCtrl;
 
 Route::post('auth/register', [RegisterCustomerCtrl::class, 'store']);
 Route::post('auth/verify-email', [VerifyEmailCtrl::class, 'store']);
@@ -21,6 +22,9 @@ Route::post('auth/reset-password', ResetPasswordCtrl::class);
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
     Route::post('auth/complete-profile', CompleteCustomerProfileCtrl::class);
     Route::post('auth/logout', [AuthenticateSessionCtrl::class, 'destroy']);
+    Route::get('profile', [ProfileCtrl::class, 'index']);
+    Route::post('profile/delete-account', [ProfileCtrl::class, 'destroy']);
+    Route::post('profile', [ProfileCtrl::class, 'update']);
     //Route::post('auth/delete-account', [ProfileCtrl::class, 'destroy']);
     //Route::get('auth/profile', [ProfileCtrl::class, 'store']);
     //Route::post('auth/change-password', [ChangePasswordCtrl::class, 'store']);
