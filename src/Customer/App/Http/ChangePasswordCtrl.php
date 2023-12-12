@@ -4,9 +4,9 @@ namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 
-class TransactionPinCtrl extends DomainBaseCtrl
+class ChangePasswordCtrl extends DomainBaseCtrl
 {
-    public function store()
+    public function __invoke()
     {
         //
     }

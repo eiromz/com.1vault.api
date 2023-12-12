@@ -16,12 +16,15 @@ describe('Auth Routes', function () {
         $this->customer = Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '08103797739',
-            'otp_expires_at' => now()
+            'otp_expires_at' => now(),
+            'email' => 'crayolu@gmail.com'
         ]);
 
         $this->profile =  Profile::factory()->create([
-            'customer_id' => $this->customer->id
+            'customer_id' => $this->customer->id,
+            'firstname' => 'Babatunde',
         ]);
+
     });
 
     //delete account
@@ -31,6 +34,23 @@ describe('Auth Routes', function () {
     //fetch profile information
     //update profile information
     //forgot pin
+
+    test('Customers can update their profile',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile',[
+            'firstname'      => fake()->firstName,
+            'lastname'       => fake()->lastName,
+            'phone_number'   => "08139691937",
+            'email'          => fake()->email,
+            'firebase_token' => 'wekjnskdjnkfndfknjsdf',
+            'business_name'  => 'Olubekun',
+            'business_physical_address' => 'Olubekun',
+            'business_zip_code' => 'Olubekun',
+            'business_logo'  => 'Olubekun',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
     test('Customers can view their profile',function(){
         $response = $this->actingAs($this->customer)->get('/api/v1/profile');
         $response->dump();

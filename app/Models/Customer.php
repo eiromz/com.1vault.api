@@ -30,6 +30,8 @@ class Customer extends Authenticatable
         'role',
         'referral_code',
         'account_number',
+        'phone_number',
+        'firebase_token',
         'ACCOUNTID',
         'status',
     ];

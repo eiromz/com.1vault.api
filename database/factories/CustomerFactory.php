@@ -30,7 +30,7 @@ class CustomerFactory extends Factory
             'status' => true,
             'ACCOUNTID' => generateAccountId(),
             'transaction_pin' => 123456,
-            'referral_code' => Str::random(7),
+            'referral_code' => generateReferralCode(),
             'otp' => generateOtpCode(),
             'otp_expires_at' => null,
         ];

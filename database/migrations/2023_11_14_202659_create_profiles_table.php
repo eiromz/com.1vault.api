@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('business_name')->nullable();
+            $table->string('business_physical_address')->nullable();
+            $table->string('business_zip_code')->nullable();
+            $table->string('business_logo')->nullable();
             $table->foreignId('country_id');
             $table->foreignId('state_id');
             $table->string('account_number')->nullable();

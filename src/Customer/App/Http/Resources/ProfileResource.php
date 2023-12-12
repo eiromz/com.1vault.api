@@ -19,9 +19,12 @@ class ProfileResource extends JsonResource
             'firstname'     => $this->firstname,
             'lastname'      => $this->lastname,
             'business_name' => $this->business_name ?? 'N/A',
+            'business_logo' => $this->business_logo ?? 'N/A',
+            'business_zip_address' => $this->business_zip_address ?? 'N/A',
+            'business_physical_address' => $this->business_physical_address ?? 'N/A',
             'account_number' => $this->account_number ?? 'N/A',
-            'state_id'      => (new StateResource($this->whenLoaded('state'))),
-            'customer_id'      => (new CustomerResource($this->whenLoaded('customer'))),
+            'state_id'       => (new StateResource($this->whenLoaded('state'))),
+            'customer_id'    => (new CustomerResource($this->whenLoaded('customer'))),
         ];
     }
 }
