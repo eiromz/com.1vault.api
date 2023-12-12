@@ -9,6 +9,47 @@ use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
+describe('Profile Routes', function(){
+    beforeEach(function () {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->customer = Customer::where('email','crayolu@gmail.com')->with('profile')->first();
+
+    });
+    test('Customers can change their password when logged in',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/change-password',[
+            'current_password'   => 'sampleTim@123',
+            'password'   => 'sampleTim@1234',
+            'password_confirmation'   => 'sampleTim@1234'
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customers can update their profile',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile',[
+            'firstname'      => fake()->firstName,
+            'lastname'       => fake()->lastName,
+            'phone_number'   => "08139691937",
+            'firebase_token' => 'wekjnskdjnkfndfknjsdf',
+            'business_name'  => 'Olubekun',
+            'business_physical_address' => 'Olubekun',
+            'business_zip_code' => 'Olubekun',
+            'business_logo'  => 'Olubekun',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customers can view their profile',function(){
+        $response = $this->actingAs($this->customer)->get('/api/v1/profile');
+        expect($response->status())->toBe(200);
+    });
+    test('Customers can delete account', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/delete-account');
+
+        expect($response->status())->toBe(200);
+    });
+});
+
 describe('Auth Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
@@ -25,42 +66,6 @@ describe('Auth Routes', function () {
             'firstname' => 'Babatunde',
         ]);
 
-    });
-
-    //delete account
-    //set transaction pin
-    //change transaction pin
-    //change password : current password => new password , password_confirmation
-    //fetch profile information
-    //update profile information
-    //forgot pin
-
-    test('Customers can update their profile',function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/profile',[
-            'firstname'      => fake()->firstName,
-            'lastname'       => fake()->lastName,
-            'phone_number'   => "08139691937",
-            'email'          => fake()->email,
-            'firebase_token' => 'wekjnskdjnkfndfknjsdf',
-            'business_name'  => 'Olubekun',
-            'business_physical_address' => 'Olubekun',
-            'business_zip_code' => 'Olubekun',
-            'business_logo'  => 'Olubekun',
-        ]);
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
-
-    test('Customers can view their profile',function(){
-        $response = $this->actingAs($this->customer)->get('/api/v1/profile');
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
-
-    test('Customers can delete account', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/profile/delete-account');
-
-        expect($response->status())->toBe(200);
     });
 
     test('Customers verify otp', function () {
@@ -182,8 +187,3 @@ describe('Auth Routes', function () {
         $response->assertNoContent();
     });
 });
-
-
-//User flow for axa mansards
-//Notifications update is pending on the mobile side
-//Exporting proper data from the damin dashboard has been tested and will be moved to the
