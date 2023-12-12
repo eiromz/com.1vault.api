@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '08103797739',
             'otp_expires_at' => now(),
-            'email' => 'crayolu@gmail.com'
+            'email' => 'crayolu@gmail.com',
+            'transaction_pin' => Hash::make('123456')
         ]);
 
         Profile::factory()->create([

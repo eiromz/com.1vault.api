@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('ACCOUNTID', 12)
                 ->unique()
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');
-            $table->string('transaction_pin', 6)->nullable();
+            $table->string('transaction_pin')->nullable();
             $table->string('referral_code', 7);
             $table->rememberToken();
             $table->string('otp', 6)->nullable();

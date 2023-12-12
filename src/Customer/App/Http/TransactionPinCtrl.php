@@ -13,8 +13,8 @@ class TransactionPinCtrl extends DomainBaseCtrl
     public function store(Request $request)
     {
         $request->validate([
-            'current_pin' => ['required',Password::min(5)->numbers()],
-            'pin' => ['required','confirmed',Password::min(5)->numbers()],
+            'current_pin' => ['required','size:6',Password::min(5)->numbers()],
+            'pin' => ['required','confirmed','size:6',Password::min(5)->numbers()],
             'pin_confirmation' => ['required'],
         ]);
 

@@ -16,6 +16,14 @@ describe('Profile Routes', function(){
         $this->customer = Customer::where('email','crayolu@gmail.com')->with('profile')->first();
 
     });
+    test('Customers can change their transaction pin',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/transaction-pin',[
+            'current_pin'   => '123456',
+            'pin'   => '123455',
+            'pin_confirmation'   => '123455'
+        ]);
+        expect($response->status())->toBe(200);
+    });
     test('Customers can change their password when logged in',function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/change-password',[
             'current_password'   => 'sampleTim@123',
