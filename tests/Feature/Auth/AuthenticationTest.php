@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\Profile;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -17,6 +18,10 @@ describe('Auth Routes', function () {
             'phone_number' => '08103797739',
             'otp_expires_at' => now()
         ]);
+
+        $this->profile =  Profile::factory()->create([
+            'customer_id' => $this->customer->id
+        ]);
     });
 
     //delete account
@@ -28,7 +33,7 @@ describe('Auth Routes', function () {
     //forgot pin
     test('Customers can view their profile',function(){
         $response = $this->actingAs($this->customer)->get('/api/v1/profile');
-        $response->dd();
+        $response->dump();
         expect($response->status())->toBe(200);
     });
 

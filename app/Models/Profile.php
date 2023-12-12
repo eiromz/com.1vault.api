@@ -17,4 +17,8 @@ class Profile extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }

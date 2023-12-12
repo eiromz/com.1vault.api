@@ -73,6 +73,6 @@ class Customer extends Authenticatable
 
     public function profile(): HasOne
     {
-        return $this->hasOne(Profile::class, 'customer_id');
+        return $this->hasOne(Profile::class,'customer_id');
     }
 }

@@ -14,33 +14,14 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class ProfileData extends Data
 {
-    #[Email]
-    #[Required]
-    #[Exists('customers', 'email')]
-    public string $email;
-
-    #[Required]
-    #[Exists('customers', 'otp')]
-    public int $otp;
-
-    #[Nullable]
-    public ?object $customer;
-
-    /**
-     * @throws Exception
-     */
-    public function execute()
-    {
-        $this->customer = Customer::where('email', $this->email)
-            ->where('otp', $this->otp)->firstOrFail();
-
-        if ($this->customer->otp_expires_at->isPast()) {
-            throw new Exception('Otp has expired!', Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $this->customer->email_verified_at = now();
-        $this->customer->status = AccountStatus::ACTIVE->value;
-
-        return $this->customer->save();
-    }
+    public function __construct(
+        public int $id,
+        public int $user_id,
+        public int $product_id,
+        public Currency $amount,
+        public string $status,
+        public string $processed_at,
+        public string $created_at,
+        public string $updated_at,
+    ) {}
 }
