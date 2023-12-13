@@ -12,6 +12,7 @@ use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Password;
 use Spatie\LaravelData\Attributes\Validation\Required;
+use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,6 +27,7 @@ class CompleteCustomerProfileData extends Data
     public string $last_name;
 
     #[Required]
+    #[Unique('customers', 'phone_number')]
     #[Min(11)]
     public string $phone_number;
 
