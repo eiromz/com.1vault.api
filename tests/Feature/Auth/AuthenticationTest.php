@@ -16,12 +16,38 @@ describe('Profile Routes', function(){
         $this->customer = Customer::where('email','crayolu@gmail.com')->with('profile')->first();
 
     });
+    test("Customer can submit kyc information", function(){
+        //selfie
+        //docs
+    });
+    test('Customers can forgot their pin',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/transaction-pin',[
+            'type' => 'forgot',
+            'password'   => 'sampleTim@123',
+            'pin'   => '123455',
+            'pin_confirmation'   => '123455'
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customers can create a transaction pin',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/transaction-pin',[
+            'type' => 'create',
+            'pin'   => '123455',
+            'pin_confirmation'   => '123455'
+        ]);
+
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Customers can change their transaction pin',function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/transaction-pin',[
+            'type' => 'change',
             'current_pin'   => '123456',
             'pin'   => '123455',
             'pin_confirmation'   => '123455'
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Customers can change their password when logged in',function(){

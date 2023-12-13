@@ -39,11 +39,11 @@ class Customer extends Authenticatable
     protected $table = 'customers';
 
     const OWNER_ABILITIES = [
-        'wallets', 'customer', 'services',
+        'wallets', 'customer', 'services','staff','invoices','services',
     ];
 
     const COLLABORATOR_ABILITIES = [
-        'customer', 'services',
+        'customer', 'services','invoices'
     ];
 
     /**

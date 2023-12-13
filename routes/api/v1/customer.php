@@ -29,8 +29,12 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile', [ProfileCtrl::class, 'update']);
     //update transaction pin
     Route::post('profile/transaction-pin',[TransactionPinCtrl::class,'store']);
-    Route::post('profile/forgot-transaction-pin',[TransactionPinCtrl::class,'update']);
     Route::post('profile/change-password',ChangePasswordCtrl::class);
+    Route::post('profile/kyc',ChangePasswordCtrl::class);
+    Route::post('profile/staff',ChangePasswordCtrl::class);
+    Route::post('profile/delete-staff',ChangePasswordCtrl::class);
+    Route::post('profile/create-staff',ChangePasswordCtrl::class);
+    Route::post('profile/update-staff',ChangePasswordCtrl::class);
 
     //Route::post('auth/delete-account', [ProfileCtrl::class, 'destroy']);
     //Route::get('auth/profile', [ProfileCtrl::class, 'store']);
