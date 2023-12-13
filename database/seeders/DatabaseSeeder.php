@@ -38,6 +38,5 @@ class DatabaseSeeder extends Seeder
         Profile::factory()->create([
             'customer_id' => $customer->id
         ]);
-
     }
 }
