@@ -29,18 +29,20 @@ class ProfileCtrl extends DomainBaseCtrl
     public function update(Request  $request): JsonResponse
     {
         $request->validate([
-            'firstname'         =>  ['required','string'],
-            'lastname'          =>  ['required','string'],
-            'phone_number'      =>  ['required','string'],
+            'firstname'         =>  ['nullable','string'],
+            'lastname'          =>  ['nullable','string'],
+            'phone_number'      =>  ['nullable','string'],
             'email'             =>  ['nullable','unique:App\Models\Customer,email'],
             'firebase_token'    =>  ['nullable','string'],
             'business_name'     =>  ['nullable','string'],
             'business_physical_address' =>  ['nullable','string'],
             'business_zip_code' =>  ['nullable','string'],
             'business_logo'     =>  ['nullable','string'],
+            'image'             =>  ['nullable','string'],
         ]);
 
         $emailIsSame = $request->email !== auth()->user()->email;
+
 
         $customer = Customer::findOrFail($request->user()->id);
         $customer->fill($request->only(['email','phone_number','firebase_token']));

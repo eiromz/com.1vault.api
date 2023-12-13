@@ -221,3 +221,5 @@ describe('Auth Routes', function () {
         $response->assertNoContent();
     });
 });
+
+//account id, balance_before, balance_after,account_locked,account_locked_session,restricted,restricted_reason,created_at, updated_at
