@@ -37,7 +37,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile', [ProfileCtrl::class, 'update']);
     //update transaction pin
 
-    Route::post('profile/kyc', KnowYourCustomerCtrl::class)->middleware('kyc.completed');
+    Route::post('profile/kyc', KnowYourCustomerCtrl::class);
 
     Route::post('profile/transaction-pin',[TransactionPinCtrl::class,'store']);
     Route::post('profile/change-password',ChangePasswordCtrl::class);

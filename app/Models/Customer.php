@@ -70,9 +70,9 @@ class Customer extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function knowYourCustomer(): HasMany
+    public function knowYourCustomer(): HasOne
     {
-        return $this->hasMany(KnowYourCustomer::class, 'customer_id');
+        return $this->hasOne(KnowYourCustomer::class, 'customer_id');
     }
 
     public function profile(): HasOne

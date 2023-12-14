@@ -17,7 +17,7 @@ class StaffCtrl extends DomainBaseCtrl
      */
     public function index()
     {
-
+        //i am cac
     }
     public function store(RegisterCustomerData $request): JsonResponse
     {
