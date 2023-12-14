@@ -41,7 +41,6 @@ Route::prefix('v1')->middleware(['json.response'])->group(function () {
 
 Route::get('v1/states', function () {
     $state = State::query()->select(['id', 'name'])->where('country_id', 160)->get();
-
     return jsonResponse(Response::HTTP_OK, $state);
 });
 

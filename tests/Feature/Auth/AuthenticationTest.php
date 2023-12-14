@@ -16,18 +16,18 @@ describe('Profile Routes', function(){
         $this->customer = Customer::where('email','crayolu@gmail.com')->with('profile')->first();
 
     });
-    test("Customer can fetch doc types", function(){
-        $response = $this->actingAs($this->customer)->get('/api/v1/doc-types');
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
     test("Customer can submit kyc information", function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc',[
             'bvn' => '12345678090',
-            'doc_type'   => 'sampleTim@123',
-            'doc_image'   => '123455',
-            'selfie'   => '123455'
+            'doc_type'   => 'drivers_license',
+            'doc_image'   => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'selfie'   => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg'
         ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test("Customer can fetch doc types", function(){
+        $response = $this->actingAs($this->customer)->get('/api/v1/doc-types');
         $response->dump();
         expect($response->status())->toBe(200);
     });

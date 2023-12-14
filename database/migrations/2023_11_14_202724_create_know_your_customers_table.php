@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('know_your_customers', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
             $table->foreignUuid('customer_id');
+            $table->string('bvn');
             $table->string('doc_type');
-            $table->string('doc_number')->unique();
-            $table->string('doc_img');
-            $table->string('selfie')->nullable();
-            $table->foreignUuid('approved_by_admin')->nullable();
+            $table->string('doc_image');
+            $table->string('selfie');
+            $table->foreignUuid('approved_by_admin')->nullable()->comment('Admin id for the approval of the documents');
             $table->tinyInteger('status')
                 ->comment('pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5,failed');
             $table->timestamp('created_at')->useCurrent();
