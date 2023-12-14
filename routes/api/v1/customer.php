@@ -36,17 +36,13 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile/delete-account', [ProfileCtrl::class, 'destroy']);
     Route::post('profile', [ProfileCtrl::class, 'update']);
     //update transaction pin
+
+    Route::post('profile/kyc', KnowYourCustomerCtrl::class)->middleware('kyc.completed');
+
     Route::post('profile/transaction-pin',[TransactionPinCtrl::class,'store']);
     Route::post('profile/change-password',ChangePasswordCtrl::class);
-    Route::post('profile/kyc', KnowYourCustomerCtrl::class);
     Route::post('profile/staff', [StaffCtrl::class,'index']);
     Route::post('profile/delete-staff',[StaffCtrl::class,'destroy']);
     Route::post('profile/create-staff',[StaffCtrl::class,'store']);
     Route::post('profile/update-staff',[StaffCtrl::class,'update']);
-
-    //Route::post('auth/delete-account', [ProfileCtrl::class, 'destroy']);
-    //Route::get('auth/profile', [ProfileCtrl::class, 'store']);
-    //Route::post('auth/change-password', [ChangePasswordCtrl::class, 'store']);
-    //change transaction pin
-    //forgot pin
 });
