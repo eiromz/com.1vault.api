@@ -26,7 +26,10 @@ class KycCompleted
         }
 
         if(in_array($user->knowYourCustomer->status,KnowYourCustomer::STATUS_CODES)){
-            throw new Exception('You have not been authorized to use this service', Response::HTTP_BAD_REQUEST);
+            throw new Exception(
+                'You have not been authorized to use this service',
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
         return $next($request);
