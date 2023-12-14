@@ -11,7 +11,13 @@ class KnowYourCustomer extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'customer_id',
+        'bvn',
+        'doc_type',
+        'doc_image',
+        'selfie'
+    ];
 
     public function customer(): BelongsTo
     {
