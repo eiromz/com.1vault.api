@@ -11,6 +11,8 @@ class KnowYourCustomer extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
