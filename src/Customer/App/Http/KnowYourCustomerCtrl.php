@@ -26,9 +26,12 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
         ]);
 
         $kyc = new KnowYourCustomer();
-        $kyc->fill();
+        $kyc->fill($request->only(['bvn','doc_type','doc_image','selfie']));
+        $kyc->customer_id = auth()->user()->id;
+        $kyc->save();
 
-
-        return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Success We would get back to you as soon as possible.'
+        ]);
     }
 }

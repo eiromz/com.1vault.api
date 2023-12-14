@@ -28,6 +28,7 @@ Route::post('auth/reset-password', ResetPasswordCtrl::class);
 //a middleware that can detect when a person has not completed their registration.
 //a middleware that prevents users from accessing places where they have no abilites for.
 //a middleware that checks if a user has a transaction pin added to their account.
+//kyc validation to generate bank account number middleware for any customer.
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
     Route::post('auth/complete-profile', CompleteCustomerProfileCtrl::class);
     Route::post('auth/logout', [AuthenticateSessionCtrl::class, 'destroy']);
