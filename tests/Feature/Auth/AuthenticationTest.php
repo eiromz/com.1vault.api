@@ -16,9 +16,20 @@ describe('Profile Routes', function(){
         $this->customer = Customer::where('email','crayolu@gmail.com')->with('profile')->first();
 
     });
+    test("Customer can fetch doc types", function(){
+        $response = $this->actingAs($this->customer)->get('/api/v1/doc-types');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test("Customer can submit kyc information", function(){
-        //selfie
-        //docs
+        $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc',[
+            'bvn' => '12345678090',
+            'doc_type'   => 'sampleTim@123',
+            'doc_image'   => '123455',
+            'selfie'   => '123455'
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
     });
     test('Customers can forgot their pin',function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/transaction-pin',[

@@ -2,6 +2,7 @@
 
 use Src\Customer\App\Http\AuthenticateSessionCtrl;
 use Src\Customer\App\Http\CompleteCustomerProfileCtrl;
+use Src\Customer\App\Http\KnowYourCustomerCtrl;
 use Src\Customer\App\Http\RegisterCustomerCtrl;
 use Src\Customer\App\Http\ResendOtpCtrl;
 use Src\Customer\App\Http\TransactionPinCtrl;
@@ -30,7 +31,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     //update transaction pin
     Route::post('profile/transaction-pin',[TransactionPinCtrl::class,'store']);
     Route::post('profile/change-password',ChangePasswordCtrl::class);
-    Route::post('profile/kyc',ChangePasswordCtrl::class);
+    Route::post('profile/kyc', KnowYourCustomerCtrl::class);
     Route::post('profile/staff',ChangePasswordCtrl::class);
     Route::post('profile/delete-staff',ChangePasswordCtrl::class);
     Route::post('profile/create-staff',ChangePasswordCtrl::class);

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\WelcomeController;
 use App\Http\Controllers\UploadCtrl;
+use App\Models\Profile;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,4 +43,8 @@ Route::get('v1/states', function () {
     $state = State::query()->select(['id', 'name'])->where('country_id', 160)->get();
 
     return jsonResponse(Response::HTTP_OK, $state);
+});
+
+Route::get('v1/doc-types', function () {
+    return jsonResponse(Response::HTTP_OK, Profile::DOC_TYPES);
 });
