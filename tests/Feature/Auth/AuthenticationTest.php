@@ -9,6 +9,22 @@ use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
+describe('Wallet Routes', function(){
+    beforeEach(function () {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->customer = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
+
+    });
+
+    //show account number
+    //show transaction history
+    //add to cart
+    //delete from cart
+    //define service
+    //
+});
+
 describe('Profile Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);

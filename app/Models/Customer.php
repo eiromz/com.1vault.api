@@ -69,7 +69,7 @@ class Customer extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected $with = ['account'];
+    protected $with = ['account','knowYourCustomer'];
 
     public function knowYourCustomer(): HasOne
     {
