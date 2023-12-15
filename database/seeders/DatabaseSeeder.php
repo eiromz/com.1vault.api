@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
         ]);
 
-        $customer = Customer::factory()->create([
+        $customer = Customer::factory()->count(5)->create([
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '08103797739',
             'otp_expires_at' => now(),
