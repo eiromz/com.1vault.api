@@ -8,7 +8,6 @@ use App\Models\Profile;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Src\Customer\App\Http\Data\CompleteCustomerProfileData;
 use Symfony\Component\HttpFoundation\Response;
 
 class KnowYourCustomerCtrl extends DomainBaseCtrl
@@ -19,15 +18,23 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
     public function __invoke(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'bvn'           => ['required','size:11'],
-            'doc_type'      => ['required','string',Rule::in(Profile::DOC_TYPES)],
-            'doc_image'     => ['required','string','url'],
-            'selfie'        => ['required','string','url'],
+            'bvn' => ['required', 'size:11'],
+            'doc_type' => ['required', 'string', Rule::in(Profile::DOC_TYPES)],
+            'doc_image' => ['required', 'string', 'url'],
+            'selfie' => ['required', 'string', 'url'],
         ]);
 
+        if(is_null(auth()->user()->image)){
+            $request->user()->fill([
+                'image' => $request->selfie
+            ]);
+
+            $request->user()->save();
+        }
+
         $kyc = new KnowYourCustomer();
-        $kyc->fill($request->only(['bvn','doc_type','doc_image','selfie']));
-        $kyc->customer_id = auth()->user()->id;
+        $kyc->fill($request->only(['bvn', 'doc_type', 'doc_image', 'selfie']));
+        $kyc->customer_id = $request->user()->id;
         $kyc->save();
 
         return jsonResponse(Response::HTTP_OK, [

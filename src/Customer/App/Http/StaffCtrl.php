@@ -19,6 +19,7 @@ class StaffCtrl extends DomainBaseCtrl
     {
         //i am cac
     }
+
     public function store(RegisterCustomerData $request): JsonResponse
     {
         $request->toArray();
@@ -33,6 +34,7 @@ class StaffCtrl extends DomainBaseCtrl
     {
 
     }
+
     public function destroy()
     {
 

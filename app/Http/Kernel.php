@@ -69,6 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'json.response' => JsonResponse::class,
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
-        'kyc.completed' => KycCompleted::class
+        'kyc.completed' => KycCompleted::class,
     ];
 }

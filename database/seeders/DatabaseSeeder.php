@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Customer;
 use App\Models\Profile;
+use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -32,11 +33,15 @@ class DatabaseSeeder extends Seeder
             'phone_number' => '08103797739',
             'otp_expires_at' => now(),
             'email' => 'crayolu@gmail.com',
-            'transaction_pin' => Hash::make('123456')
+            'transaction_pin' => Hash::make('123456'),
         ]);
 
         Profile::factory()->create([
-            'customer_id' => $customer->id
+            'customer_id' => $customer->id,
+        ]);
+
+        Account::factory()->create([
+            'customer_id' => $customer->id,
         ]);
     }
 }

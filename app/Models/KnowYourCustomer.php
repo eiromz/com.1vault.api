@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KnowYourCustomer extends Model
 {
-    use HasFactory, SoftDeletes, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'customer_id',
@@ -18,11 +18,11 @@ class KnowYourCustomer extends Model
         'doc_type',
         'doc_image',
         'selfie',
-        'status'
+        'status',
     ];
 
     const STATUS_CODES = [
-        0,1,2,3,4,5,6
+        0, 1, 2, 3, 4, 5, 6,
     ];
 
     public function customer(): BelongsTo

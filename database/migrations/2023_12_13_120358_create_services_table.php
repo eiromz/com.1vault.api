@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
         });
-//service one time: [type:airtime,bills,data,service],provider[mtn,1vault,IKEDC],amount,SERVICEID=>unique,status
+        //service one time: [type:airtime,bills,data,service],provider[mtn,1vault,IKEDC],amount,SERVICEID=>unique,status
     }
 
     /**

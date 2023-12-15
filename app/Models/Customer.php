@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,11 +40,11 @@ class Customer extends Authenticatable
     protected $table = 'customers';
 
     const OWNER_ABILITIES = [
-        'wallets', 'customer', 'services','staff','invoices','services',
+        'wallets', 'customer', 'services', 'staff', 'invoices', 'services',
     ];
 
     const COLLABORATOR_ABILITIES = [
-        'customer', 'services','invoices'
+        'customer', 'services', 'invoices',
     ];
 
     /**
@@ -70,6 +69,8 @@ class Customer extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $with = ['account'];
+
     public function knowYourCustomer(): HasOne
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id');
@@ -77,6 +78,11 @@ class Customer extends Authenticatable
 
     public function profile(): HasOne
     {
-        return $this->hasOne(Profile::class,'customer_id');
+        return $this->hasOne(Profile::class, 'customer_id');
+    }
+
+    public function account(): HasOne
+    {
+        return $this->hasOne(Account::class);
     }
 }

@@ -4,7 +4,6 @@ namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
-use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
