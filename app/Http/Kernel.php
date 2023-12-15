@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\JsonResponse;
+use App\Http\Middleware\KycCompleted;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Src\Customer\App\Http\Middleware\EnsureEmailHasBeenVerified;
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'json.response' => JsonResponse::class,
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
+        'kyc.completed' => KycCompleted::class,
     ];
 }

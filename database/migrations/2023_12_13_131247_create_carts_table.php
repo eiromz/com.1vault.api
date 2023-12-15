@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
+            $table->string('order_number')->nullable();
             $table->foreignUuid('customer_id');
-            $table->double('balance_before');
-            $table->double('balance_after');
-            $table->boolean('restrict')->default(0);
+            $table->foreignUuid('service_id');
+            $table->double('amount');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('carts');
     }
 };

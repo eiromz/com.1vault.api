@@ -3,6 +3,7 @@
 namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Account;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
 use Src\Customer\App\Http\Data\VerifyEmailData;
@@ -27,6 +28,17 @@ class VerifyEmailCtrl extends DomainBaseCtrl
         $customer = $request->customer;
         $customer->token = $token;
 
+        $this->setupAccount($customer);
+
         return jsonResponse(Response::HTTP_OK, $customer);
+    }
+
+    private function setupAccount($customer): void
+    {
+        Account::query()->create([
+            'customer_id' => $customer->id,
+            'balance_before' => 0,
+            'balance_after' => 0,
+        ]);
     }
 }

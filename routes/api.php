@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Api\WelcomeController;
 use App\Http\Controllers\UploadCtrl;
+use App\Models\Profile;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Aws\S3\S3Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ Route::get('test', function () {
 
 Route::get('/', WelcomeController::class);
 
-Route::post('/v1/upload-file',UploadCtrl::class);
+Route::post('/v1/upload-file', UploadCtrl::class);
 
 Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/customer.php';
@@ -42,4 +42,8 @@ Route::get('v1/states', function () {
     $state = State::query()->select(['id', 'name'])->where('country_id', 160)->get();
 
     return jsonResponse(Response::HTTP_OK, $state);
+});
+
+Route::get('v1/doc-types', function () {
+    return jsonResponse(Response::HTTP_OK, Profile::DOC_TYPES);
 });

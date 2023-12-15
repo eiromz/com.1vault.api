@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
         });
+        //customer_service
         //subscription id,service_id,[charge_type:one-time,recurring],description,amount,trx_ref,source:wallet,subscription_date,expiration_date
     }
 

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
 use App\Models\State;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,11 +18,11 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'firstname'     => fake()->firstName,
-            'lastname'      => fake()->lastName,
+            'firstname' => fake()->firstName,
+            'lastname' => fake()->lastName,
             'business_name' => fake()->company,
-            'country_id'    => 160,
-            'state_id'      => State::where('name','Lagos')->first()->id,
+            'country_id' => 160,
+            'state_id' => State::where('name', 'Lagos')->first()->id,
         ];
     }
 }

@@ -14,12 +14,12 @@ class ForgotPasswordCtrl extends DomainBaseCtrl
     public function __invoke(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'email' => ['required','email','exists:customers,email']
+            'email' => ['required', 'email', 'exists:customers,email'],
         ]);
 
-        $customer = Customer::query()->where('email',$request->email)->firstOrFail();
+        $customer = Customer::query()->where('email', $request->email)->firstOrFail();
 
-        if($customer->otp_expires_at->isPast()){
+        if ($customer->otp_expires_at->isPast()) {
             $customer->otp = generateOtpCode();
             $customer->otp_expires_at = now()->addMinutes(15);
             $customer->save();
@@ -28,7 +28,7 @@ class ForgotPasswordCtrl extends DomainBaseCtrl
         Mail::to($customer->email)->queue(new VerificationEmail($customer->otp));
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => "Otp has been sent to your registered email please check"
+            'message' => 'Otp has been sent to your registered email please check',
         ]);
     }
 }
