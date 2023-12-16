@@ -32,7 +32,11 @@ class ProfileResource extends JsonResource
         ];
     }
 
-    public function profileComplete()
+    /**
+     * Profile has been complete
+     * @return bool
+     */
+    public function profileComplete(): bool
     {
         $return = false;
 
@@ -43,7 +47,11 @@ class ProfileResource extends JsonResource
         return $return;
     }
 
-    public function pinSet()
+    /**
+     * Pin has been set
+     * @return bool
+     */
+    public function pinSet(): bool
     {
         $return = false;
 
@@ -54,7 +62,11 @@ class ProfileResource extends JsonResource
         return $return;
     }
 
-    public function kycComplete()
+    /**
+     * Kyc has been complete
+     * @return bool
+     */
+    public function kycComplete(): bool
     {
         $return = false;
 
