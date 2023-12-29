@@ -6,6 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Wallets\Payments\Domain\Services\CreditEntryJournalService;
 use Src\Wallets\Payments\Domain\Services\ProvidusCreditService;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -16,11 +17,12 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
      */
     public function __invoke(Request $request): JsonResponse
     {
-        $request->validate([
-            'accountNumber' => ['required','exists:App\Models\Profile,account_number']
-        ]);
+//        $request->validate([
+//            'accountNumber' => ['required','exists:App\Models\Profile,account_number']
+//        ]);
 
         $service = new ProvidusCreditService($request);
+        //save the transaction in the database for processing.
 
         $service->isDuplicate();
 
