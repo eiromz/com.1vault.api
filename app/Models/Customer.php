@@ -69,11 +69,11 @@ class Customer extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected $with = ['account','knowYourCustomer'];
+    protected $with = ['account', 'knowYourCustomer'];
 
     public function knowYourCustomer(): HasOne
     {
-        return $this->hasOne(KnowYourCustomer::class, 'customer_id');
+        return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }
 
     public function profile(): HasOne

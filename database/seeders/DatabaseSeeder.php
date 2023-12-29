@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Profile;
-use App\Models\Account;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,6 +42,15 @@ class DatabaseSeeder extends Seeder
 
         Account::factory()->create([
             'customer_id' => $customer->id,
+        ]);
+
+        $admin = Customer::factory()->create([
+            'password' => Hash::make('sampleTim@123'),
+            'phone_number' => '0810379'.fake()->randomNumber(5, true),
+            'otp_expires_at' => now(),
+            'email' => 'crayoluadmin@gmail.com',
+            'transaction_pin' => Hash::make('123456'),
+            'role' => 'admin',
         ]);
     }
 }

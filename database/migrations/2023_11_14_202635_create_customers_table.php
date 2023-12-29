@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('role')
                 ->default('business_owner')
-                ->comment('business_owner,employee,admin');
+                ->comment('Different approved roles : business_owner,employee,admin');
             $table->string('firebase_token')->nullable();
             $table->boolean('accept_terms_conditions')
                 ->default(0);
@@ -31,7 +31,7 @@ return new class extends Migration
                 ->comment('identify if the account is the employee account');
             $table->tinyInteger('status')
                 ->default(1)
-                ->comment('pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5');
+                ->comment('approved status pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5');
             $table->string('ACCOUNTID', 12)
                 ->unique()
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');

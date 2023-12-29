@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/breeze": "^1.26",
         "laravel/framework": "^10.10",
@@ -13,8 +14,10 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "spatie/laravel-data": "^3.10",
-        "fakerphp/faker": "^1.9.1"
+        "saloonphp/laravel-http-sender": "^2.0",
+        "saloonphp/laravel-plugin": "^3.0",
+        "saloonphp/saloon": "^3.0",
+        "spatie/laravel-data": "^3.10"
     },
     "require-dev": {
         "knuckleswtf/scribe": "^4.26",

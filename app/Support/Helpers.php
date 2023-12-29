@@ -69,3 +69,22 @@ if (! function_exists('createNameForToken')) {
         return "{$identifier}{$unix}";
     }
 }
+
+if (! function_exists('logExceptionErrorMessage')) {
+
+    function logExceptionErrorMessage(string $name, $exception, array $context = []): void
+    {
+        $context['class-identifier'] = $name;
+
+        if (! is_null($exception)) {
+            $context = [
+                'message' => $exception->getMessage() ?? 'Nothing to report',
+                'trace' => $exception->getTraceAsString() ?? 'Nothing to report',
+            ];
+        }
+
+        $data = $context;
+
+        logger('error', $data);
+    }
+}

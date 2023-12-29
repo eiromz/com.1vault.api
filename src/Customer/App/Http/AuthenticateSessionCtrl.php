@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class AuthenticateSessionCtrl extends DomainBaseCtrl
 {
     /**
-     * Handle an incoming authentication request.
+     * Create a new session
      */
     public function store(LoginRequest $request): JsonResponse
     {
@@ -28,7 +28,7 @@ class AuthenticateSessionCtrl extends DomainBaseCtrl
     }
 
     /**
-     * Destroy an authenticated session.
+     * Destroy an authenticated session
      */
     public function destroy(Request $request): JsonResponse
     {

@@ -6,6 +6,7 @@ use App\Http\Middleware\JsonResponse;
 use App\Http\Middleware\KycCompleted;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Src\Customer\App\Http\Middleware\EnsureEmailHasBeenVerified;
+use Src\Wallets\Payments\App\Middleware\ProvidusBankOriginVerification;
 
 class Kernel extends HttpKernel
 {
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         'json.response' => JsonResponse::class,
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
         'kyc.completed' => KycCompleted::class,
+        'providus.origin.verification' => ProvidusBankOriginVerification::class
     ];
 }
