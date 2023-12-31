@@ -15,33 +15,32 @@ class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'                        => $this->id,
-            'firstname'                 => $this->firstname,
-            'lastname'                  => $this->lastname,
-            'business_name'             => $this->business_name ?? 'N/A',
-            'business_logo'             => $this->business_logo ?? 'N/A',
-            'business_zip_code'         => $this->business_zip_code ?? 'N/A',
+            'id' => $this->id,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'business_name' => $this->business_name ?? 'N/A',
+            'business_logo' => $this->business_logo ?? 'N/A',
+            'business_zip_code' => $this->business_zip_code ?? 'N/A',
             'business_physical_address' => $this->business_physical_address ?? 'N/A',
-            'account_number'            => $this->account_number ?? 'N/A',
-            'state_id'                  => (new StateResource($this->whenLoaded('state'))),
-            'customer_id'               => (new CustomerResource($this->whenLoaded('customer'))),
-            'account'                   => (new AccountResource($this->whenLoaded('account'))),
-            'profile-complete'          => $this->profileComplete(),
-            'pin-set'                   => $this->pinSet(),
-            'kyc-complete'              => $this->kycComplete()
+            'account_number' => $this->account_number ?? 'N/A',
+            'state_id' => (new StateResource($this->whenLoaded('state'))),
+            'customer_id' => (new CustomerResource($this->whenLoaded('customer'))),
+            'account' => (new AccountResource($this->whenLoaded('account'))),
+            'profile-complete' => $this->profileComplete(),
+            'pin-set' => $this->pinSet(),
+            'kyc-complete' => $this->kycComplete(),
         ];
     }
 
     /**
      * Profile has been complete
-     * @return bool
      */
     public function profileComplete(): bool
     {
         $return = false;
 
-        if(!is_null(auth()->user()->profile)){
-          $return = true;
+        if (! is_null(auth()->user()->profile)) {
+            $return = true;
         }
 
         return $return;
@@ -49,13 +48,12 @@ class ProfileResource extends JsonResource
 
     /**
      * Pin has been set
-     * @return bool
      */
     public function pinSet(): bool
     {
         $return = false;
 
-        if(!is_null(auth()->user()->transaction_pin)){
+        if (! is_null(auth()->user()->transaction_pin)) {
             $return = true;
         }
 
@@ -64,13 +62,12 @@ class ProfileResource extends JsonResource
 
     /**
      * Kyc has been complete
-     * @return bool
      */
     public function kycComplete(): bool
     {
         $return = false;
 
-        if(!is_null(auth()->user()->knowYourCustomer)){
+        if (! is_null(auth()->user()->knowYourCustomer)) {
             $return = true;
         }
 

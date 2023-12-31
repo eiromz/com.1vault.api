@@ -12,6 +12,20 @@ class KnowYourCustomer extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
+    const PENDING = 0;
+
+    const ACTIVE = 1;
+
+    const SUSPENDED = 2;
+
+    const BLOCKED = 3;
+
+    const CONTACT_ADMIN = 4;
+
+    const FRAUD = 5;
+
+    const FAILED = 6;
+
     protected $fillable = [
         'customer_id',
         'bvn',

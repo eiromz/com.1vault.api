@@ -24,9 +24,9 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
             'selfie' => ['required', 'string', 'url'],
         ]);
 
-        if(is_null(auth()->user()->image)){
+        if (is_null(auth()->user()->image)) {
             $request->user()->fill([
-                'image' => $request->selfie
+                'image' => $request->selfie,
             ]);
 
             $request->user()->save();
@@ -38,7 +38,7 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
         $kyc->save();
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Success We would get back to you as soon as possible.'
+            'message' => 'Success We would get back to you as soon as possible.',
         ]);
     }
 }
