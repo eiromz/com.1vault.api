@@ -20,7 +20,7 @@ class CustomerFactory extends Factory
         return [
             'email' => fake()->email,
             'email_verified_at' => now(),
-            'phone_number' => fake()->phoneNumber,
+            'phone_number' => '0810379'.fake()->randomNumber(4, true),
             'password' => null,
             'role' => Role::BUSINESS_OWNER->value,
             'accept_terms_conditions' => true,

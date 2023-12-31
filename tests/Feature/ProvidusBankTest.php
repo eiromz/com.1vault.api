@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Customer;
-use App\Models\KnowYourCustomer;
-use App\Models\Profile;
-use App\Models\State;
+use App\Models\{Customer,KnowYourCustomer,Journal,Profile,State,Account};
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -14,16 +11,14 @@ describe('Auth Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 
-        $this->phone_number = '081037977'.fake()->randomNumber(2, true);
         $this->state = State::query()
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
         $this->customer = Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
-            'phone_number' => $this->phone_number,
             'otp_expires_at' => now()->addMinutes(15),
-            'email' => 'crayoluauth@gmail.com',
+            'email' => 'crayolu1@gmail.com',
         ]);
 
         $this->profile = Profile::factory()->create([
@@ -32,11 +27,17 @@ describe('Auth Routes', function () {
             'account_number' => '9977581536'
         ]);
 
+        $this->account = Account::factory()->create([
+            'customer_id' => $this->customer->id
+        ]);
+
         $this->kyc = KnowYourCustomer::factory()->create([
             'customer_id' => $this->customer->id,
         ]);
 
-        //create the kyc factory to allow for a user generate dummy data for a customer
+        $this->journal = Journal::factory()->create([
+            'customer_id' => $this->customer->id,
+        ]);
     });
 
     test('Customers can reserve a bank account', function () {
@@ -63,6 +64,8 @@ describe('Auth Routes', function () {
             "channelId" => "1",
             "tranDateTime" => "2021-03-01 18:06:20.000"
         ]);
+
+        $response->dump();
 
         expect($response->status())->toBe(200);
     });

@@ -25,6 +25,8 @@ Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/service.php';
 });
 
+//'middleware' => 'throttle:3'
+
 Route::get('v1/states', function () {
     $state = State::query()->select(['id', 'name'])->where('country_id', 160)->get();
 
