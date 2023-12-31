@@ -18,13 +18,8 @@ class GetAccountInstance
      * @param $account_number
      * @return Model
      */
-    public static function getActiveInstance($account_number): Model
+    public static function getActiveInstance($profile): Model
     {
-        $profile = Profile::query()
-            ->where('account_number','=',$account_number)
-            ->with('customer')
-            ->firstOrFail();
-
         $model = Journal::query()
             ->where('customer_id','=',$profile->customer_id)
             ->latest()

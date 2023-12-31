@@ -23,7 +23,7 @@ class KnowYourCustomerFactory extends Factory
             'doc_type' => 'drivers_license',
             'doc_image' => fake()->imageUrl,
             'selfie' => fake()->imageUrl,
-            'approved_by_admin' => Customer::where('role', '=', 'admin')->first()->id,
+            'approved_by_admin' => Customer::query()->where('role', '=', 'admin')->first()->id,
             'status' => KnowYourCustomer::ACTIVE,
         ];
     }

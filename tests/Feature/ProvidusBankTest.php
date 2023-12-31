@@ -11,33 +11,8 @@ describe('Auth Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 
-        $this->state = State::query()
-            ->where('country_id', '=', 160)
-            ->where('name', '=', 'Lagos')->first();
+        $this->customer = Customer::query()->where('email','=','crayolu@gmail.com')->first();
 
-        $this->customer = Customer::factory()->create([
-            'password' => Hash::make('sampleTim@123'),
-            'otp_expires_at' => now()->addMinutes(15),
-            'email' => 'crayolu1@gmail.com',
-        ]);
-
-        $this->profile = Profile::factory()->create([
-            'customer_id' => $this->customer->id,
-            'firstname' => 'Babatunde',
-            'account_number' => '9977581536'
-        ]);
-
-        $this->account = Account::factory()->create([
-            'customer_id' => $this->customer->id
-        ]);
-
-        $this->kyc = KnowYourCustomer::factory()->create([
-            'customer_id' => $this->customer->id,
-        ]);
-
-        $this->journal = Journal::factory()->create([
-            'customer_id' => $this->customer->id,
-        ]);
     });
 
     test('Customers can reserve a bank account', function () {

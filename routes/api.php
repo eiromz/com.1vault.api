@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\WelcomeController;
 use App\Http\Controllers\UploadCtrl;
 use App\Models\Profile;
 use App\Models\State;
+use App\Support\Firebase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Src\Wallets\Payments\App\Http\ProvidusWebhookCtrl;
@@ -14,6 +15,19 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::get('/', WelcomeController::class);
+
+Route::get('/v1/testing', function(){
+    $notification = [
+        'title' => 'Credit Notification',
+        'body' => 'New credit to your account.'
+    ];
+    $customer = \App\Models\Customer::query()
+        ->where('email','=','crayolu@gmail.com')
+        ->with(['profile'])
+        ->first();
+    $firebase = new Firebase($customer->firebase_token);
+    $firebase->sendMessageWithToken($notification,['Transactions']);
+});
 
 Route::post('/v1/pr/webhook/notify', ProvidusWebhookCtrl::class);
 
