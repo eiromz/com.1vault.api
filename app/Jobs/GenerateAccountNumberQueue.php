@@ -22,8 +22,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
-    {
-    }
+    {}
 
     /**
      * Execute the job.
@@ -33,12 +32,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
         try {
             $generateAccountService = new GenerateAccountNumber($this->customer, $this->profile, $this->kyc);
 
-            if (! $generateAccountService->payload['requestSuccessful']) {
-                logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
-                throw new Exception('Request service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-            }
-
-            if ($generateAccountService->payload['responseCode'] === '00') {
+            if (! $generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] === '00') {
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Request service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }

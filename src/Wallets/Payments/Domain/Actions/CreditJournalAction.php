@@ -6,38 +6,36 @@ use App\Models\Journal;
 
 class CreditJournalAction
 {
-    public static function execute($params,$currentBalance,$origin='webhook')
+    public static function execute($params, $currentBalance, $origin = 'webhook')
     {
         try {
 
             $data = [];
 
-            if($origin === 'webhook') {
-                $data = (new self)->webhook($params,$currentBalance);
+            if ($origin === 'webhook') {
+                $data = (new self)->webhook($params, $currentBalance);
             }
 
-//        if($origin === 'service'){
-//            $data = (new self)->service(params);
-//        }
+            //        if($origin === 'service'){
+            //            $data = (new self)->service(params);
+            //        }
 
             \DB::beginTransaction();
 
-                $journal = Journal::query()->create($data);
+            $journal = Journal::query()->create($data);
 
             \DB::commit();
 
             return $journal;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             \DB::rollBack();
-            logExceptionErrorMessage('CreditJournalAction',$e,[]);
+            logExceptionErrorMessage('CreditJournalAction', $e, []);
         }
     }
 
-
-    public function webhook($params,$currentBalance)
+    public function webhook($params, $currentBalance)
     {
-        $c  = $currentBalance;
+        $c = $currentBalance;
         $p = $params;
         $newBalance = ($c->balance_after + $p->transactionAmount);
 
@@ -56,8 +54,6 @@ class CreditJournalAction
             'payload' => json_encode($params->all()),
         ];
     }
-
-
 
     //Account model exists for transaction
 }

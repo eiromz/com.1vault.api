@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileCtrl extends DomainBaseCtrl
 {
-    /**
-     * TODO refactor this method using form request
-     */
     public function index(): JsonResponse
     {
         $profile = Profile::where('customer_id', auth()->user()->id)->with(['state', 'customer'])->first();
@@ -42,7 +39,7 @@ class ProfileCtrl extends DomainBaseCtrl
                 'image' => ['nullable', 'string'],
             ]);
 
-            $customer = Customer::findOrFail($request->user()->id);
+            $customer = Customer::query()->findOrFail($request->user()->id);
             $customer->fill($request->only(['email', 'phone_number', 'firebase_token', 'image']));
 
             if (($request->email !== auth()->user()->email) && $customer->isDirty('email')) {

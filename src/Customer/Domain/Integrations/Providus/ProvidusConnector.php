@@ -10,7 +10,7 @@ class ProvidusConnector extends Connector
     use AcceptsJson;
 
     /**
-     * The Base URL of the API
+     * @return string
      */
     public function resolveBaseUrl(): string
     {

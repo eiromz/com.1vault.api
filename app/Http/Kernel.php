@@ -71,6 +71,6 @@ class Kernel extends HttpKernel
         'json.response' => JsonResponse::class,
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
         'kyc.completed' => KycCompleted::class,
-        'providus.origin.verification' => ProvidusBankOriginVerification::class
+        'providus.origin.verification' => ProvidusBankOriginVerification::class,
     ];
 }

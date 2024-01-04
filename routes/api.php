@@ -16,17 +16,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::get('/', WelcomeController::class);
 
-Route::get('/v1/testing', function(){
+Route::get('/v1/testing', function () {
     $notification = [
         'title' => 'Credit Notification',
-        'body' => 'New credit to your account.'
+        'body' => 'New credit to your account.',
     ];
     $customer = \App\Models\Customer::query()
-        ->where('email','=','crayolu@gmail.com')
+        ->where('email', '=', 'crayolu@gmail.com')
         ->with(['profile'])
         ->first();
     $firebase = new Firebase($customer->firebase_token);
-    $firebase->sendMessageWithToken($notification,['Transactions']);
+    $firebase->sendMessageWithToken($notification, ['Transactions']);
 });
 
 Route::post('/v1/pr/webhook/notify', ProvidusWebhookCtrl::class);

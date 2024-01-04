@@ -2,6 +2,7 @@
 
 namespace Src\Customer\Domain\Services;
 
+use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Customer;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -47,8 +48,19 @@ class GenerateAccountNumber
 
         $response = $connector->send($request);
 
+        if($response->failed()){
+            logExceptionErrorMessage('GenerateAccountNumberService',null,[
+                'message' => 'Failed to generate account number for user'
+            ]);
+        }
+
+        $notification = [
+            'title' => 'Account Number Generation',
+            'body'  => 'Your account number has been generated',
+        ];
+
+        SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $notification)->delay(now()->addMinute());
+
         return $response->json();
     }
-
-    //send email to notify customer of the new account number
 }

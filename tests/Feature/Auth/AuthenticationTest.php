@@ -123,7 +123,7 @@ describe('Auth Routes', function () {
     test('Customers can request a opt for new account', function () {
 
         $response = $this->post('/api/v1/auth/register', [
-            'email' => fake()->email,
+            'email' => 'seun@mailinator.com',
         ]);
 
         expect($response->status())->toBe(200);
