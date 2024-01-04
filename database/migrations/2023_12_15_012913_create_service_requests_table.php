@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('service_requests', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            //service_type => legal,social_media
+            //
         });
     }
 

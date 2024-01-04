@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->string('item_name');
-            $table->double('cost_price');
-            $table->double('selling_price');
-            $table->integer('quantity');
+            $table->string('product_name');
+            $table->double('product_cost_price');
+            $table->double('product_selling_price')->nullable();
+            $table->string('product_description')->nullable();
+            $table->integer('product_quantity');
+            $table->tinyInteger('product_stock_status')->comment('0 for out of stock and 1 for available');
+            $table->boolean('product_is_store_front')->default(0);
+            $table->string('product_image')->nullable();
+            $table->boolean('published')->default();
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
