@@ -21,7 +21,7 @@ return new class extends Migration
             $table->tinyInteger('product_stock_status')->comment('0 for out of stock and 1 for available');
             $table->boolean('product_is_store_front')->default(0);
             $table->string('product_image')->nullable();
-            $table->boolean('published')->default();
+            $table->boolean('published')->default(0);
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
             $table->timestamp('created_at')->useCurrent();

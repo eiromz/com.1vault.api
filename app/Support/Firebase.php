@@ -19,7 +19,7 @@ class Firebase
 
     public string $token;
 
-    private string $filePath = 'uploads/vaultfirebaseadminsdk4951e6a7e1.json';
+    private string $filePath = 'vaultfirebaseadminsdk4951e6a7e1.json';
 
     public function __construct($token)
     {

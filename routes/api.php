@@ -29,7 +29,7 @@ Route::get('/v1/testing', function () {
     $firebase->sendMessageWithToken($notification, ['Transactions']);
 });
 
-Route::post('/v1/pr/webhook/notify', ProvidusWebhookCtrl::class);
+Route::post('/v1/pr/webhook/notify', ProvidusWebhookCtrl::class)->middleware('json.response');
 
 Route::post('/v1/upload-file', UploadCtrl::class);
 
