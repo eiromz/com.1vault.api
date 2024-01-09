@@ -25,7 +25,7 @@ return new class extends Migration
             $table->double('balance_after')->default(0);
             $table->string('label')->nullable();
             $table->string('source')->comment('wallet,card,providus');
-            $table->json('payload')->nullable();
+            $table->jsonb('payload')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
