@@ -50,7 +50,6 @@ return new class extends Migration
             $table->string('attestation',40)->comment('On behalf of');
             $table->string('card_type',20);
             $table->string('signature_link');
-            $table->string('designation');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
