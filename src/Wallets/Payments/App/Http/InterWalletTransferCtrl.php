@@ -36,23 +36,23 @@ class InterWalletTransferCtrl extends DomainBaseCtrl
 
         $notification = [
             'title' => 'Credit Notification',
-            'body'  => "Wallet Credit Notification",
+            'body' => 'Wallet Credit Notification',
         ];
 
-        if(!is_null($profile->customer->firebase_token)){
+        if (! is_null($profile->customer->firebase_token)) {
             SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token, $notification);
         }
 
         AccountBalanceUpdateQueue::dispatch(
-            $newJournalBalance->balance_before, $newJournalBalance->balance_after,$account);
+            $newJournalBalance->balance_before, $newJournalBalance->balance_after, $account);
         //TODO send email notification for when account is credited.
 
         return response()->json([
             'requestSuccessful' => true,
             'sessionId' => $request->sessionId,
             'responseMessage' => 'success',
-            'responseCode' => '00'
-        ],ResponseAlias::HTTP_OK);
+            'responseCode' => '00',
+        ], ResponseAlias::HTTP_OK);
     }
 
     //Airtime::purchase();

@@ -9,9 +9,6 @@ class ProvidusConnector extends Connector
 {
     use AcceptsJson;
 
-    /**
-     * @return string
-     */
     public function resolveBaseUrl(): string
     {
         return (string) config('providus-bank.base_url');

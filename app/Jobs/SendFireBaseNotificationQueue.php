@@ -28,7 +28,7 @@ class SendFireBaseNotificationQueue implements ShouldQueue
      */
     public function handle(): void
     {
-        if(!is_null($this->token)) {
+        if (! is_null($this->token)) {
             $firebase = new Firebase($this->token);
             $firebase->sendMessageWithToken($this->notification, $this->notification);
         }

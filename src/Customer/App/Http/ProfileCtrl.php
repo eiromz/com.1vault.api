@@ -4,7 +4,6 @@ namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
-use App\Models\ErrorCodes;
 use App\Models\Profile;
 use Exception;
 use Illuminate\Http\JsonResponse;

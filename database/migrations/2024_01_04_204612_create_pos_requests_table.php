@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('category');
 
             $table->string('office_address');
-            $table->string('local_govt_area',30);
+            $table->string('local_govt_area', 30);
             $table->foreignId('state_id');
 
             $table->jsonb('contact_person')->nullable();
@@ -30,7 +30,6 @@ return new class extends Migration
             $table->jsonb('business_mobile_phone_number')->comment('accepts multiple data as an array')->nullable();
             $table->jsonb('email_address')->comment('accepts multiple data as an array')->nullable();
 
-
             $table->jsonb('pos_outlet_number_of_terminals')->comment('accepts multiple data as an array')->nullable();
             $table->jsonb('pos_outlet_location_of_terminals')->comment('accepts multiple data as an array')->nullable();
             $table->jsonb('pos_outlet_contact_person')->comment('accepts multiple data as an array')->nullable();
@@ -38,18 +37,18 @@ return new class extends Migration
             $table->jsonb('pos_outlet_location_of_terminal')->comment('accepts multiple data as an array')->nullable();
 
             $table->boolean('receive_notification')->default(0);
-            $table->string('notification_email_address',40)->nullable();
-            $table->string('notification_phone_number',20)->nullable();
+            $table->string('notification_email_address', 40)->nullable();
+            $table->string('notification_phone_number', 20)->nullable();
             $table->boolean('real_time_transaction_viewing')->default(0);
 
-            $table->string('settlement_account_name',20);
-            $table->string('settlement_account_number',20);
-            $table->string('settlement_branch',30);
+            $table->string('settlement_account_name', 20);
+            $table->string('settlement_account_number', 20);
+            $table->string('settlement_branch', 30);
 
             $table->longText('other_information')->nullable();
-            $table->string('attestation',40)->comment('On behalf of');
-            $table->string('card_type',20);
-            $table->string('signature_link');
+            $table->string('attestation', 40)->comment('On behalf of');
+            $table->string('card_type', 20);
+            $table->string('signature_pdf_link');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Account;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,7 +17,7 @@ class AccountBalanceUpdateQueue implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public $balance_before,public $balance_after, public $accountBalance)
+    public function __construct(public $balance_before, public $balance_after, public $accountBalance)
     {
         //
     }
@@ -30,28 +29,28 @@ class AccountBalanceUpdateQueue implements ShouldQueue
     {
         try {
             $fetchAccount = Account::query()
-                ->where('customer_id','=',$this->accountBalance->customer_id)
+                ->where('customer_id', '=', $this->accountBalance->customer_id)
                 ->firstOrFail();
 
             $fetchAccount->balance_before = $this->balance_before;
-            $fetchAccount->balance_after  = $this->balance_after;
+            $fetchAccount->balance_after = $this->balance_after;
 
-            if(!$fetchAccount->save()){
-                logExceptionErrorMessage('AccountBalanceUpdateQueue',null,[
+            if (! $fetchAccount->save()) {
+                logExceptionErrorMessage('AccountBalanceUpdateQueue', null, [
                     'customer_id' => $this->accountBalance->customer_id,
                     'balance_before' => $this->balance_before,
                     'balance_after' => $this->balance_after,
                 ]);
             }
 
-            logExceptionErrorMessage('AccountBalanceUpdateQueue',null,[
+            logExceptionErrorMessage('AccountBalanceUpdateQueue', null, [
                 'customer_id' => $this->accountBalance->customer_id,
                 'balance_before' => $this->balance_before,
                 'balance_after' => $this->balance_after,
             ]);
 
         } catch (Exception $e) {
-            logExceptionErrorMessage('AccountBalanceUpdateQueue',$e);
+            logExceptionErrorMessage('AccountBalanceUpdateQueue', $e);
         }
     }
 }

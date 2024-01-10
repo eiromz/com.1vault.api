@@ -6,7 +6,7 @@ use App\Models\Journal;
 
 class AccountBalanceUpdateAction
 {
-    public static function execute($balance_before,$balance_after,$account)
+    public static function execute($balance_before, $balance_after, $account)
     {
         try {
 
@@ -32,7 +32,6 @@ class AccountBalanceUpdateAction
             logExceptionErrorMessage('CreditJournalAction', $e, []);
         }
     }
-
 }
 
 //automated account update for a user once a transaction happens

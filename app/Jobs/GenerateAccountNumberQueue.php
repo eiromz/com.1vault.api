@@ -22,7 +22,8 @@ class GenerateAccountNumberQueue implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
-    {}
+    {
+    }
 
     /**
      * Execute the job.

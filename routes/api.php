@@ -1,6 +1,6 @@
 <?php
+
 use App\Http\Controllers\Api\WelcomeController;
-use App\Http\Controllers\UploadCtrl;
 use App\Models\Customer;
 use App\Support\Firebase;
 use Illuminate\Support\Facades\Route;
@@ -20,8 +20,6 @@ Route::get('/v1/testing', function () {
     $firebase->sendMessageWithToken($notification, ['Transactions']);
 });
 
-Route::post('/v1/upload-file', UploadCtrl::class);
-
 Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/customer.php';
     require __DIR__.'/api/v1/payment.php';
@@ -29,5 +27,3 @@ Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/accounting.php';
     require __DIR__.'/api/v1/general.php';
 });
-
-//'middleware' => 'throttle:3'
