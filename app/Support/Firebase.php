@@ -19,10 +19,11 @@ class Firebase
 
     public string $token;
 
-    private string $filePath = 'vaultfirebaseadminsdk4951e6a7e1.json';
+    private string $filePath;
 
     public function __construct($token)
     {
+        $this->filePath=config('app.firebase_service_file');
         $this->storage = Storage::disk('local')->get($this->filePath);
         $this->factory = (new Factory)->withServiceAccount($this->storage);
         $this->messaging = $this->factory->createMessaging();
