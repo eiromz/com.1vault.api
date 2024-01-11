@@ -51,11 +51,11 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
             'body' => 'Wallet Credit Notification',
         ];
 
-        if (! is_null($profile->customer->firebase_token)) {
-            $firebase = new Firebase($profile->customer->firebase_token);
-            $firebase->sendMessageWithToken($notification, $notification);
-            //SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token, $notification);
-        }
+//        if (! is_null($profile->customer->firebase_token)) {
+//            $firebase = new Firebase($profile->customer->firebase_token);
+//            $firebase->sendMessageWithToken($notification, $notification);
+//            //SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token, $notification);
+//        }
 
         AccountBalanceUpdateQueue::dispatch(
             $newJournalBalance->balance_before, $newJournalBalance->balance_after, $account);

@@ -87,6 +87,7 @@ describe('Auth Routes', function () {
             'password' => 'PallEord@123',
             'password_confirmation' => 'PallEord@123',
         ]);
+        $response->dump();
 
         expect($response->status())->toBe(200);
     });
