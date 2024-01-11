@@ -24,7 +24,7 @@ class Firebase
     public function __construct($token)
     {
         $this->filePath=config('app.firebase_service_file');
-        $this->storage = Storage::disk('local')->get($this->filePath);
+        $this->storage = Storage::disk('do')->get($this->filePath);
         $this->factory = (new Factory)->withServiceAccount($this->storage);
         $this->messaging = $this->factory->createMessaging();
         $this->token = $token;
@@ -32,6 +32,7 @@ class Firebase
 
     public function sendMessageWithToken(array $notification, array $data): void
     {
+        dd($this->filePath);
         try {
             $message = CloudMessage::withTarget('token', $this->token)
                 ->withNotification($this->notification($notification))

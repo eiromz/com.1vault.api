@@ -15,11 +15,18 @@ class ProfileCtrl extends DomainBaseCtrl
 {
     public function index(): JsonResponse
     {
-        $profile = Profile::query()->where('customer_id', auth()->user()->id)->with(['state', 'customer'])->first();
+        try {
+            $profile = Profile::query()->where('customer_id', auth()->user()->id)->with(['state', 'customer'])->firstOrFail();
 
-        return jsonResponse(Response::HTTP_OK,
-            new ProfileResource($profile)
-        );
+            return jsonResponse(Response::HTTP_OK,
+                new ProfileResource($profile)
+            );
+        }
+        catch (Exception $e){
+            return \jsonResponse(Response::HTTP_BAD_REQUEST,[
+                'message' => 'Profile has not been set'
+            ]);
+        }
     }
 
     public function update(Request $request): JsonResponse

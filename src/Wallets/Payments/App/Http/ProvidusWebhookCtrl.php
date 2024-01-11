@@ -7,6 +7,7 @@ use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Journal;
 use App\Models\Profile;
+use App\Support\Firebase;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,7 +52,9 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
         ];
 
         if (! is_null($profile->customer->firebase_token)) {
-            SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token, $notification);
+            $firebase = new Firebase($profile->customer->firebase_token);
+            $firebase->sendMessageWithToken($notification, $notification);
+            //SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token, $notification);
         }
 
         AccountBalanceUpdateQueue::dispatch(

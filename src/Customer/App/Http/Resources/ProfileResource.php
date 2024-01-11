@@ -37,13 +37,7 @@ class ProfileResource extends JsonResource
      */
     public function profileComplete(): bool
     {
-        $return = false;
-
-        if (! is_null(auth()->user()->profile)) {
-            $return = true;
-        }
-
-        return $return;
+        return !is_null(auth()->user()->profile);
     }
 
     /**
@@ -51,13 +45,7 @@ class ProfileResource extends JsonResource
      */
     public function pinSet(): bool
     {
-        $return = false;
-
-        if (! is_null(auth()->user()->transaction_pin)) {
-            $return = true;
-        }
-
-        return $return;
+        return !is_null(auth()->user()->transaction_pin);
     }
 
     /**
@@ -65,12 +53,6 @@ class ProfileResource extends JsonResource
      */
     public function kycComplete(): bool
     {
-        $return = false;
-
-        if (! is_null(auth()->user()->knowYourCustomer)) {
-            $return = true;
-        }
-
-        return $return;
+        return !is_null(auth()->user()->knowYourCustomer);
     }
 }

@@ -13,6 +13,15 @@ describe('Profile Routes', function () {
 
         $this->customer = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
 
+        $this->customerWithOutProfile = Customer::factory()->create([
+            'email' => 'crayoluman@gmail.com'
+        ]);
+    });
+
+    test('Customer has not completed his profile', function () {
+        $response = $this->actingAs($this->customerWithOutProfile)->get('/api/v1/profile');
+        $response->dump();
+        expect($response->status())->toBe(200);
     });
     test('Customer can submit kyc information', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc', [
