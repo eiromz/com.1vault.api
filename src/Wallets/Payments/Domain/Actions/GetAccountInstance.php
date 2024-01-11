@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GetAccountInstance
 {
-    public $model;
-
     /**
      * Check if a customer has made any transaction
      * once there is no transaction go and get the account model object

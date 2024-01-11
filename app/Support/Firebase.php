@@ -17,7 +17,7 @@ class Firebase
 
     public object $messaging;
 
-    public string $token;
+    public $token;
 
     private string $filePath;
 
@@ -32,8 +32,9 @@ class Firebase
 
     public function sendMessageWithToken(array $notification, array $data): void
     {
-        dd($this->filePath);
         try {
+            if (is_null($this->token)) return;
+
             $message = CloudMessage::withTarget('token', $this->token)
                 ->withNotification($this->notification($notification))
                 ->withData($data);
