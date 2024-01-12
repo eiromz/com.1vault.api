@@ -35,7 +35,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
 
             if (! $generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] === '00') {
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
-                throw new Exception('Request service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+                throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             $generateAccountService->save();

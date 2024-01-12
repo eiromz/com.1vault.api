@@ -259,7 +259,7 @@ async function executeTryOut(endpointId, form) {
         })
         .catch(err => {
             if (err.name === "AbortError") {
-                console.log("Request cancelled");
+                console.log("Requests cancelled");
                 return;
             }
             console.log("Error while making request: ", err);

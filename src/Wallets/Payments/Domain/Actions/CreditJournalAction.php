@@ -16,10 +16,6 @@ class CreditJournalAction
                 $data = (new self)->webhook($params, $currentBalance);
             }
 
-            //        if($origin === 'service'){
-            //            $data = (new self)->service(params);
-            //        }
-
             \DB::beginTransaction();
 
             $journal = Journal::query()->create($data);

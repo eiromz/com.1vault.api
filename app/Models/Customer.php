@@ -54,7 +54,6 @@ class Customer extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'transaction_pin',
         'remember_token',
     ];
 

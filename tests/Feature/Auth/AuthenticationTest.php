@@ -118,6 +118,8 @@ describe('Auth Routes', function () {
             'otp' => $this->customer->otp,
         ]);
 
+        $response->dump();
+
         expect($response->status())->toBe(200);
     });
 

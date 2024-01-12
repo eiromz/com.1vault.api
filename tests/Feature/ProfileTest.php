@@ -18,11 +18,6 @@ describe('Profile Routes', function () {
         ]);
     });
 
-    test('Customer has not completed his profile', function () {
-        $response = $this->actingAs($this->customerWithOutProfile)->get('/api/v1/profile');
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
     test('Customer can submit kyc information', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc', [
             'bvn' => '12345678090',

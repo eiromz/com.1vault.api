@@ -8,6 +8,7 @@ use App\Models\Profile;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Customer\App\Http\Resources\CustomerResource;
 use Src\Customer\App\Http\Resources\ProfileResource;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,10 +17,10 @@ class ProfileCtrl extends DomainBaseCtrl
     public function index(): JsonResponse
     {
         try {
-            $profile = Profile::query()->where('customer_id', auth()->user()->id)->with(['state', 'customer'])->firstOrFail();
+            $profile = Profile::query()->where('customer_id', auth()->user()->id)->with('customer')->firstOrFail();
 
             return jsonResponse(Response::HTTP_OK,
-                new ProfileResource($profile)
+                new CustomerResource($profile->customer)
             );
         }
         catch (Exception $e){
