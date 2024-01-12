@@ -4,5 +4,5 @@ namespace Src\Accounting\Domain\Repository\Interfaces;
 
 interface BusinessRepositoryInterface
 {
-    public function create(array $businessDetails);
+    public function create(array $details);
 }

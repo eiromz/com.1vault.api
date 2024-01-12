@@ -13,6 +13,7 @@ describe('Business Routes', function () {
         $this->seed(DatabaseSeeder::class);
 
         $this->customer = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
+        //$this->customerMember = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
         $this->state = State::query()
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();

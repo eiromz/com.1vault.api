@@ -6,6 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Src\Accounting\App\Requests\CreateBusinessInformationRequest;
+use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,9 +14,9 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 {
     private $repository;
 
-    public function __construct(BusinessRepositoryInterface $businesRepository)
+    public function __construct(BusinessRepositoryInterface $repository)
     {
-        $this->repository = $businesRepository;
+        $this->repository = $repository;
         parent::__construct();
     }
     /**
@@ -27,7 +28,11 @@ class BusinessInformationCtrl extends DomainBaseCtrl
             'fullname' => $request->name,
         ]);
         $request->validated();
+
+        $data = $this->repository->create(
+            $request->only(['email','fullname','logo','phone_number','address','state_id','zip_code'])
+        );
         //create a business information from the api data
-        return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
+        return jsonResponse(Response::HTTP_OK, $data);
     }
 }

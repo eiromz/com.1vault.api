@@ -3,9 +3,11 @@
 namespace Src\Accounting\Domain\Repository;
 
 use App\Models\Business;
-use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
+use App\Models\Customer;
+use Illuminate\Support\Arr;
+use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
 
-class BusinessRepository extends BaseRepository implements ClientRepositoryInterface
+class BusinessRepository extends BaseRepository implements BusinessRepositoryInterface
 {
     /**
      * UserRepository constructor.
@@ -14,5 +16,13 @@ class BusinessRepository extends BaseRepository implements ClientRepositoryInter
     public function __construct(Business $model)
     {
         parent::__construct($model);
+    }
+
+    public function create(array $details)
+    {
+        Arr::set($details,'customer_id',$this->customer);
+        Arr::set($details,'collaborator_id',$this->collaborator);
+
+        return $this->model->query()->create($details);
     }
 }
