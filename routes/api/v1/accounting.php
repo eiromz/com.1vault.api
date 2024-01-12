@@ -1,8 +1,8 @@
 <?php
 
-use Src\Accounting\App\Http\BusinsessInformationCtrl;
+use Src\Accounting\App\Http\BusinessInformationCtrl;
+use Src\Accounting\App\Http\ClientCtrl;
 
-Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
-    //Route::post('business', BusinsessInformationCtrl::class);
-    //Route::post('business', [AuthenticateSessionCtrl::class, 'destroy']);
-});
+
+Route::post('/client',[ClientCtrl::class,'store']);
+Route::post('/business',[BusinessInformationCtrl::class,'store']);

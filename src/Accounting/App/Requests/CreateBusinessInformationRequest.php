@@ -19,7 +19,13 @@ class CreateBusinessInformationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'          => ['required','min:2'],
+            'phone_number'  => ['required','min:11'],
+            'email'         => ['required','email','unique:App\Models\Business,email'],
+            'address'       => ['required','min:3'],
+            'state_id'      => ['required','exists:App\Models\State,id'],
+            'zip_code'      => ['required','string'],
+            'logo'          => ['required','url'],
         ];
     }
 }

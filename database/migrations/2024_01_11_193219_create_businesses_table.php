@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('address')->comment('The business physical address')->nullable();
             $table->foreignId('state_id')->comment('provide your state of residence')->nullable();
             $table->string('logo')->comment('logo in string for the business')->nullable();
-            $table->string('zipcode')->nullable();
+            $table->string('zip_code')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

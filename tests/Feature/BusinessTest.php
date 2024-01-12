@@ -19,7 +19,7 @@ describe('Business Routes', function () {
     });
 
     test('Customer can create a business', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/client', [
+        $response = $this->actingAs($this->customer)->post('/api/v1/business', [
             'name'          => '12345678090',
             'phone_number'  => 'drivers_license',
             'email'         => 'crayolubiz@gmail.com',
