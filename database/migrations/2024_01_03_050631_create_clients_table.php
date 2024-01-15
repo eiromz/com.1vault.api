@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
+            $table->foreignUuid('business_id');
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
             $table->string('fullname')->comment('Fullname for the client');
             $table->string('phone_number')->comment('phone number for the client');
             $table->string('address')->comment('The clients location')->nullable();
             $table->foreignId('state_id')->comment('provide your state of residence')->nullable();
-            $table->string('zipcode')->nullable();
+            $table->string('zip_code')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

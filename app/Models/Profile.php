@@ -15,6 +15,8 @@ class Profile extends Model
 
     const DOC_TYPES = ['drivers_license', 'international_passport', 'voters_card'];
 
+    protected $with = ['state'];
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

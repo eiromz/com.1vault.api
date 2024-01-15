@@ -4,6 +4,8 @@ namespace Src\Accounting\Domain\Repository;
 
 use App\Models\Business;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
 

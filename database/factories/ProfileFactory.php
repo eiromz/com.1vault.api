@@ -22,7 +22,6 @@ class ProfileFactory extends Factory
             'lastname' => fake()->lastName,
             'business_name' => fake()->company,
             'country_id' => 160,
-            'state_id' => State::where('name', 'Lagos')->first()->id,
         ];
     }
 }

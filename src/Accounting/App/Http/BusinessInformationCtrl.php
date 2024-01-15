@@ -32,7 +32,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
         $data = $this->repository->create(
             $request->only(['email','fullname','logo','phone_number','address','state_id','zip_code'])
         );
-        //create a business information from the api data
+
         return jsonResponse(Response::HTTP_OK, $data);
     }
 }

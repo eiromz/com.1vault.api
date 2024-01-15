@@ -64,9 +64,9 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
 
         return response()->json([
             'requestSuccessful' => true,
-            'sessionId' => $request->sessionId,
-            'responseMessage' => 'success',
-            'responseCode' => '00',
+            'sessionId'         => $request->sessionId,
+            'responseMessage'   => 'success',
+            'responseCode'      => '00',
         ], ResponseAlias::HTTP_OK);
     }
 

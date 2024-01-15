@@ -17,7 +17,9 @@ class ProfileCtrl extends DomainBaseCtrl
     public function index(): JsonResponse
     {
         try {
-            $profile = Profile::query()->where('customer_id', auth()->user()->id)->with('customer')->firstOrFail();
+            $profile = Profile::query()->where('customer_id', auth()->user()->id)
+                ->with(['customer','customer.profile'])
+                ->firstOrFail();
 
             return jsonResponse(Response::HTTP_OK,
                 new CustomerResource($profile->customer)

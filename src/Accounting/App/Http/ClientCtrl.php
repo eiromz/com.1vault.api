@@ -14,9 +14,9 @@ class ClientCtrl extends DomainBaseCtrl
 {
     private $repository;
 
-    public function __construct(ClientRepositoryInterface $clientRepository)
+    public function __construct(ClientRepositoryInterface $repository)
     {
-        $this->repository = $clientRepository;
+        $this->repository = $repository;
         parent::__construct();
     }
     /**
@@ -24,18 +24,46 @@ class ClientCtrl extends DomainBaseCtrl
      */
     public function store(Request $request): JsonResponse
     {
+        $request->merge(['fullname' => $request->name]);
+
         $request->validate([
             'name'          => ['required','min:2'],
             'phone_number'  => ['required','min:11'],
-            'email'         => ['required','email','unique:App\Models\Business,email'],
             'address'       => ['required','min:3'],
             'state_id'      => ['required','exists:App\Models\State,id'],
-            'zip_code'      => ['required','string'],
-            'logo'          => ['required','url'],
+            'zip_code'      => ['nullable','string'],
+            'business_id'   => ['required','exists:App\Models\Business,id']
         ]);
 
-        dd($request->all());
-        //create a business information from the api data
-        return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
+        $keys = ['fullname','phone_number','address','zip_code','business_id','state_id'];
+
+        $customerExists =  $this->repository->getClientDetails([
+            'business_id' => $request->business_id,
+        ]);
+
+        if(is_null($customerExists)){
+            $customerExists = $this->repository->create($request->only($keys));
+        }
+
+        return jsonResponse(Response::HTTP_OK, $customerExists);
+    }
+
+    public function view(Request $request): JsonResponse
+    {
+        $request->validate([
+            'client_id'      => ['required','exists:App\Models\Client,id'],
+        ]);
+
+        $customerExists =  $this->repository->getClientDetails([
+            'id' => $request->client_id
+        ]);
+
+        if(is_null($customerExists)){
+            return jsonResponse(Response::HTTP_PRECONDITION_FAILED, [
+                'message' => 'We could not find what you were looking for.'
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, $customerExists);
     }
 }

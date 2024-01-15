@@ -66,22 +66,24 @@ class Customer extends Authenticatable
         'email_verified_at' => 'datetime',
         'otp_expires_at' => 'datetime',
         'password' => 'hashed',
+        'is_member' => 'boolean',
+        'is_owner' => 'boolean',
+        'accept_terms_conditions' => 'boolean'
     ];
 
-    protected $with = ['account', 'knowYourCustomer', 'profile'];
-
-    public function knowYourCustomer(): HasOne
-    {
-        return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
-    }
+    //FIXME : anything i add
+    //protected $with = ['account','knowYourCustomer', 'profile'];
 
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class, 'customer_id');
     }
-
     public function account(): HasOne
     {
         return $this->hasOne(Account::class);
+    }
+    public function knowYourCustomer(): HasOne
+    {
+        return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }
 }

@@ -26,33 +26,6 @@ class ProfileResource extends JsonResource
             'state_id' => (new StateResource($this->whenLoaded('state'))),
             'customer_id' => (new CustomerResource($this->whenLoaded('customer'))),
             'account' => (new AccountResource($this->whenLoaded('account'))),
-            'profile-complete' => $this->profileComplete(),
-            'pin-set' => $this->pinSet(),
-            'kyc-complete' => $this->kycComplete(),
         ];
-    }
-
-    /**
-     * Profile has been complete
-     */
-    public function profileComplete(): bool
-    {
-        return !is_null(auth()->user()->profile);
-    }
-
-    /**
-     * Pin has been set
-     */
-    public function pinSet(): bool
-    {
-        return !is_null(auth()->user()->transaction_pin);
-    }
-
-    /**
-     * Kyc has been complete
-     */
-    public function kycComplete(): bool
-    {
-        return !is_null(auth()->user()->knowYourCustomer);
     }
 }

@@ -88,3 +88,18 @@ if (! function_exists('logExceptionErrorMessage')) {
         logger('error', $data);
     }
 }
+
+if (! function_exists('generateInvoiceNumber')) {
+    function generateInvoiceNumber($model,$prefix)
+    {
+        $latest = $model::latest()->first();
+
+        if (!$latest) {
+            return $prefix.'0001';
+        }
+
+        $string = preg_replace("/[^0-9\.]/", '', $latest->number);
+
+        return $prefix . sprintf('%04d', $string+1);
+    }
+}

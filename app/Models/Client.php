@@ -11,7 +11,9 @@ class Client extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $with = ['customer','collaborator'];
+    protected $with = ['customer','collaborator','state'];
+
+    protected $guarded = [];
 
     public function customer(): BelongsTo
     {
@@ -21,5 +23,10 @@ class Client extends Model
     public function collaborator(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
     }
 }

@@ -4,10 +4,13 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Account;
+use App\Models\Business;
+use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Journal;
 use App\Models\KnowYourCustomer;
 use App\Models\Profile;
+use App\Models\State;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,6 +25,9 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             StateSeeder::class,
         ]);
+
+        $state = State::query()
+            ->where('name','=','Lagos')->first();
 
         //Create admin
         $admin = Customer::factory()->create([
@@ -45,6 +51,7 @@ class DatabaseSeeder extends Seeder
         Profile::factory()->create([
             'customer_id' => $customer->id,
             'account_number' => '9977581536',
+            'state_id' => $state->id
         ]);
 
         $account = Account::factory()->create([
@@ -53,6 +60,16 @@ class DatabaseSeeder extends Seeder
 
         $kyc = KnowYourCustomer::factory()->create([
             'customer_id' => $customer->id,
+        ]);
+
+        $business = Business::factory()->create([
+            'state_id' => $state->id
+        ]);
+
+        $client = Client::factory()->create([
+            'business_id' => $business->id,
+            'customer_id' => $customer->id,
+            'fullname'    => 'Apostle Atokolos'
         ]);
 
         //        $journal = Journal::factory()->create([

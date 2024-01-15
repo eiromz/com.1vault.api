@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
+            $table->foreignUuid('business_id');
+            $table->foreignUuid('customer_id')->nullable();
+            $table->foreignUuid('collaborator_id')->nullable();
             $table->string('product_name');
             $table->double('product_cost_price');
             $table->double('product_selling_price')->nullable();
@@ -22,8 +25,6 @@ return new class extends Migration
             $table->boolean('product_is_store_front')->default(0);
             $table->string('product_image')->nullable();
             $table->boolean('published')->default(0);
-            $table->foreignUuid('customer_id')->nullable();
-            $table->foreignUuid('collaborator_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
