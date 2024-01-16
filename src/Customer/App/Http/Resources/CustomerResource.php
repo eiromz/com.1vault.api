@@ -26,8 +26,8 @@ class CustomerResource extends JsonResource
             'referral_code' => $this->referral_code,
             'is_owner' => $this->is_owner,
             'is_member' => $this->is_member,
-            'profile' => (new ProfileResource($this->whenLoaded('profile'))),
-            'image' => $this->image
+            'image' => $this->image,
+            'profile' => (new ProfileResource($this->whenLoaded('profile')))
         ];
     }
 }
