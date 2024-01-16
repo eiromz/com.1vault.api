@@ -4,6 +4,7 @@ namespace Src\Accounting\Domain\Repository;
 
 use App\Models\Business;
 use App\Models\Customer;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -13,18 +14,11 @@ class BusinessRepository extends BaseRepository implements BusinessRepositoryInt
 {
     /**
      * UserRepository constructor.
-     * @param Client $model
+     * @param Business $model
+     * @throws Exception
      */
     public function __construct(Business $model)
     {
         parent::__construct($model);
-    }
-
-    public function create(array $details)
-    {
-        Arr::set($details,'customer_id',$this->customer);
-        Arr::set($details,'collaborator_id',$this->collaborator);
-
-        return $this->model->query()->create($details);
     }
 }

@@ -2,13 +2,12 @@
 
 namespace Src\Accounting\Domain\Repository;
 
-use App\Models\Client;
 use App\Models\Customer;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Src\Accounting\Domain\Repository\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\HttpFoundation\Response;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -16,8 +15,8 @@ class BaseRepository implements BaseRepositoryInterface
      * @var Model
      */
     protected Model $model;
-    protected $collaborator = null,$customer = null;
-
+    protected $customer = null;
+    protected $collaborator = null;
     /**
      * BaseRepository constructor.
      *
@@ -30,16 +29,25 @@ class BaseRepository implements BaseRepositoryInterface
     }
     public function setUser($user): void
     {
-        if($user && $user->is_owner) {
+        $customer = Customer::query()
+            ->where('ACCOUNTID','=',$user->ACCOUNTID)
+            ->whereIsOwner(1)
+            ->firstOrFail();
+
+        $this->customer = $customer->id;
+        $this->owner($user);
+        $this->member($user);
+    }
+    public function owner($user): void
+    {
+        if($user->is_owner) {
             $this->customer = $user->id;
         }
-
-        if($user && $user->is_member) {
+    }
+    public function member($user): void
+    {
+        if($user->is_member) {
             $this->collaborator = $user->id;
-            $customer = Customer::query()->where('ACCOUNTID','=',$user->ACCOUNTID)
-                ->whereIsOwner(1)
-                ->first();
-            $this->customer = $customer->id;
         }
     }
     public function getAll()
@@ -52,17 +60,23 @@ class BaseRepository implements BaseRepositoryInterface
     }
     public function delete($id)
     {
-        $this->model->query()->delete($id);
+        return $this->model->query()->delete($id);
     }
     public function create(array $details)
     {
+        Arr::set($details,'customer_id',$this->customer);
+
+        if(!is_null($this->collaborator)) {
+            Arr::set($details,'collaborator_id',$this->collaborator);
+        }
+
         return $this->model->query()->create($details);
     }
     public function update($id, array $newDetails) :Model
     {
         return $this->model->query()->whereId($id)->update($newDetails);
     }
-    public function getDetailsByParams(array $details)
+    public function getDetailsByParams(array $details): Model|Builder|null
     {
         Arr::set($details,'customer_id',$this->customer);
 
@@ -72,5 +86,14 @@ class BaseRepository implements BaseRepositoryInterface
 
         return $this->model->query()->where($details)->first();
     }
+    public function getAllByParams(array $details): Collection|array
+    {
+        Arr::set($details,'customer_id',$this->customer);
 
+        if(!is_null($this->collaborator)) {
+            Arr::set($details,'collaborator_id',$this->collaborator);
+        }
+
+        return $this->model->query()->where($details)->get();
+    }
 }

@@ -15,6 +15,8 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 {
     private $repository;
 
+    private array $filterRequestKeys = ['email','fullname','logo','phone_number','address','state_id','zip_code'];
+
     public function __construct(BusinessRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -27,18 +29,15 @@ class BusinessInformationCtrl extends DomainBaseCtrl
     {
         $this->repository->setUser(auth()->user());
         $request->merge([
-            'fullname' => $request->name,
+            'fullname' => $request->name
         ]);
         $request->validated();
 
-        $data = $this->repository->create(
-            $request->only(['email','fullname','logo','phone_number','address','state_id','zip_code'])
-        );
+        $data = $this->repository->create($request->only($this->filterRequestKeys));
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
-    public function view(Request $request)
+    public function view(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
@@ -49,6 +48,14 @@ class BusinessInformationCtrl extends DomainBaseCtrl
         $data =  $this->repository->getDetailsByParams([
             'id' => $request->business
         ]);
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
+    public function index(): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $data =  $this->repository->getAllByParams([]);
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

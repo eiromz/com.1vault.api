@@ -10,5 +10,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/client/view',[ClientCtrl::class,'view']);
     Route::post('/business',[BusinessInformationCtrl::class,'store']);
     Route::post('/business/view',[BusinessInformationCtrl::class,'view']);
+    Route::get('/business',[BusinessInformationCtrl::class,'index']);
     Route::post('/invoice',[InvoiceCtrl::class,'store']);
 });
