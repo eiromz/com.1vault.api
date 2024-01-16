@@ -26,8 +26,8 @@ class InvoiceCtrl extends DomainBaseCtrl
         $this->repository->setUser(auth()->user());
 
         $request->validate([
-            'invoice_date'      => ['required','date'],
-            'due_date'          => ['required','date'],
+            'invoice_date'      => ['required','date','after_or_equal:today'],
+            'due_date'          => ['required','date','after_or_equal:today'],
             'items'             => ['required','array'],
             'note'              => ['nullable'],
             'amount_received'   => ['required'],
@@ -37,7 +37,7 @@ class InvoiceCtrl extends DomainBaseCtrl
             'shipping_fee'      => ['nullable']
         ]);
 
-        $request->all();
+        $this->repository->create($request->all());
 
         return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
     }

@@ -24,13 +24,4 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
         Arr::set($details,'collaborator_id',$this->collaborator);
         return $this->model->query()->create($details);
     }
-    public function getClientDetails(array $details)
-    {
-        Arr::set($details,'customer_id',$this->customer);
-        if(!is_null($this->collaborator)) {
-            Arr::set($details,'collaborator_id',$this->collaborator);
-        }
-
-        return $this->model->query()->where($details)->first();
-    }
 }

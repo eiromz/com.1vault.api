@@ -38,7 +38,7 @@ class ClientCtrl extends DomainBaseCtrl
 
         $keys = ['fullname','phone_number','address','zip_code','business_id','state_id'];
 
-        $customerExists =  $this->repository->getClientDetails([
+        $customerExists =  $this->repository->getDetailsByParams([
             'business_id' => $request->business_id,
             'phone_number' => $request->phone_number,
         ]);
@@ -58,7 +58,7 @@ class ClientCtrl extends DomainBaseCtrl
             'client_id'      => ['required','exists:App\Models\Client,id'],
         ]);
 
-        $customerExists =  $this->repository->getClientDetails([
+        $customerExists =  $this->repository->getDetailsByParams([
             'id' => $request->client_id
         ]);
 

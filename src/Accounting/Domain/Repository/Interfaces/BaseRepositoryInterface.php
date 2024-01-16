@@ -9,4 +9,5 @@ interface BaseRepositoryInterface
     public function delete($id);
     public function create(array $details);
     public function update($id, array $newDetails);
+    public function getDetailsByParams(array $details);
 }

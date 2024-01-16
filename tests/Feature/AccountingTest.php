@@ -21,7 +21,8 @@ describe('Business Routes', function () {
         $this->customer = Customer::where('email','=','crayolu@gmail.com')->with('profile')->first();
 
         $this->business = Business::factory()->create([
-            'state_id' => $this->state->id
+            'state_id' => $this->state->id,
+            'customer_id' => $this->customer->id
         ]);
 
         $this->client = Client::factory()->create([
@@ -39,6 +40,13 @@ describe('Business Routes', function () {
             'state_id'      => $this->state->id,
             'zip_code'      => '1001261',
             'logo'          => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can view a business', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/business/view', [
+            'business_id' => $this->business->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -76,11 +84,11 @@ describe('Business Routes', function () {
             'note'              => 'welcome',
             'amount_received'   => 50000,
             'payment_method'    => 'cash',
-            'discount'         =>  1000,
-            'tax'              => 500,
-            'shipping_fee'     => 400,
-            'invoice_date'      => '2024-0',
-            'due_date'          => ['required','date'],
+            'discount'          =>  1000,
+            'tax'               => 500,
+            'shipping_fee'      => 400,
+            'invoice_date'      => '2024-01-16',
+            'due_date'          => '2024-02-06',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

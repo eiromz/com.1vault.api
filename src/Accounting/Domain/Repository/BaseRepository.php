@@ -5,6 +5,7 @@ namespace Src\Accounting\Domain\Repository;
 use App\Models\Client;
 use App\Models\Customer;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Arr;
 use Src\Accounting\Domain\Repository\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,6 +61,16 @@ class BaseRepository implements BaseRepositoryInterface
     public function update($id, array $newDetails) :Model
     {
         return $this->model->query()->whereId($id)->update($newDetails);
+    }
+    public function getDetailsByParams(array $details)
+    {
+        Arr::set($details,'customer_id',$this->customer);
+
+        if(!is_null($this->collaborator)) {
+            Arr::set($details,'collaborator_id',$this->collaborator);
+        }
+
+        return $this->model->query()->where($details)->first();
     }
 
 }
