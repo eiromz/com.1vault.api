@@ -2,19 +2,19 @@
 
 namespace Src\Accounting\Domain\Repository;
 
-use App\Models\Client;
+use App\Models\Invoice;
 use Exception;
 use Illuminate\Support\Arr;
-use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
+use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
 
-class ClientRepository extends BaseRepository implements ClientRepositoryInterface
+class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInterface
 {
     /**
      * UserRepository constructor.
      * @param Client $model
      * @throws Exception
      */
-    public function __construct(Client $model)
+    public function __construct(Invoice $model)
     {
         parent::__construct($model);
     }

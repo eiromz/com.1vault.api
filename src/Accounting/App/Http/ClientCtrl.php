@@ -24,6 +24,7 @@ class ClientCtrl extends DomainBaseCtrl
      */
     public function store(Request $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
         $request->merge(['fullname' => $request->name]);
 
         $request->validate([
@@ -39,6 +40,7 @@ class ClientCtrl extends DomainBaseCtrl
 
         $customerExists =  $this->repository->getClientDetails([
             'business_id' => $request->business_id,
+            'phone_number' => $request->phone_number,
         ]);
 
         if(is_null($customerExists)){
@@ -50,6 +52,8 @@ class ClientCtrl extends DomainBaseCtrl
 
     public function view(Request $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
+
         $request->validate([
             'client_id'      => ['required','exists:App\Models\Client,id'],
         ]);

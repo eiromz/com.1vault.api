@@ -4,6 +4,7 @@ namespace Src\Accounting\Domain\Repository;
 
 use App\Models\Client;
 use App\Models\Customer;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Src\Accounting\Domain\Repository\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,41 +25,38 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function __construct(Model $model)
     {
-        if(auth()->user() && auth()->user()->is_owner){
-            $this->customer = auth()->user()->id;
+        $this->model = $model;
+    }
+    public function setUser($user): void
+    {
+        if($user && $user->is_owner) {
+            $this->customer = $user->id;
         }
 
-        if(auth()->user() && auth()->user()->is_member) {
-            $this->collaborator = auth()->user()->id;
-            $customer = Customer::query()->where('ACCOUNTID','=',auth()->user()->ACCOUNTID)
+        if($user && $user->is_member) {
+            $this->collaborator = $user->id;
+            $customer = Customer::query()->where('ACCOUNTID','=',$user->ACCOUNTID)
                 ->whereIsOwner(1)
                 ->first();
             $this->customer = $customer->id;
         }
-
-        $this->model = $model;
     }
-
     public function getAll()
     {
         return $this->model->query()->all();
     }
-
     public function getById($id) : Model
     {
         return $this->model->query()->findOrFail($id);
     }
-
     public function delete($id)
     {
         $this->model->query()->delete($id);
     }
-
     public function create(array $details)
     {
         return $this->model->query()->create($details);
     }
-
     public function update($id, array $newDetails) :Model
     {
         return $this->model->query()->whereId($id)->update($newDetails);

@@ -43,21 +43,46 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Business can create client', function () {
+    test('Business can create client for invoice', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client', [
             'name'          => 'Maxwell Camelo',
             'phone_number'  => '0810379'.fake()->randomNumber(4, true),
             'address'       => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
             'business_id'   => $this->business->id,
-            'state_id'   => $this->state->id,
-            //'zip_code'      => '1001261',
+            'state_id'      => $this->state->id,
+            'zip_code'    => '1001261',
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can view client', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client/view', [
             'client_id'  => $this->client->id,
         ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Business can create invoice', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/invoice', [
+            'client_id'  => $this->client->id,
+            'items'      => [
+                [
+                    'name' => fake()->lastName,
+                    'amount' => fake()->lastName,
+                    'unit' => fake()->lastName,
+                    'quantity' => 3
+                ]
+            ],
+            'note'              => 'welcome',
+            'amount_received'   => 50000,
+            'payment_method'    => 'cash',
+            'discount'         =>  1000,
+            'tax'              => 500,
+            'shipping_fee'     => 400,
+            'invoice_date'      => '2024-0',
+            'due_date'          => ['required','date'],
+        ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
 });

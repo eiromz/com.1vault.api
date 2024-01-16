@@ -24,6 +24,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
      */
     public function store(CreateBusinessInformationRequest $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
         $request->merge([
             'fullname' => $request->name,
         ]);

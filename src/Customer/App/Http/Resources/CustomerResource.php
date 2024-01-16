@@ -27,6 +27,7 @@ class CustomerResource extends JsonResource
             'is_owner' => $this->is_owner,
             'is_member' => $this->is_member,
             'profile' => (new ProfileResource($this->whenLoaded('profile'))),
+            'image' => $this->image
         ];
     }
 }

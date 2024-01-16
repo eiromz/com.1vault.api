@@ -17,10 +17,13 @@ return new class extends Migration
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('client_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
-            $table->string('number');
+            $table->string('invoice_number');
             $table->double('tax')->default(0);
             $table->double('discount')->default(0);
             $table->double('shipping_fee')->default(0);
+            $table->double('amount_received')->default(0);
+            $table->double('item_amount_total');
+            $table->string('note');
             $table->json('items')->comment('array for items to be stored in the field');
             $table->string('pdf_link')->nullable();
             $table->string('payment_method')->comment('This shows what preferred method of payment should be used');

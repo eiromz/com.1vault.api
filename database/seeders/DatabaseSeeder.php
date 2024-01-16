@@ -63,7 +63,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $business = Business::factory()->create([
-            'state_id' => $state->id
+            'state_id' => $state->id,
+            'customer_id' => $customer->id,
         ]);
 
         $client = Client::factory()->create([
