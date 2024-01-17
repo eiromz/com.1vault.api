@@ -70,4 +70,15 @@ class ClientCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $customerExists);
     }
+
+    public function index($id): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $data = $this->repository->getAllByParams([
+            'business_id' => $id
+        ]);
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
 }

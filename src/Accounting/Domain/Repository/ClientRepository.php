@@ -18,10 +18,4 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
     {
         parent::__construct($model);
     }
-    public function create(array $details)
-    {
-        Arr::set($details,'customer_id',$this->customer);
-        Arr::set($details,'collaborator_id',$this->collaborator);
-        return $this->model->query()->create($details);
-    }
 }

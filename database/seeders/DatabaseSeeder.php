@@ -62,13 +62,13 @@ class DatabaseSeeder extends Seeder
             'customer_id' => $customer->id,
         ]);
 
-        $business = Business::factory()->create([
+        $business = Business::factory()->count(2)->create([
             'state_id' => $state->id,
             'customer_id' => $customer->id,
         ]);
 
         $client = Client::factory()->create([
-            'business_id' => $business->id,
+            'business_id' => $business->first()->id,
             'customer_id' => $customer->id,
             'fullname'    => 'Apostle Atokolos'
         ]);

@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateBusinessInformationRequest;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
-use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class BusinessInformationCtrl extends DomainBaseCtrl
@@ -55,8 +54,6 @@ class BusinessInformationCtrl extends DomainBaseCtrl
     {
         $this->repository->setUser(auth()->user());
 
-        $data =  $this->repository->getAllByParams([]);
-
-        return jsonResponse(Response::HTTP_OK, $data);
+        return jsonResponse(Response::HTTP_OK, $this->repository->getAllByParams([]));
     }
 }

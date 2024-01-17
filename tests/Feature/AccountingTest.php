@@ -75,6 +75,12 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Business can view all client', function () {
+        $link = '/api/v1/client/'.$this->business->id.'/business';
+        $response = $this->actingAs($this->customer)->get($link);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Business can create invoice', function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/invoice', [
             'client_id'  => $this->client->id,
