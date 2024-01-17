@@ -72,7 +72,7 @@ class BaseRepository implements BaseRepositoryInterface
 
         return $this->model->query()->create($details);
     }
-    public function update($id, array $newDetails) :Model
+    public function update($id, array $newDetails)
     {
         return $this->model->query()->whereId($id)->update($newDetails);
     }

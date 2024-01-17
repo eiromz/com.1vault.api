@@ -14,6 +14,8 @@ class ClientCtrl extends DomainBaseCtrl
 {
     private $repository;
 
+    public array $requestKeysFilter = ['fullname','phone_number','address','zip_code','business_id','state_id'];
+
     public function __construct(ClientRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -36,15 +38,13 @@ class ClientCtrl extends DomainBaseCtrl
             'business_id'   => ['required','exists:App\Models\Business,id']
         ]);
 
-        $keys = ['fullname','phone_number','address','zip_code','business_id','state_id'];
-
         $customerExists =  $this->repository->getDetailsByParams([
             'business_id' => $request->business_id,
             'phone_number' => $request->phone_number,
         ]);
 
         if(is_null($customerExists)){
-            $customerExists = $this->repository->create($request->only($keys));
+            $customerExists = $this->repository->create($request->only($this->requestKeysFilter));
         }
 
         return jsonResponse(Response::HTTP_OK, $customerExists);
@@ -80,5 +80,34 @@ class ClientCtrl extends DomainBaseCtrl
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);
+    }
+
+    public function update($id, Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge([
+            'client_id' => $id,
+            'fullname' => $request->name,
+        ]);
+
+        $request->validate([
+            'name'          => ['nullable','min:2'],
+            'phone_number'  => ['nullable','min:11'],
+            'address'       => ['nullable','min:3'],
+            'state_id'      => ['nullable','exists:App\Models\State,id'],
+            'zip_code'      => ['nullable','string'],
+            'client_id'    => ['required','exists:App\Models\Client,id']
+        ]);
+
+        if(!$this->repository->update($id,$request->only($this->requestKeysFilter))){
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update customer'
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Customer updated'
+        ]);
     }
 }

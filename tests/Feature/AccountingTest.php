@@ -81,6 +81,15 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Business can edit a client', function () {
+        $link = '/api/v1/client/update/'.$this->client->id;
+        $response = $this->actingAs($this->customer)->post($link,[
+            'name'          => 'Maxwell Camelo',
+            'phone_number'  => '0810379'.fake()->randomNumber(4, true),
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Business can create invoice', function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/invoice', [
             'client_id'  => $this->client->id,
