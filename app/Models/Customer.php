@@ -68,7 +68,7 @@ class Customer extends Authenticatable
         'password' => 'hashed',
         'is_member' => 'boolean',
         'is_owner' => 'boolean',
-        'accept_terms_conditions' => 'boolean'
+        'accept_terms_conditions' => 'boolean',
     ];
 
     //FIXME : anything i add
@@ -78,10 +78,12 @@ class Customer extends Authenticatable
     {
         return $this->hasOne(Profile::class, 'customer_id');
     }
+
     public function account(): HasOne
     {
         return $this->hasOne(Account::class);
     }
+
     public function knowYourCustomer(): HasOne
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();

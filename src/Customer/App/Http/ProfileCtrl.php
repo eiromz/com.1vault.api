@@ -18,16 +18,15 @@ class ProfileCtrl extends DomainBaseCtrl
     {
         try {
             $profile = Profile::query()->where('customer_id', auth()->user()->id)
-                ->with(['customer','customer.profile'])
+                ->with(['customer', 'customer.profile'])
                 ->firstOrFail();
 
             return jsonResponse(Response::HTTP_OK,
                 new CustomerResource($profile->customer)
             );
-        }
-        catch (Exception $e){
-            return \jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => 'Profile has not been set'
+        } catch (Exception $e) {
+            return \jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Profile has not been set',
             ]);
         }
     }

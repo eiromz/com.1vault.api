@@ -14,13 +14,14 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 {
     private $repository;
 
-    private array $filterRequestKeys = ['email','fullname','logo','phone_number','address','state_id','zip_code'];
+    private array $filterRequestKeys = ['email', 'fullname', 'logo', 'phone_number', 'address', 'state_id', 'zip_code'];
 
     public function __construct(BusinessRepositoryInterface $repository)
     {
         $this->repository = $repository;
         parent::__construct();
     }
+
     /**
      * @throws Exception
      */
@@ -28,7 +29,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
     {
         $this->repository->setUser(auth()->user());
         $request->merge([
-            'fullname' => $request->name
+            'fullname' => $request->name,
         ]);
         $request->validated();
 
@@ -36,24 +37,56 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function view(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         $request->validate([
-            'business' => ['required','exists:App\Models\Business,id']
+            'business' => ['required', 'exists:App\Models\Business,id'],
         ]);
 
-        $data =  $this->repository->getDetailsByParams([
-            'id' => $request->business
+        $data = $this->repository->getDetailsByParams([
+            'id' => $request->business,
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function index(): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         return jsonResponse(Response::HTTP_OK, $this->repository->getAllByParams([]));
+    }
+
+    public function update($id, Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge([
+            'business' => $id,
+            'fullname' => $request->name,
+        ]);
+
+        $request->validate([
+            'name' => ['nullable', 'min:2'],
+            'phone_number' => ['nullable', 'min:11'],
+            'address' => ['nullable', 'min:3'],
+            'state_id' => ['nullable', 'exists:App\Models\State,id'],
+            'zip_code' => ['nullable', 'string'],
+            'logo' => ['nullable', 'url'],
+            'business' => ['required', 'exists:App\Models\Business,id'],
+        ]);
+
+        if (! $this->repository->update($id, $request->only($this->filterRequestKeys))) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update business',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Business updated',
+        ]);
     }
 }

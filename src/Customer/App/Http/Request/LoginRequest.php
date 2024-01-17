@@ -6,7 +6,6 @@ use App\Models\Customer;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -36,7 +35,7 @@ class LoginRequest extends FormRequest
     {
         $this->validated();
 
-        if(!Auth::attempt($this->only('email', 'password'))) {
+        if (! Auth::attempt($this->only('email', 'password'))) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);

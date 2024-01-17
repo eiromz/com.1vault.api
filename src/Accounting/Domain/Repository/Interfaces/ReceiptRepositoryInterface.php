@@ -2,9 +2,7 @@
 
 namespace Src\Accounting\Domain\Repository\Interfaces;
 
-interface InvoiceRepositoryInterface
+interface ReceiptRepositoryInterface
 {
     public function create(array $details);
-
-    public function getClientDetails(array $details);
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('client_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
+
             $table->string('invoice_number');
             $table->double('tax')->default(0);
             $table->double('discount')->default(0);

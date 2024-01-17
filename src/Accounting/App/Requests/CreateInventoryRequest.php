@@ -4,7 +4,7 @@ namespace Src\Accounting\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateBusinessInformationRequest extends FormRequest
+class CreateInventoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -20,12 +20,11 @@ class CreateBusinessInformationRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:2'],
-            'phone_number' => ['required', 'min:11'],
-            'email' => ['required', 'email', 'unique:App\Models\Business,email'],
-            'address' => ['required', 'min:3'],
-            'state_id' => ['required', 'exists:App\Models\State,id'],
-            'zip_code' => ['required', 'string'],
-            'logo' => ['required', 'url'],
+            'amount' => ['required'],
+            'quantity' => ['required', 'integer'],
+            'unit' => ['required'],
+            'business' => ['required'],
+            'selling_price' => ['nullable']
         ];
     }
 }

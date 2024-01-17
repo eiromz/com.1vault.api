@@ -3,6 +3,7 @@
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\Customer;
+use App\Models\Invoice;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,28 +19,36 @@ describe('Business Routes', function () {
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
-        $this->customer = Customer::where('email','=','crayolu@gmail.com')->with('profile')->first();
+        $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
         $this->business = Business::factory()->create([
             'state_id' => $this->state->id,
-            'customer_id' => $this->customer->id
+            'customer_id' => $this->customer->id,
         ]);
 
         $this->client = Client::factory()->create([
             'business_id' => $this->business->id,
             'customer_id' => $this->customer->id,
-            'fullname'    => 'Apostle Atokolos'
+            'fullname' => 'Apostle Atokolos',
+        ]);
+
+        $this->invoice = Invoice::factory()->count(3)->create([
+            'business_id' => $this->business->id,
+            'customer_id' => $this->customer->id,
+            'client_id' => $this->client->id,
         ]);
     });
+
+    /*************Customer Business******************/
     test('Customer can create a business', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/business', [
-            'name'          => '12345678090',
-            'phone_number'  => '08103797739',
-            'email'         => 'crayolubiz@gmail.com',
-            'address'       => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
-            'state_id'      => $this->state->id,
-            'zip_code'      => '1001261',
-            'logo'          => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'name' => '12345678090',
+            'phone_number' => '08103797739',
+            'email' => 'crayolubiz@gmail.com',
+            'address' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'state_id' => $this->state->id,
+            'zip_code' => '1001261',
+            'logo' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -56,21 +65,32 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Customer can edit a business', function () {
+        $link = '/api/v1/business/update/'.$this->business->id;
+        $response = $this->actingAs($this->customer)->post($link, [
+            'name' => 'The company',
+            'phone_number' => '0810379'.fake()->randomNumber(4, true),
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
+    /*************Customer Client******************/
     test('Business can create client for invoice', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client', [
-            'name'          => 'Maxwell Camelo',
-            'phone_number'  => '0810379'.fake()->randomNumber(4, true),
-            'address'       => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
-            'business_id'   => $this->business->id,
-            'state_id'      => $this->state->id,
-            'zip_code'    => '1001261',
+            'name' => 'Maxwell Camelo',
+            'phone_number' => '0810379'.fake()->randomNumber(4, true),
+            'address' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'business_id' => $this->business->id,
+            'state_id' => $this->state->id,
+            'zip_code' => '1001261',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can view client', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client/view', [
-            'client_id'  => $this->client->id,
+            'client_id' => $this->client->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -83,32 +103,56 @@ describe('Business Routes', function () {
     });
     test('Business can edit a client', function () {
         $link = '/api/v1/client/update/'.$this->client->id;
-        $response = $this->actingAs($this->customer)->post($link,[
-            'name'          => 'Maxwell Camelo',
-            'phone_number'  => '0810379'.fake()->randomNumber(4, true),
+        $response = $this->actingAs($this->customer)->post($link, [
+            'name' => 'Maxwell Camelo',
+            'phone_number' => '0810379'.fake()->randomNumber(4, true),
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Business can create invoice', function(){
+
+    /*************Business Invoice******************/
+    test('Business can create invoice', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/invoice', [
-            'client_id'  => $this->client->id,
-            'items'      => [
+            'client' => $this->client->id,
+            'business' => $this->business->id,
+            'items' => [
                 [
                     'name' => fake()->lastName,
                     'amount' => fake()->lastName,
                     'unit' => fake()->lastName,
-                    'quantity' => 3
-                ]
+                    'quantity' => 3,
+                ],
             ],
-            'note'              => 'welcome',
-            'amount_received'   => 50000,
-            'payment_method'    => 'cash',
-            'discount'          =>  1000,
-            'tax'               => 500,
-            'shipping_fee'      => 400,
-            'invoice_date'      => '2024-01-16',
-            'due_date'          => '2024-02-06',
+            'note' => 'welcome',
+            'amount_received' => 50000,
+            'payment_method' => 'cash',
+            'discount' => 1000,
+            'tax' => 500,
+            'shipping_fee' => 400,
+            'invoice_date' => '2024-01-17',
+            'due_date' => '2024-02-06',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Business can delete invoice', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/invoice/delete', [
+            'invoice' => $this->invoice->first()->id,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
+    /*************Inventory ******************/
+    test('Create Inventory', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/inventory', [
+            'name'          => fake()->lastName,
+            'amount'        => fake()->numberBetween(100,1000),
+            'selling_price' => fake()->numberBetween(100,1000),
+            'quantity'      => fake()->numberBetween(100,1000),
+            'unit'          => fake()->numberBetween(100,1000),
+            'business'      => $this->business->id
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $state = State::query()
-            ->where('name','=','Lagos')->first();
+            ->where('name', '=', 'Lagos')->first();
 
         //Create admin
         $admin = Customer::factory()->create([
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
         Profile::factory()->create([
             'customer_id' => $customer->id,
             'account_number' => '9977581536',
-            'state_id' => $state->id
+            'state_id' => $state->id,
         ]);
 
         $account = Account::factory()->create([
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
         $client = Client::factory()->create([
             'business_id' => $business->first()->id,
             'customer_id' => $customer->id,
-            'fullname'    => 'Apostle Atokolos'
+            'fullname' => 'Apostle Atokolos',
         ]);
 
         //        $journal = Journal::factory()->create([

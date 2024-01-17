@@ -9,8 +9,12 @@ use Src\Accounting\Domain\Repository\ClientRepository;
 use Src\Accounting\Domain\Repository\Interfaces\BaseRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
+use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
+use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
+use Src\Accounting\Domain\Repository\InventoryRepository;
 use Src\Accounting\Domain\Repository\InvoiceRepository;
+use Src\Accounting\Domain\Repository\ReceiptRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -34,6 +38,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             InvoiceRepositoryInterface::class,
             InvoiceRepository::class
+        );
+        $this->app->bind(
+            InventoryRepositoryInterface::class,
+            InventoryRepository::class
+        );
+        $this->app->bind(
+            ReceiptRepositoryInterface::class,
+            ReceiptRepository::class
         );
     }
 

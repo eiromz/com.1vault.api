@@ -17,35 +17,39 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ProvidusWebhookCtrl extends DomainBaseCtrl
 {
-
     public array $notification = [
         'title' => 'Credit Notification',
         'body' => 'Wallet Credit Notification',
     ];
+
     /**
      * @throws Exception
      */
     public function __invoke(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'accountNumber' => ['required', 'exists:App\Models\Profile,account_number']
+            'accountNumber' => ['required', 'exists:App\Models\Profile,account_number'],
         ]);
 
-        if ($validator->fails()) return response()->json([
-            'sessionId' => $request->sessionId,
-            'requestSuccessful' => true,
-            'responseMessage' => 'rejected transaction',
-            'responseCode' => '02',
-        ], ResponseAlias::HTTP_OK);
+        if ($validator->fails()) {
+            return response()->json([
+                'sessionId' => $request->sessionId,
+                'requestSuccessful' => true,
+                'responseMessage' => 'rejected transaction',
+                'responseCode' => '02',
+            ], ResponseAlias::HTTP_OK);
+        }
 
         $journal = Journal::query()->where('trx_ref', '=', $request->settlementId)->exists();
 
-        if ($journal) return response()->json([
-            'sessionId' => $request->sessionId,
-            'requestSuccessful' => true,
-            'responseMessage' => 'duplicate transaction',
-            'responseCode' => '01',
-        ], ResponseAlias::HTTP_OK);
+        if ($journal) {
+            return response()->json([
+                'sessionId' => $request->sessionId,
+                'requestSuccessful' => true,
+                'responseMessage' => 'duplicate transaction',
+                'responseCode' => '01',
+            ], ResponseAlias::HTTP_OK);
+        }
 
         $profile = Profile::query()
             ->where('account_number', '=', $request->accountNumber)
@@ -64,9 +68,9 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
 
         return response()->json([
             'requestSuccessful' => true,
-            'sessionId'         => $request->sessionId,
-            'responseMessage'   => 'success',
-            'responseCode'      => '00',
+            'sessionId' => $request->sessionId,
+            'responseMessage' => 'success',
+            'responseCode' => '00',
         ], ResponseAlias::HTTP_OK);
     }
 

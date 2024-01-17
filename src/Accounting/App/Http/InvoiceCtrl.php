@@ -13,11 +13,17 @@ class InvoiceCtrl extends DomainBaseCtrl
 {
     private $repository;
 
+    public array $requestKeysFilter = [
+        'client_id', 'business_id', 'invoice_date', 'due_date', 'items', 'note',
+        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee',
+    ];
+
     public function __construct(InvoiceRepositoryInterface $repository)
     {
         $this->repository = $repository;
         parent::__construct();
     }
+
     /**
      * @throws Exception
      */
@@ -25,20 +31,48 @@ class InvoiceCtrl extends DomainBaseCtrl
     {
         $this->repository->setUser(auth()->user());
 
-        $request->validate([
-            'invoice_date'      => ['required','date','after_or_equal:today'],
-            'due_date'          => ['required','date','after_or_equal:today'],
-            'items'             => ['required','array'],
-            'note'              => ['nullable'],
-            'amount_received'   => ['required'],
-            'payment_method'    => ['required','in:pos,transfer,cash'],
-            'discount'          => ['nullable'],
-            'tax'               => ['nullable'],
-            'shipping_fee'      => ['nullable']
+        $request->merge([
+            'client_id' => $request->client,
+            'business_id' => $request->business,
         ]);
 
-        $this->repository->create($request->all());
+        $request->validate([
+            'invoice_date' => ['required', 'date', 'after_or_equal:today'],
+            'due_date' => ['required', 'date', 'after_or_equal:today'],
+            'items' => ['required', 'array'],
+            'note' => ['nullable'],
+            'amount_received' => ['required'],
+            'payment_method' => ['required', 'in:pos,transfer,cash'],
+            'discount' => ['nullable'],
+            'tax' => ['required'],
+            'shipping_fee' => ['required'],
+            'client' => ['nullable', 'exists:App\Models\Client,id'],
+            'business' => ['nullable', 'exists:App\Models\Business,id'],
+        ]);
 
-        return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
+        //dd($request->only($this->requestKeysFilter));
+
+        //$data = $this->repository->create($request->all());
+
+        return jsonResponse(Response::HTTP_OK, $request->only($this->requestKeysFilter));
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->validate([
+            'invoice' => ['required', 'exists:App\Models\Invoice,id'],
+        ]);
+
+        if (! $this->repository->delete($request->invoice)) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to Delete Invoice',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Invoice Deleted',
+        ]);
     }
 }

@@ -13,7 +13,7 @@ class Business extends Model
 
     protected $guarded = [];
 
-    protected $with = ['customer','state'];
+    protected $with = ['customer', 'state'];
 
     public function customer(): BelongsTo
     {

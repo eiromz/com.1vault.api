@@ -188,5 +188,5 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
-    'firebase_service_file' => env('FIREBASE_SERVICE_FILE')
+    'firebase_service_file' => env('FIREBASE_SERVICE_FILE'),
 ];

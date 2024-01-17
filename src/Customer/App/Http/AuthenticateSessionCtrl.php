@@ -5,7 +5,6 @@ namespace Src\Customer\App\Http;
 use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Src\Customer\App\Http\Request\LoginRequest;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 

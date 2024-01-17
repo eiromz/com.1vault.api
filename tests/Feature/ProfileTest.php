@@ -14,7 +14,7 @@ describe('Profile Routes', function () {
         $this->customer = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
 
         $this->customerWithOutProfile = Customer::factory()->create([
-            'email' => 'crayoluman@gmail.com'
+            'email' => 'crayoluman@gmail.com',
         ]);
     });
 

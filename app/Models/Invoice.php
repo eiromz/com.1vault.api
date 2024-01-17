@@ -12,9 +12,12 @@ class Invoice extends Model
     use HasFactory, HasUuids;
 
     protected $casts = [
-        'invoice_date'  => 'datetime',
-        'due_date'      => 'datetime',
+        'invoice_date' => 'datetime',
+        'due_date' => 'datetime',
+        'items' => 'array',
     ];
+
+    protected $guarded = [];
 
     public function customer(): BelongsTo
     {
@@ -26,13 +29,13 @@ class Invoice extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(Client::class);
-    }
-
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
+
+    //    public function client(): BelongsTo
+    //    {
+    //        return $this->belongsTo(Client::class);
+    //    }
 }

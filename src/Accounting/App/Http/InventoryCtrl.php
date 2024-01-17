@@ -3,23 +3,38 @@
 namespace Src\Accounting\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Src\Customer\App\Http\Data\CompleteCustomerProfileData;
+use Src\Accounting\App\Requests\CreateInventoryRequest;
+use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class InventoryCtrl extends DomainBaseCtrl
 {
-    /**
-     * @throws Exception
-     */
-    public function __invoke(CompleteCustomerProfileData $request): JsonResponse
+    private $repository;
+
+    public array $requestKeysFilterCreate = [
+        'amount','is_published','product_name','unit','quantity','business_id','selling_price'
+    ];
+
+    public function __construct(InventoryRepositoryInterface $repository)
     {
-        $this->customer = auth()->user();
-        $request->toArray();
+        $this->repository = $repository;
+        parent::__construct();
+    }
 
-        $request->execute($this->customer);
+    public function store(CreateInventoryRequest $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
 
-        return jsonResponse(Response::HTTP_OK, $this->customer->load('profile'));
+        $request->merge([
+            'is_published' => 1,
+            'product_name' => $request->name,
+            'business_id' => $request->business
+        ]);
+        $request->validated();
+
+        $data = $this->repository->create($request->only($this->requestKeysFilterCreate));
+
+        return jsonResponse(Response::HTTP_OK, $data);
     }
 }
