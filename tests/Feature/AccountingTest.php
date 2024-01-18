@@ -124,10 +124,18 @@ describe('Business Routes', function () {
             'business' => $this->business->id,
             'items' => [
                 [
-                    'name' => fake()->lastName,
-                    'amount' => fake()->lastName,
-                    'unit' => fake()->lastName,
-                    'quantity' => 3,
+                    'inventory_id' => fake()->uuid,
+                    "name" => "Hackett",
+                    "amount" => "Stark",
+                    "unit" => "Johnston",
+                    "quantity" => 3
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    "name" => "Hackett",
+                    "amount" => "Stark",
+                    "unit" => "Johnston",
+                    "quantity" => 3
                 ],
             ],
             'note' => 'welcome',
@@ -136,6 +144,7 @@ describe('Business Routes', function () {
             'discount' => 1000,
             'tax' => 500,
             'shipping_fee' => 400,
+            'total' => 50000,
             'invoice_date' => now()->addDays(2)->format('Y-m-d'),
             'due_date' => now()->addDays(30)->format('Y-m-d'),
         ]);

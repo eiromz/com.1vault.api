@@ -6,6 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Accounting\App\Requests\CreateInvoiceRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,8 @@ class InvoiceCtrl extends DomainBaseCtrl
 
     public array $requestKeysFilter = [
         'client_id', 'business_id', 'invoice_date', 'due_date', 'items', 'note',
-        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee',
+        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee','total',
+        'payment_status'
     ];
 
     public function __construct(InvoiceRepositoryInterface $repository)
@@ -27,7 +29,7 @@ class InvoiceCtrl extends DomainBaseCtrl
     /**
      * @throws Exception
      */
-    public function store(Request $request): JsonResponse
+    public function store(CreateInvoiceRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
@@ -36,25 +38,15 @@ class InvoiceCtrl extends DomainBaseCtrl
             'business_id' => $request->business,
         ]);
 
-        $request->validate([
-            'invoice_date' => ['required', 'date', 'after_or_equal:today'],
-            'due_date' => ['required', 'date', 'after_or_equal:today'],
-            'items' => ['required', 'array'],
-            'note' => ['nullable'],
-            'amount_received' => ['required'],
-            'payment_method' => ['required', 'in:pos,transfer,cash'],
-            'discount' => ['nullable'],
-            'tax' => ['required'],
-            'shipping_fee' => ['required'],
-            'client' => ['nullable', 'exists:App\Models\Client,id'],
-            'business' => ['nullable', 'exists:App\Models\Business,id'],
-        ]);
+        if($request->amount_received === $request->total){
+            $request->merge(['payment_status' => 1]);
+        }
 
-        //dd($request->only($this->requestKeysFilter));
+        $request->validated();
 
-        //$data = $this->repository->create($request->all());
+        $data = $this->repository->create($request->only($this->requestKeysFilter));
 
-        return jsonResponse(Response::HTTP_OK, $request->only($this->requestKeysFilter));
+        return jsonResponse(Response::HTTP_OK, $data);
     }
 
     public function destroy(Request $request): JsonResponse

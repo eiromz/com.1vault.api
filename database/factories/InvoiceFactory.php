@@ -19,10 +19,10 @@ class InvoiceFactory extends Factory
         return [
             'items' => [
                 [
-                    'name' => 'Raynor',
-                    'amount' => 'Smitham',
-                    'unit' => 'Leuschke',
-                    'quantity' => 3,
+                    'name' => fake()->uuid,
+                ],
+                [
+                    'name' => fake()->uuid,
                 ],
             ],
             'note' => 'welcome',
@@ -33,8 +33,7 @@ class InvoiceFactory extends Factory
             'shipping_fee' => fake()->numberBetween(300, 500),
             'invoice_date' => '2024-01-20',
             'due_date' => '2024-02-06',
-            'invoice_number' => fake()->numberBetween(0, 1000000),
-            'item_amount_total' => fake()->numberBetween(0, 1000000),
+            'total' => fake()->numberBetween(0, 1000000),
         ];
     }
 }

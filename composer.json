@@ -19,7 +19,8 @@
         "saloonphp/laravel-http-sender": "^2.0",
         "saloonphp/laravel-plugin": "^3.0",
         "saloonphp/saloon": "^3.0",
-        "spatie/laravel-data": "^3.10"
+        "spatie/laravel-data": "^3.10",
+        "spatie/laravel-pdf": "^1.1"
     },
     "require-dev": {
         "knuckleswtf/scribe": "^4.26",
