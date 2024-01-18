@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Attributes\InvoicePaymentStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,15 +39,19 @@ class Invoice extends Model
         );
     }
 
+    protected function paymentStatus(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => (new InvoicePaymentStatus(
+                $attributes['payment_status'],$attributes['due_date']
+            ))->execute(),
+        );
+    }
+
 //    protected function items(): Attribute
 //    {
 //        return Attribute::make(
 //            get: fn (mixed $value, array $attributes) => 'INV000'.$attributes['id'],
 //        );
 //    }
-
-    //    public function client(): BelongsTo
-    //    {
-    //        return $this->belongsTo(Client::class);
-    //    }
 }
