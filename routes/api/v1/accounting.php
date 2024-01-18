@@ -24,6 +24,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     /********Inventory Routes*******/
     Route::post('/inventory', [InventoryCtrl::class, 'store']);
-    Route::get('/inventory/{id}', [InventoryCtrl::class, 'index']);
+    Route::get('/inventory/business/{id}', [InventoryCtrl::class, 'index']);
+    Route::get('/inventory/{inventory}/business/{business}', [InventoryCtrl::class, 'view']);
     Route::post('/inventory/delete', [InventoryCtrl::class, 'destroy']);
 });

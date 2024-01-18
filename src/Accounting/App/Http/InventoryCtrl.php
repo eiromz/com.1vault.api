@@ -81,4 +81,32 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $collection);
     }
+
+    /**
+     * @param $inventory
+     * @param $business
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function view($inventory, $business, Request $request)
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge([
+            'inventory' => $inventory,
+            'business' => $business
+        ]);
+
+        $request->validate([
+            'business' => ['required','exists:App\Models\Business,id'],
+            'inventory' => ['required','exists:App\Models\Inventory,id']
+        ]);
+
+        $data = $this->repository->getDetailsByParams([
+            'id' => $inventory,
+            'business_id' => $business,
+        ]);
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
 }

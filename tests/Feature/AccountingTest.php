@@ -61,7 +61,7 @@ describe('Business Routes', function () {
     });
     test('Customer can view a business', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/business/view', [
-            'business_id' => $this->business->id,
+            'business' => $this->business->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -136,8 +136,8 @@ describe('Business Routes', function () {
             'discount' => 1000,
             'tax' => 500,
             'shipping_fee' => 400,
-            'invoice_date' => '2024-01-17',
-            'due_date' => '2024-02-06',
+            'invoice_date' => now()->addDays(2)->format('Y-m-d'),
+            'due_date' => now()->addDays(30)->format('Y-m-d'),
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -164,7 +164,13 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('All Inventories', function () {
-        $response = $this->actingAs($this->customer)->get('/api/v1/inventory/'.$this->business->id);
+        $response = $this->actingAs($this->customer)->get('/api/v1/inventory/business/'.$this->business->id);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Get Single Inventory', function () {
+        $link = '/api/v1/inventory/'.$this->inventory->first()->id.'/business/'.$this->business->id;
+        $response = $this->actingAs($this->customer)->get($link);
         $response->dump();
         expect($response->status())->toBe(200);
     });
