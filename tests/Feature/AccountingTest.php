@@ -3,6 +3,7 @@
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\Customer;
+use App\Models\Inventory;
 use App\Models\Invoice;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
@@ -36,6 +37,11 @@ describe('Business Routes', function () {
             'business_id' => $this->business->id,
             'customer_id' => $this->customer->id,
             'client_id' => $this->client->id,
+        ]);
+
+        $this->inventory = Inventory::factory()->count(3)->create([
+            'business_id' => $this->business->id,
+            'customer_id' => $this->customer->id,
         ]);
     });
 
@@ -153,6 +159,18 @@ describe('Business Routes', function () {
             'quantity'      => fake()->numberBetween(100,1000),
             'unit'          => fake()->numberBetween(100,1000),
             'business'      => $this->business->id
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('All Inventories', function () {
+        $response = $this->actingAs($this->customer)->get('/api/v1/inventory/'.$this->business->id);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Delete Inventory', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/inventory/delete', [
+            'inventory' => $this->inventory->first()->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

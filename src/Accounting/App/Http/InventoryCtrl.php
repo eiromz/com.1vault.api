@@ -4,6 +4,7 @@ namespace Src\Accounting\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,5 +37,48 @@ class InventoryCtrl extends DomainBaseCtrl
         $data = $this->repository->create($request->only($this->requestKeysFilterCreate));
 
         return jsonResponse(Response::HTTP_OK, $data);
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->validate([
+            'inventory' => ['required', 'exists:App\Models\Inventory,id'],
+        ]);
+
+        if (!$this->repository->delete($request->inventory)) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to Delete Inventory',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Inventory Deleted',
+        ]);
+    }
+
+    public function index($id,Request $request)
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge(['business' => $id]);
+
+        $request->validate([
+            'business' => ['required','exists:App\Models\Business,id']
+        ]);
+
+        $collection = collect([
+            'inventory_count' => $this->repository->getCountAll(['business_id' => $id]),
+            'inventory_total_value' => $this->repository->getSum(['business_id' => $id])
+        ]);
+
+        $data = $this->repository->getAllByParams([
+            'business_id' => $id
+        ]);
+
+        $collection->put('inventory_list',$data->all());
+
+        return jsonResponse(Response::HTTP_OK, $collection);
     }
 }
