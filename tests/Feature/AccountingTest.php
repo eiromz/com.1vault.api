@@ -177,7 +177,7 @@ describe('Business Routes', function () {
                     "quantity" => 3
                 ],
             ],
-                'payment_status' => 1,
+                'payment_status'    => 1,
                 'note'              => 'welcome',
                 'amount_received'   => 50000,
                 'payment_method'    => 'cash',

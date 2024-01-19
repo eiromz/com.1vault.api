@@ -19,17 +19,17 @@ class UpdateInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'invoice_date'      => ['required', 'date', 'after_or_equal:today'],
-            'due_date'          => ['required', 'date', 'after_or_equal:today'],
-            'items'             => ['required', 'array'],
+            'invoice_date'      => ['nullable', 'date', 'after_or_equal:today'],
+            'due_date'          => ['nullable', 'date', 'after_or_equal:today'],
+            'items'             => ['nullable', 'array'],
             'note'              => ['nullable'],
             'amount_received'   => ['required'],
             'payment_method'    => ['required', 'in:pos,transfer,cash'],
             'discount'          => ['nullable'],
-            'tax'               => ['required'],
-            'shipping_fee'      => ['required'],
-            'total'             => ['required'],
-            'payment_status'    => ['required','integer','in:1,0'],
+            'tax'               => ['nullable'],
+            'shipping_fee'      => ['nullable'],
+            'total'             => ['nullable'],
+            'payment_status'    => ['nullable','integer','in:1,0'],
         ];
     }
 }
