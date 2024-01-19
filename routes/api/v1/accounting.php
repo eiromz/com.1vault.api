@@ -20,6 +20,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     /********Invoice Routes*******/
     Route::post('/invoice', [InvoiceCtrl::class, 'store']);
+    Route::post('/invoice/edit/{id}', [InvoiceCtrl::class, 'update']);
     Route::post('/invoice/delete', [InvoiceCtrl::class, 'destroy']);
 
     /********Inventory Routes*******/

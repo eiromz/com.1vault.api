@@ -22,7 +22,6 @@ class InventoryCtrl extends DomainBaseCtrl
         $this->repository = $repository;
         parent::__construct();
     }
-
     public function store(CreateInventoryRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -38,7 +37,6 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
     public function destroy(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -57,7 +55,6 @@ class InventoryCtrl extends DomainBaseCtrl
             'message' => 'Inventory Deleted',
         ]);
     }
-
     public function index($id,Request $request)
     {
         $this->repository->setUser(auth()->user());
@@ -81,7 +78,6 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $collection);
     }
-
     /**
      * @param $inventory
      * @param $business

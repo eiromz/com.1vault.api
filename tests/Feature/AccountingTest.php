@@ -158,6 +158,46 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Business can edit invoice', function () {
+        $response = $this->actingAs($this->customer)
+            ->post('/api/v1/invoice/edit/'.$this->invoice->first()->id, [
+                'items'             => [
+                [
+                    'inventory_id' => fake()->uuid,
+                    "name" => "Hackett",
+                    "amount" => "Stark",
+                    "unit" => "Johnston",
+                    "quantity" => 3
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    "name" => "Hackett",
+                    "amount" => "Stark",
+                    "unit" => "Johnston",
+                    "quantity" => 3
+                ],
+            ],
+                'payment_status' => 1,
+                'note'              => 'welcome',
+                'amount_received'   => 50000,
+                'payment_method'    => 'cash',
+                'discount'          => 1000,
+                'tax'               => 500,
+                'shipping_fee'      => 400,
+                'total'             => 50000,
+                'invoice_date'      => now()->addDays(2)->format('Y-m-d'),
+                'due_date'          => now()->addDays(30)->format('Y-m-d'),
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Business can view invoice', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/invoice/edit', [
+            'invoice' => $this->invoice->first()->id,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 
     /*************Inventory ******************/
     test('Create Inventory', function () {

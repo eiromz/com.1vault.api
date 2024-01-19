@@ -7,19 +7,24 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateInvoiceRequest;
+use Src\Accounting\App\Requests\UpdateInvoiceRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class InvoiceCtrl extends DomainBaseCtrl
 {
     private $repository;
-
-    public array $requestKeysFilter = [
+    public array $storeRequestFilterKeys = [
         'client_id', 'business_id', 'invoice_date', 'due_date', 'items', 'note',
         'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee','total',
         'payment_status'
     ];
 
+    public array $updateRequestFilterKeys = [
+        'invoice_date', 'due_date', 'items', 'note',
+        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee','total',
+        'payment_status'
+    ];
     public function __construct(InvoiceRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -44,7 +49,7 @@ class InvoiceCtrl extends DomainBaseCtrl
 
         $request->validated();
 
-        $data = $this->repository->create($request->only($this->requestKeysFilter));
+        $data = $this->repository->create($request->only($this->storeRequestFilterKeys));
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
@@ -65,6 +70,22 @@ class InvoiceCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, [
             'message' => 'Invoice Deleted',
+        ]);
+    }
+
+    public function update($id,UpdateInvoiceRequest $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+        $request->validated();
+
+        if(!$this->repository->update($id,$request->only($this->updateRequestFilterKeys))){
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update invoice',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Invoice Updated'
         ]);
     }
 }
