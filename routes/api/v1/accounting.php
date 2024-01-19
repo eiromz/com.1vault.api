@@ -21,7 +21,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     /********Invoice Routes*******/
     Route::post('/invoice', [InvoiceCtrl::class, 'store']);
     Route::post('/invoice/edit/{id}', [InvoiceCtrl::class, 'update']);
-    Route::get('/invoice/view/{id}', [InvoiceCtrl::class, 'view']);
+    Route::get('/invoice/{invoice}/business/{business}', [InvoiceCtrl::class, 'view']);
     Route::post('/invoice/delete', [InvoiceCtrl::class, 'destroy']);
 
     /********Inventory Routes*******/

@@ -192,9 +192,8 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('Business can view invoice', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/invoice/edit', [
-            'invoice' => $this->invoice->first()->id,
-        ]);
+        $link = '/api/v1/invoice/'.$this->invoice->first()->id.'/business/'.$this->business->id;
+        $response = $this->actingAs($this->customer)->get($link);
         $response->dump();
         expect($response->status())->toBe(200);
     });

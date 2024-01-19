@@ -88,4 +88,26 @@ class InvoiceCtrl extends DomainBaseCtrl
             'message' => 'Invoice Updated'
         ]);
     }
+
+    public function view($invoice, $business, Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge([
+            'invoice' => $invoice,
+            'business' => $business
+        ]);
+
+        $request->validate([
+            'business' => ['required','exists:App\Models\Business,id'],
+            'invoice' => ['required','exists:App\Models\Invoice,id']
+        ]);
+
+        $data = $this->repository->getDetailsByParams([
+            'id' => $invoice,
+            'business_id' => $business,
+        ]);
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
 }
