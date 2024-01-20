@@ -278,18 +278,37 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-//    test('Business can Create Inventory', function () {
-//        $response = $this->actingAs($this->customer)->post('/api/v1/inventory', [
-//            'name' => fake()->lastName,
-//            'amount' => fake()->numberBetween(100, 1000),
-//            'selling_price' => fake()->numberBetween(100, 1000),
-//            'quantity' => fake()->numberBetween(100, 1000),
-//            'unit' => fake()->numberBetween(100, 1000),
-//            'business' => $this->business->id,
-//        ]);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
+    test('Business can Create Receipt', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/receipt', [
+            'client' => $this->client->id,
+            'business' => $this->business->id,
+            'items' => [
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+            ],
+            'description' => 'welcome',
+            'amount_received' => 50000,
+            'payment_method' => 'cash',
+            'discount' => 1000,
+            'tax' => 500,
+            'total' => 50000,
+            'transaction_date' => now()->addDays(2)->format('Y-m-d'),
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 //    test('Business can view all Inventories', function () {
 //        $response = $this->actingAs($this->customer)->get('/api/v1/inventory/business/'.$this->business->id);
 //        $response->dump();

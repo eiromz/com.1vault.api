@@ -6,6 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Accounting\App\Requests\CreateReceiptRequest;
 use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,11 +15,13 @@ class ReceiptCtrl extends DomainBaseCtrl
     private $repository;
 
     public array $storeRequestFilterKeys = [
-
+        'client_id', 'business_id', 'transaction_date', 'items', 'description',
+        'amount_received', 'payment_method', 'discount', 'tax',  'total'
     ];
 
     public array $updateRequestFilterKeys = [
-
+        'transaction_date', 'items', 'description',
+        'amount_received', 'payment_method', 'discount', 'tax', 'total'
     ];
 
     public function __construct(ReceiptRepositoryInterface $repository)
@@ -30,7 +33,7 @@ class ReceiptCtrl extends DomainBaseCtrl
     /**
      * @throws Exception
      */
-    public function store(Request $request): JsonResponse
+    public function store(CreateReceiptRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
@@ -38,10 +41,6 @@ class ReceiptCtrl extends DomainBaseCtrl
             'client_id' => $request->client,
             'business_id' => $request->business,
         ]);
-
-        if ($request->amount_received === $request->total) {
-            $request->merge(['payment_status' => 1]);
-        }
 
         $request->validated();
 
