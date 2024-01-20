@@ -309,12 +309,12 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-//    test('Business can view all Inventories', function () {
-//        $response = $this->actingAs($this->customer)->get('/api/v1/inventory/business/'.$this->business->id);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
-//    test('Business can edit Inventory', function () {
+    test('Business can view all Receipts', function () {
+        $response = $this->actingAs($this->customer)->get('/api/v1/receipt/business/'.$this->business->id);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+//    test('Business can edit Receipt', function () {
 //        $link = '/api/v1/inventory/edit/'.$this->inventory->first()->id;
 //        $response = $this->actingAs($this->customer)->post($link, [
 //            'name' => "ola Damilola Update",
@@ -327,10 +327,10 @@ describe('Business Routes', function () {
 //        $response->dump();
 //        expect($response->status())->toBe(200);
 //    });
-//    test('Business can view Inventory', function () {
-//        $link = '/api/v1/inventory/'.$this->inventory->first()->id.'/business/'.$this->business->id;
-//        $response = $this->actingAs($this->customer)->get($link);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
+    test('Business can view Receipt', function () {
+        $link = '/api/v1/receipt/'.$this->receipt->first()->id.'/business/'.$this->business->id;
+        $response = $this->actingAs($this->customer)->get($link);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });

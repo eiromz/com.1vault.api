@@ -31,6 +31,8 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     /********Receipt Routes*******/
     Route::post('/receipt/delete', [ReceiptCtrl::class, 'destroy']);
     Route::post('/receipt', [ReceiptCtrl::class, 'store']);
+    Route::get('/receipt/business/{business}', [ReceiptCtrl::class, 'index']);
+    Route::get('/receipt/{receipt}/business/{business}', [ReceiptCtrl::class, 'view']);
 
     /********Inventory Routes*******/
     Route::post('/inventory', [InventoryCtrl::class, 'store']);

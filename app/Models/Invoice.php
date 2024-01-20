@@ -18,6 +18,7 @@ class Invoice extends Model
         'items' => 'array',
     ];
 
+    protected $with = ['client'];
     protected $guarded = [];
 
     protected $appends = ['invoice_number'];
@@ -47,5 +48,9 @@ class Invoice extends Model
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

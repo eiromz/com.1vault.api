@@ -84,29 +84,29 @@ class ReceiptCtrl extends DomainBaseCtrl
         ]);
     }
 
-    public function view($invoice, $business, Request $request): JsonResponse
+    public function view($receipt, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         $request->merge([
-            'invoice' => $invoice,
+            'receipt' => $receipt,
             'business' => $business,
         ]);
 
         $request->validate([
             'business' => ['required', 'exists:App\Models\Business,id'],
-            'invoice' => ['required', 'exists:App\Models\Invoice,id'],
+            'receipt' => ['required', 'exists:App\Models\Receipt,id'],
         ]);
 
         $data = $this->repository->getDetailsByParams([
-            'id' => $invoice,
+            'id' => $receipt,
             'business_id' => $business,
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
-    public function index($business, Request $request)
+    public function index($business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 

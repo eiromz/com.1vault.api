@@ -20,6 +20,8 @@ class Receipt extends Model
 
     protected $appends = ['receipt_number'];
 
+    protected $with = ['client'];
+
     protected function receiptNumber(): Attribute
     {
         return Attribute::make(
@@ -37,5 +39,9 @@ class Receipt extends Model
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
+    }
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }
