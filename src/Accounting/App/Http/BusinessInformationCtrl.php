@@ -89,4 +89,23 @@ class BusinessInformationCtrl extends DomainBaseCtrl
             'message' => 'Business updated',
         ]);
     }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->validate([
+            'business' => ['required', 'exists:App\Models\Business,id'],
+        ]);
+
+        if (! $this->repository->delete($request->business)) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to Delete Business',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Business Deleted',
+        ]);
+    }
 }

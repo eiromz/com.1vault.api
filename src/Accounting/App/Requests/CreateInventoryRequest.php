@@ -24,7 +24,7 @@ class CreateInventoryRequest extends FormRequest
             'quantity' => ['required', 'integer'],
             'unit' => ['required'],
             'business' => ['required'],
-            'selling_price' => ['nullable']
+            'selling_price' => ['nullable'],
         ];
     }
 }

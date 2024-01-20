@@ -17,11 +17,11 @@ class InventoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'product_name'   => fake()->lastName,
-            'amount'        => fake()->numberBetween(100,1000),
-            'selling_price' => fake()->numberBetween(100,1000),
-            'quantity'      => fake()->numberBetween(100,1000),
-            'unit'          => fake()->numberBetween(100,1000),
+            'product_name' => fake()->lastName,
+            'amount' => fake()->numberBetween(100, 1000),
+            'selling_price' => fake()->numberBetween(100, 1000),
+            'quantity' => fake()->numberBetween(100, 1000),
+            'unit' => fake()->numberBetween(100, 1000),
         ];
     }
 }

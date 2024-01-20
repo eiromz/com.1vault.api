@@ -5,8 +5,9 @@ namespace Src\Accounting\Domain\Repository;
 use App\Models\Receipt;
 use Illuminate\Support\Arr;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
+use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
 
-class ReceiptRepository extends BaseRepository implements InventoryRepositoryInterface
+class ReceiptRepository extends BaseRepository implements ReceiptRepositoryInterface
 {
     public function __construct(Receipt $model)
     {

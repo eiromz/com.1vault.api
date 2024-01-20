@@ -14,17 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 class InvoiceCtrl extends DomainBaseCtrl
 {
     private $repository;
+
     public array $storeRequestFilterKeys = [
         'client_id', 'business_id', 'invoice_date', 'due_date', 'items', 'note',
-        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee','total',
-        'payment_status'
+        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee', 'total',
+        'payment_status',
     ];
 
     public array $updateRequestFilterKeys = [
         'invoice_date', 'due_date', 'items', 'note',
-        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee','total',
-        'payment_status'
+        'amount_received', 'payment_method', 'discount', 'tax', 'shipping_fee', 'total',
+        'payment_status',
     ];
+
     public function __construct(InvoiceRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -43,7 +45,7 @@ class InvoiceCtrl extends DomainBaseCtrl
             'business_id' => $request->business,
         ]);
 
-        if($request->amount_received === $request->total){
+        if ($request->amount_received === $request->total) {
             $request->merge(['payment_status' => 1]);
         }
 
@@ -73,19 +75,19 @@ class InvoiceCtrl extends DomainBaseCtrl
         ]);
     }
 
-    public function update($id,UpdateInvoiceRequest $request): JsonResponse
+    public function update($id, UpdateInvoiceRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
         $request->validated();
 
-        if(!$this->repository->update($id,$request->only($this->updateRequestFilterKeys))){
+        if (! $this->repository->update($id, $request->only($this->updateRequestFilterKeys))) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to update invoice',
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Invoice Updated'
+            'message' => 'Invoice Updated',
         ]);
     }
 
@@ -95,16 +97,33 @@ class InvoiceCtrl extends DomainBaseCtrl
 
         $request->merge([
             'invoice' => $invoice,
-            'business' => $business
+            'business' => $business,
         ]);
 
         $request->validate([
-            'business' => ['required','exists:App\Models\Business,id'],
-            'invoice' => ['required','exists:App\Models\Invoice,id']
+            'business' => ['required', 'exists:App\Models\Business,id'],
+            'invoice' => ['required', 'exists:App\Models\Invoice,id'],
         ]);
 
         $data = $this->repository->getDetailsByParams([
             'id' => $invoice,
+            'business_id' => $business,
+        ]);
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
+
+    public function index($business, Request $request)
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge(['business' => $business]);
+
+        $request->validate([
+            'business' => ['required', 'exists:App\Models\Business,id'],
+        ]);
+
+        $data = $this->repository->getAllByParams([
             'business_id' => $business,
         ]);
 

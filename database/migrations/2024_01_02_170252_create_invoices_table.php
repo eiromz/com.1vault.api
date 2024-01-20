@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
             $table->foreignUuid('business_id');
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('client_id')->nullable();
@@ -21,10 +21,9 @@ return new class extends Migration
             $table->double('discount')->default(0);
             $table->double('shipping_fee')->default(0);
             $table->double('amount_received')->default(0);
-            $table->double('total');
+            $table->double('total')->default(0);
             $table->string('note');
             $table->json('items')->comment('array for items to be stored in the field');
-            $table->string('pdf_link')->nullable();
             $table->string('payment_method')->comment('This shows what preferred method of payment should be used');
             $table->boolean('payment_status')->default(0)->comment('there are two status paid[1] and unpaid[0]');
             $table->timestamp('invoice_date');

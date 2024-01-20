@@ -110,4 +110,23 @@ class ClientCtrl extends DomainBaseCtrl
             'message' => 'Customer updated',
         ]);
     }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->validate([
+            'customer' => ['required', 'exists:App\Models\Client,id'],
+        ]);
+
+        if (! $this->repository->delete($request->business)) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to Delete Customer',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Customer Deleted',
+        ]);
+    }
 }

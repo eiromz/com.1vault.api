@@ -12,11 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 class InventoryCtrl extends DomainBaseCtrl
 {
     private $repository;
-
     public array $requestKeysFilterCreate = [
-        'amount','is_published','product_name','unit','quantity','business_id','selling_price'
+        'amount', 'is_published', 'product_name', 'unit', 'quantity', 'business_id', 'selling_price',
     ];
-
+    public array $requestKeysFilterUpdate = [
+        'amount','product_name', 'unit', 'quantity', 'selling_price',
+    ];
     public function __construct(InventoryRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -29,7 +30,7 @@ class InventoryCtrl extends DomainBaseCtrl
         $request->merge([
             'is_published' => 1,
             'product_name' => $request->name,
-            'business_id' => $request->business
+            'business_id' => $request->business,
         ]);
         $request->validated();
 
@@ -45,7 +46,7 @@ class InventoryCtrl extends DomainBaseCtrl
             'inventory' => ['required', 'exists:App\Models\Inventory,id'],
         ]);
 
-        if (!$this->repository->delete($request->inventory)) {
+        if (! $this->repository->delete($request->inventory)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Inventory',
             ]);
@@ -55,47 +56,41 @@ class InventoryCtrl extends DomainBaseCtrl
             'message' => 'Inventory Deleted',
         ]);
     }
-    public function index($id,Request $request)
+    public function index($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         $request->merge(['business' => $id]);
 
         $request->validate([
-            'business' => ['required','exists:App\Models\Business,id']
+            'business' => ['required', 'exists:App\Models\Business,id'],
         ]);
 
         $collection = collect([
             'inventory_count' => $this->repository->getCountAll(['business_id' => $id]),
-            'inventory_total_value' => $this->repository->getSum(['business_id' => $id])
+            'inventory_total_value' => $this->repository->getSum(['business_id' => $id]),
         ]);
 
         $data = $this->repository->getAllByParams([
-            'business_id' => $id
+            'business_id' => $id,
         ]);
 
-        $collection->put('inventory_list',$data->all());
+        $collection->put('inventory_list', $data->all());
 
         return jsonResponse(Response::HTTP_OK, $collection);
     }
-    /**
-     * @param $inventory
-     * @param $business
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function view($inventory, $business, Request $request)
+    public function view($inventory, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         $request->merge([
             'inventory' => $inventory,
-            'business' => $business
+            'business' => $business,
         ]);
 
         $request->validate([
-            'business' => ['required','exists:App\Models\Business,id'],
-            'inventory' => ['required','exists:App\Models\Inventory,id']
+            'business' => ['required', 'exists:App\Models\Business,id'],
+            'inventory' => ['required', 'exists:App\Models\Inventory,id'],
         ]);
 
         $data = $this->repository->getDetailsByParams([
@@ -104,5 +99,31 @@ class InventoryCtrl extends DomainBaseCtrl
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);
+    }
+    public function edit($id, Request $request): JsonResponse
+    {
+        $this->repository->setUser(auth()->user());
+
+        $request->merge([
+            'product_name' => $request->name,
+        ]);
+
+        $request->merge(['inventory' => $id]);
+
+        $request->validate([
+            'inventory' => ['required', 'exists:App\Models\Inventory,id'], 'name' => ['nullable', 'min:2'],
+            'amount' => ['nullable'], 'quantity' => ['nullable', 'integer'],
+            'unit' => ['nullable'], 'selling_price' => ['nullable']
+        ]);
+
+        if (! $this->repository->update($id, $request->only($this->requestKeysFilterUpdate))) {
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update inventory',
+            ]);
+        }
+
+        return jsonResponse(Response::HTTP_OK, [
+            'message' => 'Inventory Updated',
+        ]);
     }
 }

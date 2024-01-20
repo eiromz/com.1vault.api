@@ -7,7 +7,6 @@ use App\Models\Account;
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\Customer;
-use App\Models\Invoice;
 use App\Models\Journal;
 use App\Models\KnowYourCustomer;
 use App\Models\Profile;
