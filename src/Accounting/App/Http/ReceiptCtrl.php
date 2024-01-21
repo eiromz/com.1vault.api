@@ -85,6 +85,7 @@ class ReceiptCtrl extends DomainBaseCtrl
         ]);
     }
 
+
     public function view($receipt, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
