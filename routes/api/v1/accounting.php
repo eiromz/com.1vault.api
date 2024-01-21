@@ -29,10 +29,11 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/invoice/delete', [InvoiceCtrl::class, 'destroy']);
 
     /********Receipt Routes*******/
-    Route::post('/receipt/delete', [ReceiptCtrl::class, 'destroy']);
-    Route::post('/receipt', [ReceiptCtrl::class, 'store']);
     Route::get('/receipt/business/{business}', [ReceiptCtrl::class, 'index']);
     Route::get('/receipt/{receipt}/business/{business}', [ReceiptCtrl::class, 'view']);
+    Route::post('/receipt', [ReceiptCtrl::class, 'store']);
+    Route::post('/receipt/edit/{id}', [ReceiptCtrl::class, 'update']);
+    Route::post('/receipt/delete', [ReceiptCtrl::class, 'destroy']);
 
     /********Inventory Routes*******/
     Route::post('/inventory', [InventoryCtrl::class, 'store']);

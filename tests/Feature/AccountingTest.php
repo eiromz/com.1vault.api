@@ -314,19 +314,37 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-//    test('Business can edit Receipt', function () {
-//        $link = '/api/v1/inventory/edit/'.$this->inventory->first()->id;
-//        $response = $this->actingAs($this->customer)->post($link, [
-//            'name' => "ola Damilola Update",
-//            'amount' => fake()->numberBetween(100, 1000),
-//            'selling_price' => fake()->numberBetween(100, 1000),
-//            'quantity' => fake()->numberBetween(100, 1000),
-//            'unit' => fake()->numberBetween(100, 1000)
-//        ]);
-//
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
+    test('Business can edit Receipt', function () {
+        $link = '/api/v1/receipt/edit/'.$this->receipt->first()->id;
+        $response = $this->actingAs($this->customer)->post($link, [
+            'items' => [
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+            ],
+            'description' => 'welcome',
+            'amount_received' => 50000,
+            'payment_method' => 'cash',
+            'discount' => 1000,
+            'tax' => 500,
+            'total' => 50000,
+            'transaction_date' => now()->addDays(2)->format('Y-m-d'),
+        ]);
+
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Business can view Receipt', function () {
         $link = '/api/v1/receipt/'.$this->receipt->first()->id.'/business/'.$this->business->id;
         $response = $this->actingAs($this->customer)->get($link);

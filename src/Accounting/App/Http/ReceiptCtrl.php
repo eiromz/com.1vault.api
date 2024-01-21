@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateReceiptRequest;
+use Src\Accounting\App\Requests\UpdateReceiptRequest;
 use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,19 +69,19 @@ class ReceiptCtrl extends DomainBaseCtrl
         ]);
     }
 
-    public function update($id, Request $request): JsonResponse
+    public function update($id, UpdateReceiptRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
         $request->validated();
 
         if (! $this->repository->update($id, $request->only($this->updateRequestFilterKeys))) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Failed to update invoice',
+                'message' => 'Failed to update receipt',
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Invoice Updated',
+            'message' => 'Receipt Updated',
         ]);
     }
 

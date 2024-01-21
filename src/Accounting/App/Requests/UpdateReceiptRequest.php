@@ -4,7 +4,7 @@ namespace Src\Accounting\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateReceiptRequest extends FormRequest
+class UpdateReceiptRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -26,8 +26,6 @@ class CreateReceiptRequest extends FormRequest
             'payment_method' => ['required', 'in:pos,transfer,cash'],
             'discount' => ['nullable'],
             'tax' => ['required'],
-            'client' => ['nullable', 'exists:App\Models\Client,id'],
-            'business' => ['nullable', 'exists:App\Models\Business,id'],
             'total' => ['required'],
         ];
     }
