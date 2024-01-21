@@ -21,12 +21,18 @@ class Invoice extends Model
     protected $with = ['client'];
     protected $guarded = [];
 
-    protected $appends = ['invoice_number'];
+    protected $appends = ['invoice_number','balance_due'];
 
     protected function invoiceNumber(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => 'INV000'.$attributes['id'],
+        );
+    }
+    protected function balanceDue(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes['total']-$attributes['amount_received']),
         );
     }
     protected function paymentStatus(): Attribute
@@ -37,6 +43,7 @@ class Invoice extends Model
             ))->execute(),
         );
     }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

@@ -4,7 +4,5 @@ namespace Src\Accounting\Domain\Repository\Interfaces;
 
 interface InvoiceRepositoryInterface
 {
-    public function create(array $details);
-
-    public function getClientDetails(array $details);
+    public function getSalesAndDebtorList(array $details, $start_date, $end_date);
 }

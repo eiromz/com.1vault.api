@@ -5,6 +5,7 @@ use Src\Accounting\App\Http\ClientCtrl;
 use Src\Accounting\App\Http\InventoryCtrl;
 use Src\Accounting\App\Http\InvoiceCtrl;
 use Src\Accounting\App\Http\ReceiptCtrl;
+use Src\Accounting\App\Http\ReportCtrl;
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
     /******** Client Routes ***********/
@@ -34,6 +35,8 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/receipt', [ReceiptCtrl::class, 'store']);
     Route::post('/receipt/edit/{id}', [ReceiptCtrl::class, 'update']);
     Route::post('/receipt/delete', [ReceiptCtrl::class, 'destroy']);
+
+    Route::post('/report', [ReportCtrl::class, 'index']);
 
     /********Inventory Routes*******/
     Route::post('/inventory', [InventoryCtrl::class, 'store']);

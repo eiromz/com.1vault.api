@@ -13,21 +13,24 @@ class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInter
         parent::__construct($model);
     }
 
-    public function create(array $details)
+    public function getSalesAndDebtorList(array $details, $start_date, $end_date)
     {
-        Arr::set($details, 'customer_id', $this->customer);
-        Arr::set($details, 'collaborator_id', $this->collaborator);
+        //use type = debtor
+        //invoice has not been marked as paid
+        // TODO: Implement getDebtorList() method.
 
-        return $this->model->query()->create($details);
-    }
+        try {
+            Arr::set($details, 'customer_id', $this->customer);
 
-    public function getClientDetails(array $details)
-    {
-        Arr::set($details, 'customer_id', $this->customer);
-        if (! is_null($this->collaborator)) {
-            Arr::set($details, 'collaborator_id', $this->collaborator);
+            if (! is_null($this->collaborator)) {
+                Arr::set($details, 'collaborator_id', $this->collaborator);
+            }
+
+            return $this->model->query()->where($details)
+                ->whereBetween('due_date',[$start_date,$end_date])
+                ->get();
+        } catch (\Exception $e) {
+            logExceptionErrorMessage('InvoiceRepository=>getDebtorList', $e);
         }
-
-        return $this->model->query()->where($details)->first();
     }
 }
