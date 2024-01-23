@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('id')->primary()->index();
             $table->foreignUuid('customer_id');
             $table->foreignUuid('service_id')->nullable();
-            $table->string('charge_type')->comment('one-time,recurring')->nullable();
             $table->double('amount');
             $table->string('trx_ref');
             $table->string('source')->comment('wallet');

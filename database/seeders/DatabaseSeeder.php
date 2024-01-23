@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\Customer;
+use App\Models\Invoice;
 use App\Models\Journal;
 use App\Models\KnowYourCustomer;
 use App\Models\Profile;
@@ -71,6 +72,12 @@ class DatabaseSeeder extends Seeder
             'business_id' => $business->first()->id,
             'customer_id' => $customer->id,
             'fullname' => 'Apostle Atokolos',
+        ]);
+
+        $invoice = Invoice::factory()->count(3)->create([
+            'business_id' => $client->business_id,
+            'customer_id' => $customer->id,
+            'client_id' => $client->id,
         ]);
 
         //        $journal = Journal::factory()->create([

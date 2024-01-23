@@ -363,4 +363,14 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Business can Retrieve Report', function () {
+        $response = $this->actingAs($this->customer)->post('/download/pdf', [
+            'start_date' => '2024-01-01',
+            'end_date'  => '2024-02-10',
+            'business'  => $this->business->id,
+            'type' => 'debtors',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });

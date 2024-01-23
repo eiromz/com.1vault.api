@@ -19,7 +19,7 @@ class InterWalletTransferCtrl extends DomainBaseCtrl
     /**
      * @throws Exception
      */
-    public function __invoke(Request $request): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $request->validate([
             'accountNumber' => ['required', 'exists:App\Models\Profile,account_number'],

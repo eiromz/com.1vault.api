@@ -24,4 +24,9 @@ class Journal extends Model
         'source',
         'payload',
     ];
+
+    protected $casts = [
+        'debit' => 'boolean',
+        'credit' => 'boolean'
+    ];
 }

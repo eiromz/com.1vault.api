@@ -17,4 +17,16 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
+Route::get('/view/template/receipt', function(){
+    return view('pdf-template.receipt');
+});
+
+Route::get('/view/template/sales', function(){
+    return view('pdf-template.sales');
+});
+
+Route::get('/view/template/debtors', function(){
+    return view('pdf-template.debtors');
+});
+
 require __DIR__.'/auth.php';
