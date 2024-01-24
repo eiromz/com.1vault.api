@@ -99,6 +99,9 @@ class JournalCtrl extends DomainBaseCtrl
         $destination->credit()->notify();
     }
 
+    //create the request
+    //pay : amount, cart_id, order_number
+
     //Airtime::purchase();
     //Debit::journal();
     //Subscribe::service()

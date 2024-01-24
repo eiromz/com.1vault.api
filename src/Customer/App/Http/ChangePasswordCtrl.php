@@ -3,6 +3,7 @@
 namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Customer;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,15 +32,20 @@ class ChangePasswordCtrl extends DomainBaseCtrl
                 );
             }
 
-            $request->user()->fill([
-                'password' => Hash::make($request->password),
+            $customer = Customer::query()->find(auth()->user()->id);
+
+            $customer->password = Hash::make($request->password);
+
+            if($customer->save()){
+                return jsonResponse(Response::HTTP_OK, [
+                    'message' => 'Successfully Updated Your Password',
+                ]);
+            }
+
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update your password',
             ]);
 
-            $request->user()->save();
-
-            return jsonResponse(Response::HTTP_OK, [
-                'message' => 'Successfully Updated Your Password',
-            ]);
         } catch (Exception $e) {
             logExceptionErrorMessage('ChangePasswordCtrl', $e);
 
