@@ -17,5 +17,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/wallets/name-search',[WalletAccountSearchCtrl::class,'index']);
     Route::post('/wallets/journal',[JournalCtrl::class,'index']);
     Route::post('/wallets/journal/view',[JournalCtrl::class,'view']);
-    Route::post('/wallets/journal/transfer',[JournalCtrl::class,'store']);
+    Route::post('/wallets/journal/transfer',[JournalCtrl::class,'store'])
+        ->middleware('invalid.accountNumber');
 });

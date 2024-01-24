@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Wallets\Payments\Domain\Repository\Interfaces\JournalRepositoryInterface;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
+use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -33,9 +34,9 @@ class JournalCtrl extends DomainBaseCtrl
                 'filter_type'   =>    ['required','in:default,date,search'],
                 'start_date'    =>     ['required_if:filter_type,date','after_or_equal:today'],
                 'end_date'      =>     ['required_if:filter_type,date','after_or_equal:tomorrow'],
-                'search'        =>     ['required_if:filter_type,search']
             ]);
 
+            //TODO please make sure to handle the search feature
             $result = match($request->filter_type) {
                 'default' => $this->repository->getAllByParams([]),
                 'date'    => $this->repository->getAllByCreatedAtDate($request->start_date,$request->end_date,[]),
@@ -61,6 +62,33 @@ class JournalCtrl extends DomainBaseCtrl
         ]);
 
         return jsonResponse(Response::HTTP_OK, $result);
+    }
+
+    public function store(Request $request)
+    {
+        $this->repository->setUser(auth()->user());
+        $request->merge([
+            'trx_ref'   => generateTransactionReference(),
+            'debit'     => true,
+            'credit'    => false,
+            'label'     => 'wallet to wallet transfer',
+            'source'    => 'wallet transaction'
+        ]);
+
+        $request->validate([
+            'account_number' => ['required','exists:App\Models\Profile,account_number'],
+            'amount'         => ['required']
+        ]);
+
+        $source =  new JournalWalletDebitService(
+            GetAccountInstance::getActiveInstance(auth()->user()->profile),$request,$this->repository
+        );
+
+        $source->checkBalance()->debit()->notify();
+
+        $destination = new JournalWalletDebitService(
+            GetAccountInstance::getActiveInstance(Profile::where('account_number')),$request,$this->repository
+        );
     }
 
     //Airtime::purchase();

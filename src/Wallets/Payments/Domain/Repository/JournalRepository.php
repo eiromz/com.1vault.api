@@ -20,7 +20,7 @@ class JournalRepository extends BaseRepository implements JournalRepositoryInter
         try {
             Arr::set($details, 'customer_id', $this->customer);
 
-            return $this->model->query()->where($details)->get();
+            return $this->model->query()->where($details)->latest()->limit(100)->get();
         } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
         }
@@ -32,6 +32,8 @@ class JournalRepository extends BaseRepository implements JournalRepositoryInter
             Arr::set($details, 'customer_id', $this->customer);
 
             return $this->model->query()->where($details)
+                ->limit(100)
+                ->latest()
                 ->whereBetween('created_at',[$start_date,$end_date])
                 ->get();
         } catch (\Exception $e) {

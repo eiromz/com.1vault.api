@@ -11,6 +11,8 @@ use App\Models\Invoice;
 use App\Models\Journal;
 use App\Models\KnowYourCustomer;
 use App\Models\Profile;
+use App\Models\Service;
+use App\Models\ServiceBenefit;
 use App\Models\State;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -83,5 +85,13 @@ class DatabaseSeeder extends Seeder
         //        $journal = Journal::factory()->create([
         //            'customer_id' => $customer->id,
         //        ]);
+
+        $service  = Service::factory()->count(3)->create();
+        ServiceBenefit::factory()->count(3)->create([
+            'service_id' => $service->first()->id
+        ]);
+        $journal = Journal::factory()->count(3)->create([
+            'customer_id' => $customer->id,
+        ]);
     }
 }

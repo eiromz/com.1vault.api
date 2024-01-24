@@ -103,3 +103,10 @@ if (! function_exists('generateInvoiceNumber')) {
         return $prefix.sprintf('%04d', $string + 1);
     }
 }
+
+if (! function_exists('generateTransactionReference')) {
+    function generateTransactionReference(): string
+    {
+        return 'trx'.time().uniqid();
+    }
+}

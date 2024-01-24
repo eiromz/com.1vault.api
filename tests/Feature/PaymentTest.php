@@ -1,6 +1,7 @@
 <?php
 use App\Models\Customer;
 use App\Models\Journal;
+use App\Models\Profile;
 use App\Models\Service;
 use App\Models\ServiceBenefit;
 use App\Models\State;
@@ -31,7 +32,7 @@ describe('Payment Routes', function () {
     /*************Report ******************/
     test('Customer can perform name search', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/name-search', [
-            'account_number' => $this->customer->profile->account_number,
+            'account_number' => $this->customer2->profile->account_number,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -39,7 +40,7 @@ describe('Payment Routes', function () {
 
     test('Customer can fetch all journal transactions', function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal',[
-            'filter_type' => 'date',
+            'filter_type' => 'default',
             'start_date'    => '2024-01-24',
             'end_date'      => '2024-01-27',
         ]);
@@ -47,7 +48,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can fetch a single journal transaction', function(){
+    test('Customer can fetch a single journal transaction', function() {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view',[
             'trx_ref' => $this->journal->first()->trx_ref,
         ]);
@@ -55,4 +56,28 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
+    test('Customer can perform transaction transfers', function(){
+        $customer2 = Customer::factory()->create([
+            'email' => 'crayolu2@gmail.com'
+        ]);
+
+        Profile::factory()->create([
+            'customer_id' => $customer2->id,
+            'account_number' => '0417083628',
+            'state_id' => $this->state->id,
+        ]);
+
+        Journal::factory()->create([
+            'customer_id' => $customer2->id
+        ]);
+
+        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer',[
+            'account_number' => $customer2->profile->account_number,
+            'amount'         => 1000000000000
+        ]);
+
+        $response->dump();
+
+        expect($response->status())->toBe(200);
+    });
 });
