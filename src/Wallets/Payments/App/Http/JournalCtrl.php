@@ -58,6 +58,8 @@ class JournalCtrl extends DomainBaseCtrl
         $result = $this->repository->getDetailsByParams([
             'trx_ref' => $request->trx_ref
         ]);
+
+        return jsonResponse(Response::HTTP_OK, $result);
     }
 
     //Airtime::purchase();
