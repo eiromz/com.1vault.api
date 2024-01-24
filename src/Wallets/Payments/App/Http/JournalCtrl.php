@@ -48,7 +48,8 @@ class JournalCtrl extends DomainBaseCtrl
         }
     }
 
-    public function view(Request $request) : JsonResponse{
+    public function view(Request $request) : JsonResponse
+    {
         $this->repository->setUser(auth()->user());
 
         $request->validate([
