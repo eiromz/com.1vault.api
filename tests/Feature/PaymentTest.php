@@ -73,7 +73,7 @@ describe('Payment Routes', function () {
 
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer',[
             'account_number' => $customer2->profile->account_number,
-            'amount'         => 1000000000000
+            'amount'         => 10000
         ]);
 
         $response->dump();

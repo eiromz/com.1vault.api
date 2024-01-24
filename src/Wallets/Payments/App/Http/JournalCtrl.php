@@ -2,6 +2,7 @@
 
 namespace Src\Wallets\Payments\App\Http;
 
+use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Profile;
 use Exception;
@@ -64,6 +65,9 @@ class JournalCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $result);
     }
 
+    /**
+     * @throws InsufficientBalance
+     */
     public function store(Request $request)
     {
         $this->repository->setUser(auth()->user());
@@ -72,7 +76,7 @@ class JournalCtrl extends DomainBaseCtrl
             'debit'     => true,
             'credit'    => false,
             'label'     => 'wallet to wallet transfer',
-            'source'    => 'wallet transaction'
+            'source'    => 'wallet transaction',
         ]);
 
         $request->validate([
@@ -87,8 +91,12 @@ class JournalCtrl extends DomainBaseCtrl
         $source->checkBalance()->debit()->notify();
 
         $destination = new JournalWalletDebitService(
-            GetAccountInstance::getActiveInstance(Profile::where('account_number')),$request,$this->repository
+            GetAccountInstance::getActiveInstance(
+                Profile::query()->where('account_number','=',$request->account_number)->first()),
+            $request,$this->repository
         );
+
+        $destination->credit()->notify();
     }
 
     //Airtime::purchase();

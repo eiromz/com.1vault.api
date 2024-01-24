@@ -38,14 +38,7 @@ class ClientCtrl extends DomainBaseCtrl
             'business_id' => ['required', 'exists:App\Models\Business,id'],
         ]);
 
-        $customerExists = $this->repository->getDetailsByParams([
-            'business_id' => $request->business_id,
-            'phone_number' => $request->phone_number,
-        ]);
-
-        if (is_null($customerExists)) {
-            $customerExists = $this->repository->create($request->only($this->requestKeysFilter));
-        }
+        $customerExists = $this->repository->create($request->only($this->requestKeysFilter));
 
         return jsonResponse(Response::HTTP_OK, $customerExists);
     }
