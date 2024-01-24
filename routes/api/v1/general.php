@@ -38,10 +38,8 @@ Route::post('/download/pdf', function(Request $request){
         'receipt' => App\Models\Receipt::query(),
     };
 
-    //dd($getModel->findOrFail($request->identifier));
+    $data = $getModel->findOrFail($request->identifier);
 
     $pdf = Pdf::loadView($getView, ['welcome']);
     return $pdf->download('invoice.pdf');
-
-    return view($getView);
 });

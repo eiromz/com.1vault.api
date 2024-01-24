@@ -34,8 +34,10 @@ class JournalFactory extends Factory
             'tranDateTime' => '2021-03-01 18:06:20.000',
         ];
 
+        $random = fake()->randomNumber(3);
+
         return [
-            'trx_ref' => '202210301006807600001432',
+            'trx_ref' => '202210301006807600001432'.$random,
             'session_id' => '0000042103011805345648005069266636442357859508',
             'amount' => $payload['transactionAmount'],
             'commission' => 0,

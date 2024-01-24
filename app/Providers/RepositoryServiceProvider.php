@@ -11,10 +11,12 @@ use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
+use Src\Wallets\Payments\Domain\Repository\Interfaces\JournalRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
 use Src\Accounting\Domain\Repository\InventoryRepository;
 use Src\Accounting\Domain\Repository\InvoiceRepository;
 use Src\Accounting\Domain\Repository\ReceiptRepository;
+use Src\Wallets\Payments\Domain\Repository\JournalRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -46,6 +48,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ReceiptRepositoryInterface::class,
             ReceiptRepository::class
+        );
+
+        $this->app->bind(
+            JournalRepositoryInterface::class,
+            JournalRepository::class
         );
     }
 

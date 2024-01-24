@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ServiceBenefit extends Model
+class Beneficiaries extends Model
 {
     use HasFactory,HasUuids,SoftDeletes;
-    protected $guarded = [];
-    public function Service(): BelongsTo
+
+    public function customer()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Customer::class);
     }
 }

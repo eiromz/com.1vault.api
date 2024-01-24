@@ -24,7 +24,7 @@ class WalletAccountSearchCtrl extends DomainBaseCtrl
             ]);
 
             $profile = Profile::query()
-                //->where('customer_id','<>',auth()->user()->id)
+                ->where('customer_id','<>',auth()->user()->id)
                 ->where('account_number', '=', $request->account_number)
                 ->with('customer')
                 ->firstOrFail();

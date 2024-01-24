@@ -5,28 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Journal extends Model
 {
     use HasFactory,HasUuids;
 
-    protected $fillable = [
-        'customer_id',
-        'trx_ref',
-        'session_id',
-        'amount',
-        'commission',
-        'debit',
-        'credit',
-        'balance_before',
-        'balance_after',
-        'label',
-        'source',
-        'payload',
-    ];
+    protected $guarded = [];
 
+    protected $with = ['customer','service'];
     protected $casts = [
         'debit' => 'boolean',
-        'credit' => 'boolean'
+        'credit' => 'boolean',
+        'payload' => 'array'
     ];
+    public function customer():BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
+    }
 }
