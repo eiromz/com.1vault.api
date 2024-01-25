@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\LaravelData\Attributes\Validation\Confirmed;
 use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Attributes\Validation\Min;
+use Spatie\LaravelData\Attributes\Validation\Nullable;
 use Spatie\LaravelData\Attributes\Validation\Password;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\Unique;
@@ -35,7 +36,7 @@ class CompleteCustomerProfileData extends Data
     #[Confirmed]
     public string $password;
 
-    #[Required]
+    #[Nullable]
     #[Min(3)]
     public ?string $business_name = 'N/A';
 
