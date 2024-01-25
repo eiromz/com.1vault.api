@@ -83,7 +83,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        $service  = Service::factory()->count(3)->create();
+        $service  = Service::factory()->count(3)->create([
+            'category' => 'social_media'
+        ]);
 
 //        ServiceBenefit::factory()->count(3)->create([
 //            'service_id' => $service->first()->id
