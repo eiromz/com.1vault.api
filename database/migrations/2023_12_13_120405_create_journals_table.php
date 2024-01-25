@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('trx_ref')->unique()->comment('this is also the settlelment id for the providusbank api');
             $table->string('session_id')->nullable()->comment('The session id is null for other transactions');
             $table->double('amount')->default(0);
-            $table->integer('commission')->comment('commission in percentage');
+            $table->integer('commission')->default(0)->comment('commission in percentage');
             $table->boolean('debit')->default(0);
             $table->boolean('credit')->default(0);
             $table->double('balance_before')->default(0);

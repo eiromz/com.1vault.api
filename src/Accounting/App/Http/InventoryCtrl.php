@@ -5,6 +5,7 @@ namespace Src\Accounting\App\Http;
 use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Src\Accounting\App\Requests\CreateInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,10 +44,16 @@ class InventoryCtrl extends DomainBaseCtrl
         $this->repository->setUser(auth()->user());
 
         $request->validate([
-            'inventory' => ['required', 'exists:App\Models\Inventory,id'],
+            'inventory' => ['required', 'array'],
         ]);
 
-        if (! $this->repository->delete($request->inventory)) {
+        $delete = [];
+
+       foreach($request->inventory as $inventory){
+           $delete[] = $inventory['inventory'];
+       }
+
+        if (! $this->repository->deleteByIds($delete)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Inventory',
             ]);

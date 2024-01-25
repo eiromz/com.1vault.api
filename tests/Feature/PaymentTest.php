@@ -72,8 +72,9 @@ describe('Payment Routes', function () {
         ]);
 
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer',[
-            'account_number' => $customer2->profile->account_number,
-            'amount'         => 10000
+            'account_number'    => $customer2->profile->account_number,
+            'amount'            => 10000,
+            'transaction_pin'   => '123456'
         ]);
 
         $response->dump();

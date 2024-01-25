@@ -13,21 +13,26 @@ return new class extends Migration
     {
         Schema::create('business_requests', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->string('title')->comment('name of the business');
-            $table->string('nature_of_business')->comment('nature of the business');
+            $table->string('type',10);
+            $table->jsonb('title')->comment('name of the business');
+            $table->string('nature_of_business_company')->comment('nature of the business');
             $table->string('government_id_pdf')->comment('A government issued id for the individual');
-            $table->string('email_address')->comment('email address of the business');
-            $table->string('email_address_proprietors')->comment('address of proprietors');
+            $table->string('email_address')->comment('email address of the business,company');
             $table->string('phone_number')->comment('phone number of business');
-            $table->string('phone_number_proprietors')->comment('phone number of business proprietors');
             $table->string('physical_address')->comment('physical address of business');
-            $table->string('signature_of_proprietors_pdf');
-            $table->string('utility_bill_pdf');
-            $table->tinyInteger('status')->default(0);
+            $table->string('email_address_proprietors_directors')->comment('address of proprietors,directors');
+            $table->string('phone_number_proprietors_directors')->comment('phone number of business proprietors');
+            $table->string('physical_address_of_directors')->nullable();
+            $table->string('name_of_directors')->nullable();
+            $table->string('signature_of_proprietors_directors_pdf');
+            $table->string('passport_photograph_of_directors_pdf')->nullable();
+            $table->string('utility_bill_pdf')->nullable();
+            $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
+
         });
     }
 

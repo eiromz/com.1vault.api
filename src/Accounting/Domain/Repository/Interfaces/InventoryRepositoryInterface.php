@@ -9,4 +9,6 @@ interface InventoryRepositoryInterface
     public function getCountAll(array $details);
 
     public function getSum(array $details);
+
+    public function deleteByIds(array $ids);
 }

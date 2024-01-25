@@ -3,20 +3,21 @@
 namespace Src\Wallets\Payments\Domain\Services;
 
 use App\Exceptions\InsufficientBalance;
+use App\Jobs\AccountBalanceUpdateQueue;
+use App\Jobs\SendFireBaseNotificationQueue;
+use App\Models\Journal;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletDebitService
 {
     public object $accountInstance;
     public $request;
-    private $balance_before;
-    private $balance_after;
-    private $repository;
 
     public $creationKeys = ["amount", "trx_ref" ,
-      "debit", "credit", "label", "source", "balance_before", "balance_after"
+      "debit", "credit", "label", "source", "balance_before", "balance_after",'customer_id'
     ];
-    public function __construct($accountInstance,$request=null,$repository)
+    public function __construct($accountInstance,$request=null)
     {
         $this->accountInstance = $accountInstance;
         $this->request = $request;
@@ -42,26 +43,41 @@ class JournalWalletDebitService
         $this->request->merge([
             'balance_before' => $this->accountInstance->balance_after,
             'balance_after' => $this->calculateNewBalance(),
+            'customer_id'   => auth()->user()->id,
+            'debit'     => true,
+            'credit'    => false,
+            'trx_ref'   => generateTransactionReference()
         ]);
 
-        //dd($this->request->only($this->creationKeys));
+       if(!Journal::query()->create($this->request->only($this->creationKeys))){
+           throw new Exception('Failed to process transaction',Response::HTTP_BAD_REQUEST);
+       }
 
-        dd($this->repository->create($this->request->only($this->creationKeys)));
+       return $this;
    }
 
    public function notify()
    {
-       //i want to notify the source of the wallet via firebase that a transaction has occured on his account
-       // i want to notify via email that a transaction has occured on the users account.
+       $this->firebase();
+       return $this;
    }
 
-   public function firebase()
+   private function firebase(): void
    {
+       $notification = [
+           'title'  => 'Debit Notification',
+           'body'   => "Your account has been debited the sum of {$this->request->amount}",
+        ];
 
+       SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
    }
 
-   public function email()
-   {
-
+    /**
+     * @return void
+     */
+    public function updateBalanceQueue(): void
+    {
+       AccountBalanceUpdateQueue::dispatch(
+           $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
    }
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
+            $table->boolean('is_store_front')->nullable();
             $table->foreignUuid('customer_id')->nullable();
             $table->foreignUuid('collaborator_id')->nullable();
             $table->string('fullname')->comment('name for business');
@@ -22,6 +23,9 @@ return new class extends Migration
             $table->foreignId('state_id')->comment('provide your state of residence')->nullable();
             $table->string('logo')->comment('logo in string for the business')->nullable();
             $table->string('zip_code')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('twitter_x')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

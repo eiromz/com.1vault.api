@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
             $table->string('title');
-            $table->string('type')->comment('this can be utility,airtime,data,internet,electricity,social_media_subscription,service.legal');
+            $table->string('type')->comment('this can be utility,airtime,data,internet,electricity,social_media_subscription,legal,service.buiness_registration');
             $table->string('provider')->comment('This refers to the name of the single entity offering this service, mtn,dstv');
-            $table->string('description')->comment('Give a brief overview of the service and the benefits');
+            $table->string('description')->comment('Give a brief overview xof the service and the benefits');
             $table->string('logo')->nullable();
             $table->double('amount')->nullable();
+            $table->string('category')->comment('social_media,business_registration,legal,pos,store_front');
             $table->double('commission')->nullable()->default(0);
             $table->boolean('is_recurring')->default(0);
             $table->boolean('requires_payment')->default(1);

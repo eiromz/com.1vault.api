@@ -37,9 +37,7 @@ class TransactionPinCtrl extends DomainBaseCtrl
 
         $customer = Customer::query()->find(auth()->user()->id);
 
-        $customer->fill([
-            'transaction_pin' => Hash::make($request->pin)
-        ]);
+        $customer->transaction_pin = Hash::make($request->pin);
 
         if(!$customer->save()){
             return jsonResponse(Response::HTTP_BAD_REQUEST, [

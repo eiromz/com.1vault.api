@@ -4,12 +4,15 @@ namespace Src\Wallets\Payments\App\Http;
 
 use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Journal;
 use App\Models\Profile;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Wallets\Payments\App\Requests\CreateJournalRequest;
 use Src\Wallets\Payments\Domain\Repository\Interfaces\JournalRepositoryInterface;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
+use Src\Wallets\Payments\Domain\Services\JournalWalletCreditService;
 use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,36 +70,28 @@ class JournalCtrl extends DomainBaseCtrl
 
     /**
      * @throws InsufficientBalance
+     * @throws Exception
      */
-    public function store(Request $request)
+    public function store(CreateJournalRequest $request)
     {
         $this->repository->setUser(auth()->user());
-        $request->merge([
-            'trx_ref'   => generateTransactionReference(),
-            'debit'     => true,
-            'credit'    => false,
-            'label'     => 'wallet to wallet transfer',
-            'source'    => 'wallet transaction',
-        ]);
 
-        $request->validate([
-            'account_number' => ['required','exists:App\Models\Profile,account_number'],
-            'amount'         => ['required']
-        ]);
+        $request->execute();
 
         $source =  new JournalWalletDebitService(
-            GetAccountInstance::getActiveInstance(auth()->user()->profile),$request,$this->repository
+            GetAccountInstance::getActiveInstance(auth()->user()->profile),
+            $request
         );
 
-        $source->checkBalance()->debit()->notify();
+        $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
-        $destination = new JournalWalletDebitService(
-            GetAccountInstance::getActiveInstance(
-                Profile::query()->where('account_number','=',$request->account_number)->first()),
-            $request,$this->repository
+        $destination = new JournalWalletCreditService(
+            GetAccountInstance::getActiveInstance($request->profile),$request
         );
 
-        $destination->credit()->notify();
+        $destination->credit()->notify()->updateBalanceQueue();
+
+        return jsonResponse(Response::HTTP_OK,['message' => 'Transfer Completed']);
     }
 
     //create the request

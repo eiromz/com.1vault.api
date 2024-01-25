@@ -264,7 +264,14 @@ describe('Business Routes', function () {
     });
     test('business can delete Inventory', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/inventory/delete', [
-            'inventory' => $this->inventory->first()->id,
+            'inventory' => [
+                [
+                    'inventory' => $this->inventory->first()->id,
+                ],
+                [
+                    'inventory' => fake()->uuid,
+                ],
+            ],
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

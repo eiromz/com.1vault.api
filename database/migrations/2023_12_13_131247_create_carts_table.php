@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('order_number')->nullable();
             $table->foreignUuid('customer_id');
             $table->foreignUuid('service_id');
+            $table->foreignUuid('request_id')->nullable();
             $table->double('amount');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

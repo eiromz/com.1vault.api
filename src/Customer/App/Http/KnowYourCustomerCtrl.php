@@ -24,6 +24,10 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
             'selfie' => ['required', 'string', 'url'],
         ]);
 
+        $request->merge([
+            'bvn' => base64_encode($request->bvn)
+        ]);
+
         if (is_null(auth()->user()->image)) {
             $request->user()->fill([
                 'image' => $request->selfie,
