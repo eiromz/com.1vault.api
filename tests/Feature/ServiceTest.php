@@ -30,9 +30,9 @@ describe('Payment Routes', function () {
     });
 
     /*************Report ******************/
-    test('Customer can view services', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/services', [
-            'account_number' => $this->customer2->profile->account_number,
+    test('Customer can view services by category', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/service', [
+            'category' => $this->service->first()->category,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

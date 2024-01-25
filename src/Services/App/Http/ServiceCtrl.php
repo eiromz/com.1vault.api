@@ -3,26 +3,34 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Service;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Src\Services\App\Requests\ServiceRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServiceCtrl extends DomainBaseCtrl
 {
+    public function index(Request $request)
+    {
+        $request->validate([
+            'category' => ['required','in:business_registration,social_media,legal,pos,store_front']
+        ]);
+
+        $service = Service::query()->where('category','=',$request->category)->get();
+
+        return  jsonResponse(Response::HTTP_OK, $service);
+    }
+
     /**
      * @throws Exception
      */
     public function store(ServiceRequest $request): JsonResponse
     {
-        //register_business_request
-        //register_business_llc_request
-        //pos_request
-        $request->validated([
-            'action' => ['required',
-                'in:register_business_request,register_business_llc_request,pos_request'
-            ]
-        ]);
+        $request->validated();
+
+        //
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

@@ -25,9 +25,6 @@ class ServiceRequest extends FormRequest
         };
     }
 
-    //register_business_request
-    //register_business_llc_request
-    //pos_request
     public function registerBusinessRequestRules(): array
     {
         return [
