@@ -16,6 +16,7 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        $billing_cycle = ['one-time','monthly','quarterly','yearly'];
         return [
             'title'         => fake()->lastName,
             'type'          => fake()->randomElement(['airtime','data','electricity','legal']),
@@ -24,7 +25,7 @@ class ServiceFactory extends Factory
             'amount'        => fake()->numberBetween(1000,100000),
             'commission'    => fake()->numberBetween(1000,100000),
             'is_recurring'  => fake()->boolean,
-            'billing_cycle' => fake()->randomElement(['one-time','monthly','quarterly','yearly']),
+            'billing_cycle' => 'monthly',
             'is_request'    => fake()->boolean(50),
             'discount'      => fake()->numberBetween(1000,100000),
             'status'        => fake()->boolean,
