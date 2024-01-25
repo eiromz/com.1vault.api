@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class ServiceRequest extends FormRequest
 {
     public array $businessName = [
-        'type','business_name','nature_of_business','government_id_pdf','email','email_address',
+        'type','business_name','nature_of_business','government_id_pdf','email_address',
         'phone_number','physical_address','email_address_proprietors','phone_number_proprietors',
         'signature_of_proprietors_pdf','utility_bill_pdf'
     ];
