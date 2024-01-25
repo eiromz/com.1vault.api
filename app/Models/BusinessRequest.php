@@ -9,4 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class BusinessRequest extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'business_name' => 'array'
+    ];
 }

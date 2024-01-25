@@ -37,7 +37,48 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request',function(){
-
+    test('Customer can fill service request for business_name',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
+            'type' => 'business_name',
+            'business_name'  => ['bookworm','title'],
+            'nature_of_business'  => 'bookworm',
+            'government_id_pdf' => fake()->url,
+            'email_address' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'physical_address' => fake()->address,
+            'email_address_proprietors' => fake()->email,
+            'email_address_directors' => fake()->email,
+            'phone_number_proprietors' => fake()->phoneNumber,
+            'phone_number_directors' => fake()->phoneNumber,
+            'physical_address_of_directors' => fake()->address,
+            'name_of_directors' => fake()->lastName,
+            'signature_of_proprietors_pdf' => fake()->url,
+            'signature_of_directors_pdf' => fake()->url,
+            'passport_photograph_of_directors_pdf' => fake()->url,
+            'utility_bill_pdf' => fake()->url,
+            'comments' => fake()->phoneNumber,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can fill service request for business llc',function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
+            'type' => 'business_llc',
+            'business_name'  => ['bookworm','title'],
+            'nature_of_business'  => 'bookworm',
+            'government_id_pdf' => fake()->url,
+            'email_address' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'physical_address' => fake()->address,
+            'email_address_directors' => fake()->email,
+            'phone_number_directors' => fake()->phoneNumber,
+            'physical_address_of_directors' => fake()->address,
+            'name_of_directors' => fake()->lastName,
+            'signature_of_directors_pdf' => fake()->url,
+            'passport_photograph_of_directors_pdf' => fake()->url,
+            'comments' => fake()->phoneNumber,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
     });
 });

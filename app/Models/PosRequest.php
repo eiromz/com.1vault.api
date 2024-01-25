@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class PosRequest extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $guarded = [];
 }

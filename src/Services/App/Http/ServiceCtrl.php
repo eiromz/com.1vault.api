@@ -30,7 +30,7 @@ class ServiceCtrl extends DomainBaseCtrl
     {
         $request->validated();
 
-        //
+        $data = $request->getModel()->create($request->getOnly());
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

@@ -20,6 +20,26 @@ Route::get('/states', function () {
 
 Route::post('/upload-file', UploadCtrl::class)->middleware('throttle:3');
 
+Route::get('/pos/categories',function(){
+    return jsonResponse(Response::HTTP_OK, [
+       'sole owner','partnership','limited liability company','public limited company','others'
+    ]);
+});
+
+Route::get('/pos/business-types',function(){
+    return jsonResponse(Response::HTTP_OK, [
+        'store/supermarket','restaurants','wholesale/distributor','telecoms','fuel station',
+        'fast food','hotel/guest house','logistics','church/ngo','hospital','airlines','travel agencies',
+        'embassy','education/schools','others'
+    ]);
+});
+
+Route::get('/pos/card-types',function(){
+    return jsonResponse(Response::HTTP_OK, [
+        'local card','international mastercard','international visa card'
+    ]);
+});
+
 Route::post('/download/pdf', function(Request $request){
     $request->validate([
         'type' => ['required','in:sales,debtors,invoice,receipt'],

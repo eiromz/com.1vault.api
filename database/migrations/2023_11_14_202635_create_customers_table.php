@@ -39,8 +39,10 @@ return new class extends Migration
             $table->string('referral_code', 7);
             $table->string('image')->nullable();
             $table->string('otp', 6)->nullable();
-            $table->rememberToken();
             $table->timestamp('otp_expires_at')->nullable();
+            $table->boolean('can_receive_notification')->default(1);
+            $table->boolean('can_receive_subscription_reminder')->default(1);
+            $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
