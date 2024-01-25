@@ -82,14 +82,12 @@ class DatabaseSeeder extends Seeder
             'client_id' => $client->id,
         ]);
 
-        //        $journal = Journal::factory()->create([
-        //            'customer_id' => $customer->id,
-        //        ]);
 
         $service  = Service::factory()->count(3)->create();
-        ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $service->first()->id
-        ]);
+
+//        ServiceBenefit::factory()->count(3)->create([
+//            'service_id' => $service->first()->id
+//        ]);
         $journal = Journal::factory()->count(3)->create([
             'customer_id' => $customer->id,
         ]);

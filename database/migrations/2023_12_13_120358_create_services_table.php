@@ -19,12 +19,14 @@ return new class extends Migration
             $table->string('description')->comment('Give a brief overview xof the service and the benefits');
             $table->string('logo')->nullable();
             $table->double('amount')->nullable();
+            $table->integer('quantity')->nullable();
             $table->string('category')->comment('social_media,business_registration,legal,pos,store_front');
             $table->double('commission')->nullable()->default(0);
             $table->boolean('is_recurring')->default(0);
             $table->boolean('requires_payment')->default(1);
             $table->string('billing_cycle')->comment('this is how the queue job will charge the subscription plan, one-time,monthly,quarterly,yearly');
             $table->boolean('is_request')->default(0);
+            $table->jsonb('benefits')->nullable();
             $table->double('discount')->nullable()->default(0);
             $table->boolean('status')->default(1)->comment('confirm if the service is active or disabled.');
             $table->timestamp('created_at')->useCurrent();

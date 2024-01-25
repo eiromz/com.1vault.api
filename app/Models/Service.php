@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Service extends Model
 {
     use HasFactory,HasUuids,SoftDeletes;
+
     public function serviceBenefit(): HasMany
     {
         return $this->hasMany(ServiceBenefit::class);

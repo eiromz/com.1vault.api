@@ -28,7 +28,11 @@ class ServiceFactory extends Factory
             'is_request'    => fake()->boolean(50),
             'discount'      => fake()->numberBetween(1000,100000),
             'status'        => fake()->boolean,
-            'category'      => fake()->randomElement(['social_media','business_registration','legal','pos','store_front'])
+            'category'      => fake()->randomElement(['social_media','business_registration','legal','pos','store_front']),
+            'benefit'       => [
+                'content_creation','building house', 'running helter skelter'
+            ],
+            'quantity'      => 8,
         ];
     }
 }
