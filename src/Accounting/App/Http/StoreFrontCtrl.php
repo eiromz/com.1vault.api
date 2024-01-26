@@ -33,6 +33,10 @@ class StoreFrontCtrl extends DomainBaseCtrl
      */
     public function store(Request $request): JsonResponse
     {
+
+        //subscription is created when payment is made
+        //check if a payment or subscription for front exists and fetch it from subscription table.
+
         $this->storeFrontExists();
         $request->merge([
             'customer_id' => auth()->user()->id,
@@ -48,7 +52,8 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'state_id' => ['required', 'exists:App\Models\State,id'],
             'logo' => ['required', 'url'],
             'sector' => ['required', 'string'],
-            'trx_ref' => ['required','exists:App\Models\Journal,trx_ref'],
+//            'trx_ref' => ['required','exists:App\Models\Journal,trx_ref'],
+            'trx_ref' => ['required'],
             'whatsapp_number' => ['required'],
             'facebook' => ['nullable'],
             'instagram' => ['nullable'],
@@ -56,8 +61,6 @@ class StoreFrontCtrl extends DomainBaseCtrl
         ]);
 
         $data = Business::query()->create($request->only($this->createRequestkeys));
-
-        //create a subscription here to show that the user has subscribed to store front.
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

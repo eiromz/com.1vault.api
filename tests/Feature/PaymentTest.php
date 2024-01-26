@@ -119,7 +119,7 @@ describe('Payment Routes', function () {
             'cart'      => [
                 ['cart'=>$this->cart->first()->id],
             ],
-            'transaction_pin' => '12345'
+            'transaction_pin' => '123456'
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

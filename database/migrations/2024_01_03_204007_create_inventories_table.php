@@ -20,8 +20,8 @@ return new class extends Migration
             $table->double('amount')->comment('This is also the amount');
             $table->double('selling_price')->nullable();
             $table->string('description')->nullable();
-            $table->integer('quantity');
-            $table->string('unit');
+            $table->integer('quantity')->nullable();
+            $table->string('unit')->nullable();
             $table->boolean('stock_status')->default(1)->comment('0 for out of stock and 1 for available');
             $table->boolean('is_store_front')->default(0);
             $table->string('image')->nullable();

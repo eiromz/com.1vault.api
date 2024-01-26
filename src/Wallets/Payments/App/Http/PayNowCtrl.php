@@ -40,13 +40,10 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
-
         //$transaction = (new ProcessCartTransaction($source->request));
 
         //$transaction->process();
 
-        return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Transaction Complete'
-        ]);
+        return jsonResponse(Response::HTTP_OK, $source->journal);
     }
 }

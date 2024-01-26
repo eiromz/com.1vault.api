@@ -17,6 +17,8 @@ class JournalWalletDebitService
 
     public $request;
 
+    public $journal;
+
     public $creationKeys = ['amount', 'trx_ref',
         'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
     ];
@@ -55,7 +57,9 @@ class JournalWalletDebitService
             'trx_ref' => generateTransactionReference(),
         ]);
 
-        if (! Journal::query()->create($this->request->only($this->creationKeys))) {
+        $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
+
+        if (!$this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 

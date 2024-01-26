@@ -107,6 +107,7 @@ if (! function_exists('generateInvoiceNumber')) {
 if (! function_exists('generateTransactionReference')) {
     function generateTransactionReference(): string
     {
-        return 'trx'.time().uniqid();
+        $random = fake()->randomNumber(6);
+        return 'trx'.time().uniqid().$random;
     }
 }
