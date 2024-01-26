@@ -1,5 +1,6 @@
 <?php
 
+use Src\Accounting\App\Http\StoreFrontCtrl;
 use Src\Customer\App\Http\AuthenticateSessionCtrl;
 use Src\Customer\App\Http\ChangePasswordCtrl;
 use Src\Customer\App\Http\CompleteCustomerProfileCtrl;
@@ -46,5 +47,4 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile/create-staff', [StaffCtrl::class, 'store']);
     Route::post('profile/update-staff', [StaffCtrl::class, 'update']);
 
-    Route::post('store-front/',[StoreFrontCtrl::class,'store']);
 });

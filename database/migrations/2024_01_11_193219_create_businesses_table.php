@@ -23,12 +23,13 @@ return new class extends Migration
             $table->string('address')->comment('The business physical address')->nullable();
             $table->string('logo')->comment('logo in string for the business')->nullable();
             $table->string('sector')->nullable();
-            $table->string('trx_reference')->nullable();
+            $table->string('trx_ref')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
             $table->string('twitter_x')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

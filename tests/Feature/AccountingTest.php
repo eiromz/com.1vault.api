@@ -50,6 +50,8 @@ describe('Business Routes', function () {
             'business_id' => $this->business->id,
             'customer_id' => $this->customer->id,
         ]);
+
+        $this->journal = \App\Models\Journal::latest()->first();
     });
 
     /*************Business******************/
@@ -372,7 +374,7 @@ describe('Business Routes', function () {
     });
 
     /************* StoreFront *************/
-    test('Business can Retrieve Report', function () {
+    test('Customer can create a store front', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front', [
             'name' => '12345678090',
             'phone_number' => '08103797739',
@@ -381,6 +383,12 @@ describe('Business Routes', function () {
             'state_id' => $this->state->id,
             'zip_code' => '1001261',
             'logo' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'sector' => 'banking',
+            'trx_ref' => $this->journal->trx_ref,
+            'whatsapp_number' => '0901234567',
+            'facebook' => 'iamjonlobathe',
+            'instagram' => 'sholaaaa',
+            'twitter_x' => 'welcome',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

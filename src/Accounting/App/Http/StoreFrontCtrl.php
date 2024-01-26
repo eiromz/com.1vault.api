@@ -18,8 +18,8 @@ class StoreFrontCtrl extends DomainBaseCtrl
 
     private array $createRequestkeys = [
         'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
-        'zip_code','trx_reference','is_store_front','customer_id','whatsapp_number',
-        'trx_reference','category'
+        'zip_code','trx_ref','is_store_front','customer_id','whatsapp_number',
+        'trx_ref','sector','facebook','instagram','twitter_x'
     ];
 
     public function __construct(BusinessRepositoryInterface $repository)
@@ -41,6 +41,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
         ]);
 
         $request->validate([
+            'service_id' => ['required'],
             'name' => ['required', 'min:2'],
             'phone_number' => ['required', 'min:11'],
             'email' => ['required', 'email', 'unique:App\Models\Business,email'],
@@ -48,8 +49,8 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'state_id' => ['required', 'exists:App\Models\State,id'],
             'zip_code' => ['required', 'string'],
             'logo' => ['required', 'url'],
-            'category' => ['required', 'string'],
-            'trx_reference' => ['required'],
+            'sector' => ['required', 'string'],
+            'trx_ref' => ['required','exists:App\Models\Journal,trx_ref'],
             'whatsapp_number' => ['required'],
             'facebook' => ['nullable'],
             'instagram' => ['nullable'],
@@ -58,10 +59,12 @@ class StoreFrontCtrl extends DomainBaseCtrl
 
         $data = Business::query()->create($request->only($this->createRequestkeys));
 
+        //create a subscription here to show that the user has subscribed to store front.
+
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
-    private function storeFrontExists()
+    private function storeFrontExists(): void
     {
         $storeFrontExists = Business::query()
             ->where('customer_id','=',auth()->user()->id)
