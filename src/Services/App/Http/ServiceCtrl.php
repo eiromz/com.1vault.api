@@ -20,7 +20,7 @@ class ServiceCtrl extends DomainBaseCtrl
 
         $service = Service::query()
             ->where('category', '=', $request->category)
-            ->firstOrFail();
+            ->get();
 
         return jsonResponse(Response::HTTP_OK, $service);
     }
