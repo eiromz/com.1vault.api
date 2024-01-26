@@ -104,7 +104,7 @@ class BaseRepository implements BaseRepositoryInterface
         }
     }
 
-    public function getDetailsByParams(array $details): Model|Builder|null
+    public function getDetailsByParams(array $details)
     {
         try {
             Arr::set($details, 'customer_id', $this->customer);

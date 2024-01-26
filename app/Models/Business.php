@@ -16,7 +16,7 @@ class Business extends Model
     protected $with = ['customer', 'state'];
 
     protected $casts = [
-        'is_store_front'
+        'is_store_front' => 'boolean'
     ];
 
     public function customer(): BelongsTo

@@ -60,7 +60,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 
         $data = $this->repository->getDetailsByParams([
             'id' => $request->business,
-            'store_front' => false
+            'is_store_front' => false
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);

@@ -45,7 +45,7 @@ class JournalFactory extends Factory
             'credit' => true,
             'balance_before' => 0,
             'balance_after' => $payload['transactionAmount'],
-            'label' => 'Webhook Providus',
+            'label' => 'Transfer',
             'source' => 'Providus',
             'payload' => json_encode($payload),
         ];

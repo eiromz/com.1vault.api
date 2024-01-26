@@ -26,6 +26,7 @@ describe('Business Routes', function () {
         $this->business = Business::factory()->create([
             'state_id' => $this->state->id,
             'customer_id' => $this->customer->id,
+            'is_store_front' => false
         ]);
 
         $this->client = Client::factory()->create([
