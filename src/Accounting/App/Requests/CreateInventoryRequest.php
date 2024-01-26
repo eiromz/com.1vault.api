@@ -25,6 +25,8 @@ class CreateInventoryRequest extends FormRequest
             'unit' => ['required'],
             'business' => ['required'],
             'selling_price' => ['nullable'],
+            'image'   => ['nullable'],
+            'stock_status' => ['nullable','boolean'],
         ];
     }
 }

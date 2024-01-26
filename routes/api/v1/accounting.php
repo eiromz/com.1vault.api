@@ -7,6 +7,7 @@ use Src\Accounting\App\Http\InvoiceCtrl;
 use Src\Accounting\App\Http\ReceiptCtrl;
 use Src\Accounting\App\Http\ReportCtrl;
 use Src\Accounting\App\Http\StoreFrontCtrl;
+use Src\Accounting\App\Http\StoreFrontInventoryCtrl;
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
     /******** Client Routes ***********/
@@ -46,5 +47,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('/inventory/{inventory}/business/{business}', [InventoryCtrl::class, 'view']);
     Route::post('/inventory/delete', [InventoryCtrl::class, 'destroy']);
 
-    Route::post('store-front/',[StoreFrontCtrl::class,'store']);
+    Route::post('/store-front',[StoreFrontCtrl::class,'store']);
+    Route::post('/store-front/inventory',[StoreFrontInventoryCtrl::class,'store']);
 });

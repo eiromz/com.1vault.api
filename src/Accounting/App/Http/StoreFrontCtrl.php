@@ -46,7 +46,6 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'email' => ['required', 'email', 'unique:App\Models\Business,email'],
             'address' => ['required', 'min:3'],
             'state_id' => ['required', 'exists:App\Models\State,id'],
-            'zip_code' => ['required', 'string'],
             'logo' => ['required', 'url'],
             'sector' => ['required', 'string'],
             'trx_ref' => ['required','exists:App\Models\Journal,trx_ref'],
