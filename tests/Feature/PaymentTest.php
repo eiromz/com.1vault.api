@@ -22,6 +22,7 @@ describe('Payment Routes', function () {
             ->where('name', '=', 'Lagos')->first();
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
+
         $this->service = Service::factory()->count(3)->create();
         $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
             'service_id' => $this->service->first()->id,

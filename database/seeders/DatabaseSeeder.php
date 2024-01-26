@@ -90,6 +90,8 @@ class DatabaseSeeder extends Seeder
         $journal = Journal::factory()->count(3)->create([
             'customer_id' => $customer->id,
         ]);
+
+        $this->customer2($state);
     }
 
     public function business_name(): array
@@ -136,4 +138,28 @@ class DatabaseSeeder extends Seeder
         ];
     }
 
+    public function customer2($state)
+    {
+        $customer = Customer::factory()->create([
+            'password' => Hash::make('sampleTim@123'),
+            'otp_expires_at' => now(),
+            'email' => 'crayolu200@gmail.com',
+            'transaction_pin' => Hash::make('123456'),
+            //'firebase_token' => 'fwb71Cn3N0TLgZR8yH97r-:APA91bHAsd8RCraGU2aRdwqLgjRztSc52NOw6ibxmfjP0w4GioDACV-b-iCnqXHPxkU9FAl-bDO2tZHz53rrRtnaXgcI_DKqX0BYvY-uPniSoXXMkjlOI-KzIAPiNF0TDppFopnlGppj',
+        ]);
+
+        Profile::factory()->create([
+            'customer_id' => $customer->id,
+            'account_number' => '9977581538',
+            'state_id' => $state->id,
+        ]);
+
+        $account = Account::factory()->create([
+            'customer_id' => $customer->id,
+        ]);
+
+        $kyc = KnowYourCustomer::factory()->create([
+            'customer_id' => $customer->id,
+        ]);
+    }
 }
