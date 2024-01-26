@@ -96,14 +96,14 @@ class DatabaseSeeder extends Seeder
     {
         return [
             'title' => 'Business Name Registration',
-            'type' => fake()->randomElement(['airtime', 'data', 'electricity', 'legal']),
+            'type' => 'business_name',
             'provider' => '1vault',
             'description' => fake()->lastName,
             'amount' => fake()->numberBetween(1000, 100000),
             'commission' => fake()->numberBetween(1000, 100000),
             'is_recurring' => 0,
             'billing_cycle' => 'one-time',
-            'is_request' => fake()->boolean(50),
+            'is_request' => 1,
             'discount' => fake()->numberBetween(1000, 100000),
             'status' => fake()->boolean,
             'category' => 'business_registration',
@@ -117,15 +117,15 @@ class DatabaseSeeder extends Seeder
     public function business_llc(): array
     {
         return [
-            'title' => 'Business Name Registration',
-            'type' => fake()->randomElement(['airtime', 'data', 'electricity', 'legal']),
+            'title' => 'Register a Limited Liability Company in Nigeria',
+            'type' => 'business_llc',
             'provider' => '1vault',
             'description' => fake()->lastName,
             'amount' => fake()->numberBetween(1000, 100000),
             'commission' => fake()->numberBetween(1000, 100000),
             'is_recurring' => 0,
             'billing_cycle' => 'one-time',
-            'is_request' => fake()->boolean(50),
+            'is_request' => 1,
             'discount' => fake()->numberBetween(1000, 100000),
             'status' => fake()->boolean,
             'category' => 'business_registration',
