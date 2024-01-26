@@ -428,9 +428,8 @@ describe('Business Routes', function () {
         $response = $this->actingAs($this->customer)->post($link,[
             'name'      => 'wella health',
             'amount'    => 10000,
-            'business'  => $this->business->id,
             'stock_status' => 1,
-            'description' => 'welcome to the land of the living'
+            'description' => 'welcome to the land of the living',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
