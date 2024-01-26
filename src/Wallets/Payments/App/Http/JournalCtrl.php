@@ -30,26 +30,21 @@ class JournalCtrl extends DomainBaseCtrl
      */
     public function index(Request $request): JsonResponse
     {
-        try {
-            $this->repository->setUser(auth()->user());
+        $this->repository->setUser(auth()->user());
 
-            $request->validate([
-                'filter_type' => ['required', 'in:default,date,search'],
-                'start_date' => ['required_if:filter_type,date', 'after_or_equal:today'],
-                'end_date' => ['required_if:filter_type,date', 'after_or_equal:tomorrow'],
-            ]);
+        $request->validate([
+            'filter_type' => ['required', 'in:default,date,search'],
+            'start_date' => ['required_if:filter_type,date', 'after_or_equal:today'],
+            'end_date' => ['required_if:filter_type,date', 'after_or_equal:tomorrow'],
+        ]);
 
-            //TODO please make sure to handle the search feature
-            $result = match ($request->filter_type) {
-                'default' => $this->repository->getAllByParams([]),
-                'date' => $this->repository->getAllByCreatedAtDate($request->start_date, $request->end_date, []),
-            };
+        //TODO please make sure to handle the search feature
+        $result = match ($request->filter_type) {
+            'default' => $this->repository->getAllByParams([]),
+            'date' => $this->repository->getAllByCreatedAtDate($request->start_date, $request->end_date, []),
+        };
 
-            return jsonResponse(Response::HTTP_OK, $result);
-
-        } catch (Exception $e) {
-            return jsonResponse(Response::HTTP_BAD_REQUEST, ['message' => 'We could find what you are looking for']);
-        }
+        return jsonResponse(Response::HTTP_OK, $result);
     }
 
     public function view(Request $request): JsonResponse

@@ -48,9 +48,7 @@ describe('Payment Routes', function () {
 
     test('Customer can fetch all journal transactions', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
-            'filter_type' => 'default',
-            'start_date' => '2024-01-24',
-            'end_date' => '2024-01-27',
+            'filter_type' => 'default'
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
