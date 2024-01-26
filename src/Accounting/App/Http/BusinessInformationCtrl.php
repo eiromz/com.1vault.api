@@ -2,7 +2,9 @@
 
 namespace Src\Accounting\App\Http;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Business;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +33,16 @@ class BusinessInformationCtrl extends DomainBaseCtrl
         $request->merge([
             'fullname' => $request->name,
         ]);
+
+        $customerBusinessExists = Business::query()
+            ->where('customer_id','=',auth()->user()->id)
+            ->where('is_store_front','=',false)
+            ->exists();
+
+        if($customerBusinessExists){
+            throw new BaseException('Business already exists for this account',Response::HTTP_BAD_REQUEST);
+        }
+
         $request->validated();
 
         $data = $this->repository->create($request->only($this->filterRequestKeys));
@@ -48,6 +60,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 
         $data = $this->repository->getDetailsByParams([
             'id' => $request->business,
+            'store_front' => false
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);

@@ -15,6 +15,10 @@ class Business extends Model
 
     protected $with = ['customer', 'state'];
 
+    protected $casts = [
+        'is_store_front'
+    ];
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
@@ -23,5 +27,25 @@ class Business extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+
+    public function categories()
+    {
+        $collection = collect([
+            'sole owner', 'partnership', 'limited liability company', 'public limited company', 'others',
+        ]);
+
+        return $collection->values();
+    }
+
+    public function businessSector()
+    {
+        $collection = collect([
+            'fashion','gadgets','election','home/decoration/garden','Sports & Outdoors','Baby & Kids',
+            'Pet Supplies','Books','Beauty & Personal Care','Health & Wellness','Industrial & Scientific',
+            'Office Supplies','Food & Beverages'
+        ]);
+
+        return $collection->values();
     }
 }

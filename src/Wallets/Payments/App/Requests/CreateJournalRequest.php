@@ -2,6 +2,7 @@
 
 namespace Src\Wallets\Payments\App\Requests;
 
+use App\Exceptions\BaseException;
 use App\Models\Profile;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
@@ -54,12 +55,15 @@ class CreateJournalRequest extends FormRequest
             ->first();
     }
 
+    /**
+     * @throws BaseException
+     */
     public function verifyTransactionPin()
     {
         if (Hash::check($this->transaction_pin, auth()->user()->transaction_pin)) {
             return;
         }
 
-        throw new \Exception('Invalid Transaction pin', Response::HTTP_BAD_REQUEST);
+        throw new BaseException('Invalid Transaction pin', Response::HTTP_BAD_REQUEST);
     }
 }

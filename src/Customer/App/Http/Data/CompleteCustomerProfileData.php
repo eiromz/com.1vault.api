@@ -2,6 +2,7 @@
 
 namespace Src\Customer\App\Http\Data;
 
+use App\Exceptions\BaseException;
 use App\Models\Customer;
 use App\Models\Profile;
 use Exception;
@@ -66,7 +67,7 @@ class CompleteCustomerProfileData extends Data
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception('Failed to update customer profile', Response::HTTP_BAD_REQUEST);
+            throw new BaseException('Failed to update customer profile', Response::HTTP_BAD_REQUEST);
         }
     }
 

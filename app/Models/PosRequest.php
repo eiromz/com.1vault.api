@@ -11,4 +11,33 @@ class PosRequest extends Model
     use HasFactory, HasUuids;
 
     protected $guarded = [];
+
+    public function sectors()
+    {
+        $collection = collect([
+            'store/supermarket', 'restaurants', 'wholesale/distributor', 'telecoms', 'fuel station',
+            'fast food', 'hotel/guest house', 'logistics', 'church/ngo', 'hospital', 'airlines', 'travel agencies',
+            'embassy', 'education/schools', 'others',
+        ]);
+
+        return $collection->values();
+    }
+
+    public function businessTypes()
+    {
+        $collection = collect([
+            'sole owner', 'partnership', 'limited liability company', 'public limited company', 'others',
+        ]);
+
+        return $collection->values();
+    }
+
+    public function cardTypes()
+    {
+        $collection = collect([
+            'local card', 'international mastercard', 'international visa card',
+        ]);
+
+        return $collection->values();
+    }
 }

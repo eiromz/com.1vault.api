@@ -277,7 +277,7 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    /*************Receipt ******************/
+    /**************** Receipt ******************/
     test('Business can delete Receipt', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/receipt/delete', [
             'receipt' => $this->receipt->first()->id,
@@ -359,7 +359,7 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    /*************Report ******************/
+    /************* Report ******************/
     test('Business can Retrieve Report', function () {
         $response = $this->actingAs($this->customer)->post('/download/pdf', [
             'start_date' => '2024-01-01',

@@ -34,7 +34,7 @@ class JournalFactory extends Factory
             'tranDateTime' => '2021-03-01 18:06:20.000',
         ];
 
-        $random = fake()->randomNumber(3);
+        $random = fake()->randomNumber(6);
 
         return [
             'trx_ref' => '202210301006807600001432'.$random,

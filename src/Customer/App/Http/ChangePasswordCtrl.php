@@ -2,6 +2,7 @@
 
 namespace Src\Customer\App\Http;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
 use Exception;
@@ -26,7 +27,7 @@ class ChangePasswordCtrl extends DomainBaseCtrl
             ]);
 
             if (! Hash::check($request->current_password, auth()->user()->getAuthPassword())) {
-                throw new Exception(
+                throw new BaseException(
                     'Failed to update your password',
                     Response::HTTP_BAD_REQUEST
                 );

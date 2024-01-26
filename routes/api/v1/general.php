@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\UploadCtrl;
+use App\Models\Business;
+use App\Models\PosRequest;
 use App\Models\Profile;
 use App\Models\State;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
+use function App\Models\PosRequest;
 
 Route::get('/doc-types', function () {
     return jsonResponse(Response::HTTP_OK, Profile::DOC_TYPES);
@@ -20,24 +23,20 @@ Route::get('/states', function () {
 
 Route::post('/upload-file', UploadCtrl::class)->middleware('throttle:3');
 
-Route::get('/pos/categories', function () {
-    return jsonResponse(Response::HTTP_OK, [
-        'sole owner', 'partnership', 'limited liability company', 'public limited company', 'others',
-    ]);
+Route::get('/pos/sectors', function () {
+    return jsonResponse(Response::HTTP_OK, (new PosRequest())->sectors());
 });
 
 Route::get('/pos/business-types', function () {
-    return jsonResponse(Response::HTTP_OK, [
-        'store/supermarket', 'restaurants', 'wholesale/distributor', 'telecoms', 'fuel station',
-        'fast food', 'hotel/guest house', 'logistics', 'church/ngo', 'hospital', 'airlines', 'travel agencies',
-        'embassy', 'education/schools', 'others',
-    ]);
+    return jsonResponse(Response::HTTP_OK, (new PosRequest())->businessTypes());
 });
 
 Route::get('/pos/card-types', function () {
-    return jsonResponse(Response::HTTP_OK, [
-        'local card', 'international mastercard', 'international visa card',
-    ]);
+    return jsonResponse(Response::HTTP_OK, (new PosRequest())->cardTypes());
+});
+
+Route::get('/business/sectors', function () {
+    return jsonResponse(Response::HTTP_OK, (new Business())->businessSector());
 });
 
 Route::post('/download/pdf', function (Request $request) {

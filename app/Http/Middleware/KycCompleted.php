@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\BaseException;
 use App\Models\KnowYourCustomer;
 use Closure;
 use Exception;
@@ -22,11 +23,11 @@ class KycCompleted
         $user = $request->user()->load('knowYourCustomer');
 
         if (is_null($user->knowYourCustomer)) {
-            throw new Exception('Please complete your profile verification before proceeding', Response::HTTP_BAD_REQUEST);
+            throw new BaseException('Please complete your profile verification before proceeding', Response::HTTP_BAD_REQUEST);
         }
 
         if (in_array($user->knowYourCustomer->status, KnowYourCustomer::STATUS_CODES)) {
-            throw new Exception(
+            throw new BaseException(
                 'You have not been authorized to use this service',
                 Response::HTTP_BAD_REQUEST
             );

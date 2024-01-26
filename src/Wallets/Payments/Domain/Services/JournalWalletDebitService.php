@@ -2,11 +2,13 @@
 
 namespace Src\Wallets\Payments\Domain\Services;
 
+use App\Exceptions\BaseException;
 use App\Exceptions\InsufficientBalance;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Journal;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletDebitService
@@ -54,7 +56,7 @@ class JournalWalletDebitService
         ]);
 
         if (! Journal::query()->create($this->request->only($this->creationKeys))) {
-            throw new Exception('Failed to process transaction', Response::HTTP_BAD_REQUEST);
+            throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
         return $this;
@@ -81,5 +83,15 @@ class JournalWalletDebitService
     {
         AccountBalanceUpdateQueue::dispatch(
             $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function validateTransactionPin(): void
+    {
+        if (!Hash::check($this->request->transaction_pin, auth()->user()->transaction_pin)) {
+            throw new BaseException('Invalid Transaction Pin',Response::HTTP_BAD_REQUEST);
+        }
     }
 }

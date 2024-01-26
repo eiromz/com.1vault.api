@@ -2,6 +2,7 @@
 
 namespace Src\Wallets\Payments\Domain\Services;
 
+use App\Exceptions\BaseException;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Customer;
@@ -41,7 +42,7 @@ class JournalWalletCreditService
         ]);
 
         if (! Journal::query()->create($this->request->only($this->creationKeys))) {
-            throw new Exception('Failed to process transaction', Response::HTTP_BAD_REQUEST);
+            throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
         return $this;

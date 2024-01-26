@@ -2,6 +2,7 @@
 
 namespace Src\Customer\App\Http\Data;
 
+use App\Exceptions\BaseException;
 use App\Models\Customer;
 use Exception;
 use Spatie\LaravelData\Attributes\Validation\Email;
@@ -35,7 +36,7 @@ class VerifyEmailData extends Data
             ->where('otp', $this->otp)->firstOrFail();
 
         if ($this->customer->otp_expires_at->isPast()) {
-            throw new Exception('Otp has expired!', Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw new BaseException('Otp has expired!', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $this->customer->email_verified_at = now();

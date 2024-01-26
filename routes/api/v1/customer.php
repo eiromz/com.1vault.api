@@ -45,4 +45,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile/delete-staff', [StaffCtrl::class, 'destroy']);
     Route::post('profile/create-staff', [StaffCtrl::class, 'store']);
     Route::post('profile/update-staff', [StaffCtrl::class, 'update']);
+
+    Route::post('store-front/',[StoreFrontCtrl::class,'store']);
 });

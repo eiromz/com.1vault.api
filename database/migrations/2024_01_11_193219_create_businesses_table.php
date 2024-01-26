@@ -13,15 +13,18 @@ return new class extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->boolean('is_store_front')->nullable();
-            $table->foreignUuid('customer_id')->nullable();
+            $table->boolean('is_store_front')->default(0);
+            $table->foreignUuid('customer_id');
             $table->foreignUuid('collaborator_id')->nullable();
+            $table->foreignId('state_id')->comment('provide your state of residence')->nullable();
             $table->string('fullname')->comment('name for business');
             $table->string('phone_number')->comment('phone number for the client');
             $table->string('email')->unique()->comment('email address of the business');
             $table->string('address')->comment('The business physical address')->nullable();
-            $table->foreignId('state_id')->comment('provide your state of residence')->nullable();
             $table->string('logo')->comment('logo in string for the business')->nullable();
+            $table->string('category')->nullable();
+            $table->string('trx_reference')->nullable();
+            $table->string('whatsapp_number')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
