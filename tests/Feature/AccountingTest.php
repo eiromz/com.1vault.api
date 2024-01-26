@@ -370,4 +370,19 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+
+    /************* StoreFront *************/
+    test('Business can Retrieve Report', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/store-front', [
+            'name' => '12345678090',
+            'phone_number' => '08103797739',
+            'email' => 'crayolubiz@gmail.com',
+            'address' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'state_id' => $this->state->id,
+            'zip_code' => '1001261',
+            'logo' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });

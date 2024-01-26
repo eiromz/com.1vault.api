@@ -2,6 +2,7 @@
 
 namespace Src\Accounting\App\Http;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Business;
 use App\Models\Cart;
@@ -26,8 +27,13 @@ class StoreFrontCtrl extends DomainBaseCtrl
         $this->repository = $repository;
         parent::__construct();
     }
+
+    /**
+     * @throws BaseException
+     */
     public function store(Request $request): JsonResponse
     {
+        $this->storeFrontExists();
         $request->merge([
             'customer_id' => auth()->user()->id,
             'is_store_front' => true,
@@ -53,5 +59,17 @@ class StoreFrontCtrl extends DomainBaseCtrl
         $data = Business::query()->create($request->only($this->createRequestkeys));
 
         return jsonResponse(Response::HTTP_OK, $data);
+    }
+
+    private function storeFrontExists()
+    {
+        $storeFrontExists = Business::query()
+            ->where('customer_id','=',auth()->user()->id)
+            ->where('is_store_front','=',true)
+            ->exists();
+
+        if($storeFrontExists){
+            throw new BaseException('Store Front already exists for this account',Response::HTTP_BAD_REQUEST);
+        }
     }
 }

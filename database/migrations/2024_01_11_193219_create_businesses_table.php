@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->unique()->comment('email address of the business');
             $table->string('address')->comment('The business physical address')->nullable();
             $table->string('logo')->comment('logo in string for the business')->nullable();
-            $table->string('category')->nullable();
+            $table->string('sector')->nullable();
             $table->string('trx_reference')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('zip_code')->nullable();
