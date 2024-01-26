@@ -41,7 +41,6 @@ class StoreFrontCtrl extends DomainBaseCtrl
         ]);
 
         $request->validate([
-            'service_id' => ['required'],
             'name' => ['required', 'min:2'],
             'phone_number' => ['required', 'min:11'],
             'email' => ['required', 'email', 'unique:App\Models\Business,email'],
