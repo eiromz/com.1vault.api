@@ -81,6 +81,63 @@ describe('Service Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Customer can fill service request for pos', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
+            'type' => 'pos',
+            'business_name' => 'BusinessName',
+            'merchant_trade_name' => 'MerchantTrade',
+            'business_type' => 'sole_owner',
+            'category' => 'restaurant',
+            'office_address' => fake()->lastName,
+            'local_govt_area' => fake()->lastName,
+            'state_id' => $this->state->id,
+            'primary_contact_person' => [
+                [
+                    'name' => fake()->uuid,
+                    'designation' => 'Hackett',
+                    'office_phone' => 'Stark',
+                    'mobile_phone' => 'Stark',
+                    'email_address' => 'Stark'
+                ]
+            ],
+            'secondary_contact_person' => [
+                [
+                    'name' => fake()->uuid,
+                    'designation' => 'Hackett',
+                    'office_phone' => 'Stark',
+                    'mobile_phone' => 'Stark',
+                    'email_address' => 'Stark'
+                ]
+            ],
+            'pos_quantity' => 10,
+            'pos_locations' => [
+                [
+                    'location_of_terminal' => fake()->uuid,
+                    'contact_person' => 'Hackett',
+                    'mobile_phone' => 'Stark'
+                ],
+                [
+                    'location_of_terminal' => fake()->uuid,
+                    'contact_person' => 'Hackett',
+                    'mobile_phone' => 'Stark'
+                ],
+            ],
+            'receive_notification' => 1,
+            'notification_email_address' => fake()->email,
+            'notification_phone_number' => fake()->phoneNumber,
+            'real_time_transaction_viewing' => fake()->boolean,
+            'settlement_account_name' => fake()->lastName,
+            'settlement_account_number' => fake()->lastName,
+            'settlement_branch' => fake()->lastName,
+            'other_information' => fake()->lastName,
+            'attestation' => fake()->lastName,
+            'card_type' => 'international_card',
+            'signature_pdf_link' => fake()->url,
+            'designation' => fake()->lastName
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Customer can fill service request for legal', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'legal',

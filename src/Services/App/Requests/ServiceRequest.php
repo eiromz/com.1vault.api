@@ -16,28 +16,25 @@ class ServiceRequest extends FormRequest
         'phone_number', 'physical_address', 'email_address_proprietors', 'phone_number_proprietors',
         'signature_of_proprietors_pdf', 'utility_bill_pdf','customer_id'
     ];
-
     public array $businessLlc = [
         'type', 'business_name', 'nature_of_business', 'government_id_pdf', 'email', 'email_address',
         'phone_number', 'physical_address', 'physical_address_of_directors',
         'email_address_directors', 'phone_number_directors', 'name_of_directors',
         'signature_of_proprietors_pdf', 'passport_photograph_of_directors_pdf','customer_id'
     ];
-
     public array $pos = [
         'business_name',
         'customer_id',
         'merchant_trade_name',
         'business_type',
-        'others',
         'category',
         'office_address',
         'local_govt_area',
         'state_id',
         'primary_contact_person',
         'secondary_contact_person',
-        'pos_number',
-        'pos_location',
+        'pos_quantity',
+        'pos_locations',
         'receive_notification',
         'notification_email_address',
         'notification_phone_number',
@@ -50,19 +47,15 @@ class ServiceRequest extends FormRequest
         'card_type',
         'signature_pdf_link',
         'designation',
-        'date',
     ];
-
     public array $legal = [
         'customer_id',
         'description'
     ];
-
     public function authorize(): bool
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -76,7 +69,6 @@ class ServiceRequest extends FormRequest
             'legal' => $this->legalRequestRules()
         };
     }
-
     public function registerBusinessRequestRules(): array
     {
         return [
@@ -102,7 +94,6 @@ class ServiceRequest extends FormRequest
             'comments' => ['nullable'],
         ];
     }
-
     public function registerPosRequestRules(): array
     {
         return [
@@ -110,31 +101,28 @@ class ServiceRequest extends FormRequest
             'business_name' => ['required'],
             'merchant_trade_name' => ['required'],
             'business_type' => ['required', 'in:sole_owner,partnership,ltd,plc,others'],
-            'others' => ['required_if:business_type,others'],
             'category' => ['required'],
             'office_address' => ['required'],
             'local_govt_area' => ['required'],
             'state_id' => ['required'],
             'primary_contact_person' => ['required', 'array'],
             'secondary_contact_person' => ['required', 'array'],
-            'pos_number' => ['required', 'integer'],
-            'pos_location' => ['required', 'array'],
-            'receive_notification' => ['required', 'boolean'],
-            'notification_email_address' => ['required', 'email'],
-            'notification_phone_number' => ['required'],
-            'real_time_transaction_viewing' => ['required', 'boolean'],
+            'pos_quantity' => ['required', 'integer'],
+            'pos_locations' => ['required', 'array'],
+            'receive_notification' => ['required', 'boolean','in:1,0'],
+            'notification_email_address' => ['nullable', 'email'],
+            'notification_phone_number' => ['nullable'],
+            'real_time_transaction_viewing' => ['nullable', 'boolean'],
             'settlement_account_name' => ['required', 'string'],
             'settlement_account_number' => ['required', 'string'],
             'settlement_branch' => ['required', 'string'],
             'other_information' => ['nullable', 'string'],
             'attestation' => ['required', 'string'],
-            'card_type' => ['required', 'string', 'in:local_card,int_master_card,int_visa_card'],
+            'card_type' => ['nullable', 'string'],
             'signature_pdf_link' => ['required', 'url'],
-            'designation' => ['required', 'url'],
-            'date' => ['required'],
+            'designation' => ['nullable']
         ];
     }
-
     public function legalRequestRules(): array
     {
         return [
@@ -142,7 +130,6 @@ class ServiceRequest extends FormRequest
             'description' => ['required','max:100']
         ];
     }
-
     public function getOnly()
     {
         return match ($this->type) {
@@ -152,7 +139,6 @@ class ServiceRequest extends FormRequest
             'legal' => $this->only($this->legal)
         };
     }
-
     public function getModel(): Builder
     {
         return match ($this->type) {

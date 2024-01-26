@@ -41,7 +41,7 @@ Route::get('/business/sectors', function () {
 
 Route::post('/download/pdf', function (Request $request) {
     $request->validate([
-        'type' => ['required', 'in:sales,debtors,invoice,receipt'],
+        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
         'identifier' => ['required'],
     ]);
 

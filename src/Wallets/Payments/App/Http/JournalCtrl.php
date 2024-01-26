@@ -82,6 +82,8 @@ class JournalCtrl extends DomainBaseCtrl
             $request
         );
 
+        $source->validateTransactionPin();
+
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
         $destination = new JournalWalletCreditService(

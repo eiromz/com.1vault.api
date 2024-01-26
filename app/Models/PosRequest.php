@@ -12,6 +12,12 @@ class PosRequest extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'primary_contact_person' => 'array',
+        'secondary_contact_person' => 'array',
+        'pos_locations' => 'array',
+    ];
+
     public function sectors()
     {
         $collection = collect([

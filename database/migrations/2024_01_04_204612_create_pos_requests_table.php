@@ -43,6 +43,7 @@ return new class extends Migration
             $table->string('attestation', 40)->comment('On behalf of');
             $table->string('card_type', 20)->nullable();
             $table->string('signature_pdf_link')->nullable();
+            $table->string('designation')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
