@@ -90,7 +90,7 @@ class JournalCtrl extends DomainBaseCtrl
 
         $destination->credit()->notify()->updateBalanceQueue();
 
-        return jsonResponse(Response::HTTP_OK, ['message' => 'Transfer Completed']);
+        return jsonResponse(Response::HTTP_OK, $source->journal);
     }
 
     //create the request

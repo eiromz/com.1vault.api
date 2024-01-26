@@ -17,40 +17,45 @@ use Symfony\Component\HttpFoundation\Response;
 class StoreFrontInventoryCtrl extends DomainBaseCtrl
 {
     private $repository;
-
     public array $requestKeysFilterCreate = [
         'amount', 'is_published', 'product_name', 'unit', 'quantity', 'business_id',
-        'selling_price','is_store_front','image'
+        'selling_price','is_store_front','image','stock_status','description'
     ];
-
     public array $requestKeysFilterUpdate = [
-        'amount', 'product_name', 'unit', 'quantity', 'selling_price','image'
+        'amount', 'product_name', 'unit', 'quantity', 'selling_price','image','stock_status'
     ];
-
     public function __construct(InventoryRepositoryInterface $repository)
     {
         $this->repository = $repository;
         parent::__construct();
     }
-
-    public function store(CreateInventoryRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
         $request->merge([
-            'is_published' => true,
-            'product_name' => $request->name,
-            'business_id' => $request->business,
+            'is_published'      => false,
+            'product_name'      => $request->name,
+            'business_id'       => $request->business,
             'is_store_front'    => true,
-            'image'  => $request->image
+            'quantity' => 0,
+            'unit' => 'pcs',
+            'selling_price' => $request->amount
         ]);
-        $request->validated();
+
+        $request->validate([
+            'name' => ['required', 'min:2'],
+            'amount' => ['required'],
+            'business' => ['required'],
+            'image'   => ['required','url'],
+            'stock_status' => ['required','boolean'],
+            'description' => ['required']
+        ]);
 
         $data = $this->repository->create($request->only($this->requestKeysFilterCreate));
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
     public function destroy(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -75,7 +80,6 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
             'message' => 'Inventory Deleted',
         ]);
     }
-
     public function index($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -87,19 +91,25 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
         ]);
 
         $collection = collect([
-            'inventory_count' => $this->repository->getCountAll(['business_id' => $id]),
-            'inventory_total_value' => $this->repository->getSum(['business_id' => $id]),
+            'inventory_count' => $this->repository->getCountAll([
+                'business_id' => $id,
+                'is_store_front'=> true
+            ]),
+            'inventory_total_value' => $this->repository->getSum([
+                'business_id' => $id,
+                'is_store_front'=> true
+            ]),
         ]);
 
         $data = $this->repository->getAllByParams([
             'business_id' => $id,
+            'is_store_front'=> true
         ]);
 
         $collection->put('inventory_list', $data->all());
 
         return jsonResponse(Response::HTTP_OK, $collection);
     }
-
     public function view($inventory, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -117,11 +127,11 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
         $data = $this->repository->getDetailsByParams([
             'id' => $inventory,
             'business_id' => $business,
+            'is_store_front' => true
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
     public function edit($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -133,9 +143,12 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
         $request->merge(['inventory' => $id]);
 
         $request->validate([
-            'inventory' => ['required', 'exists:App\Models\Inventory,id'], 'name' => ['nullable', 'min:2'],
-            'amount' => ['nullable'], 'quantity' => ['nullable', 'integer'],
-            'unit' => ['nullable'], 'selling_price' => ['nullable'],
+            'inventory' => ['required', 'exists:App\Models\Inventory,id'],
+            'name' => ['nullable', 'min:2'],
+            'amount' => ['nullable'],
+            'quantity' => ['nullable', 'integer'],
+            'unit' => ['nullable'],
+            'selling_price' => ['nullable'],
         ]);
 
         if (! $this->repository->update($id, $request->only($this->requestKeysFilterUpdate))) {

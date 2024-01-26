@@ -393,23 +393,52 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Customer can create a store front inventory', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front/inventory', [
-            'name' => '12345678090',
-            'phone_number' => '08103797739',
-            'email' => 'crayolubiz@gmail.com',
-            'address' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
-            'state_id' => $this->state->id,
-            'zip_code' => '1001261',
-            'logo' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
-            'sector' => 'banking',
-            'trx_ref' => $this->journal->trx_ref,
-            'whatsapp_number' => '0901234567',
-            'facebook' => 'iamjonlobathe',
-            'instagram' => 'sholaaaa',
-            'twitter_x' => 'welcome',
+            'name' => fake()->lastName,
+            'amount' => fake()->numberBetween(100, 1000),
+            'business' => $this->business->id,
+            'image' => fake()->url,
+            'stock_status' => 1,
+            'description' => 'This is a transaction for all things'
         ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can create a view single store front inventory', function () {
+        $link = '/api/v1/store-front/inventory/'.$this->inventory->first()->id.'/business/'.$this->business->id;
+        $response = $this->actingAs($this->customer)->get($link);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can destroy a a single inventory', function () {
+        $link = '/api/v1/store-front/inventory/delete';
+        $response = $this->actingAs($this->customer)->post($link,[
+            'inventory' => [
+                [
+                    'inventory' => $this->inventory->first()->id,
+                ],
+            ],
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can update a single inventory', function () {
+        $link = '/api/v1/store-front/inventory/edit/'.$this->inventory->first()->id;
+        $response = $this->actingAs($this->customer)->post($link,[
+            'name'      => 'wella health',
+            'amount'    => 10000,
+            'business'  => $this->business->id,
+            'stock_status' => 1,
+            'description' => 'welcome to the land of the living'
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can view all inventory', function () {
+        $response = $this->actingAs($this->customer)->get(
+            '/api/v1/store-front/inventory/business/'.$this->business->id
+        );
         $response->dump();
         expect($response->status())->toBe(200);
     });

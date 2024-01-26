@@ -113,8 +113,8 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can pay for service', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/pay-now/service', [
+    test('Customer can pay for service', function() {
+        $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total'     => 10000,
             'cart'      => [
                 ['cart'=>$this->cart->first()->id],

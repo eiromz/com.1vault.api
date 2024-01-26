@@ -49,4 +49,8 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     Route::post('/store-front',[StoreFrontCtrl::class,'store']);
     Route::post('/store-front/inventory',[StoreFrontInventoryCtrl::class,'store']);
+    Route::post('/store-front/inventory/delete',[StoreFrontInventoryCtrl::class,'destroy']);
+    Route::get('/store-front/inventory/{inventory}/business/{business}',[StoreFrontInventoryCtrl::class,'view']);
+    Route::post('/store-front/inventory/edit/{id}',[StoreFrontInventoryCtrl::class,'edit']);
+    Route::get('/store-front/inventory/business/{id}',[StoreFrontInventoryCtrl::class,'index']);
 });
