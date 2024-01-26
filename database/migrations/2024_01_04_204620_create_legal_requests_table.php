@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('legal_requests', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->uuid('id')->primary()->index();
+            $table->foreignUuid('customer_id');
+            $table->string('description')->comment('nature of the business');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate();
+            $table->softDeletesTz();
         });
     }
 

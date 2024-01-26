@@ -5,7 +5,6 @@ namespace Src\Accounting\App\Http;
 use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Src\Accounting\App\Requests\CreateInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,17 +12,21 @@ use Symfony\Component\HttpFoundation\Response;
 class InventoryCtrl extends DomainBaseCtrl
 {
     private $repository;
+
     public array $requestKeysFilterCreate = [
         'amount', 'is_published', 'product_name', 'unit', 'quantity', 'business_id', 'selling_price',
     ];
+
     public array $requestKeysFilterUpdate = [
-        'amount','product_name', 'unit', 'quantity', 'selling_price',
+        'amount', 'product_name', 'unit', 'quantity', 'selling_price',
     ];
+
     public function __construct(InventoryRepositoryInterface $repository)
     {
         $this->repository = $repository;
         parent::__construct();
     }
+
     public function store(CreateInventoryRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -39,6 +42,7 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function destroy(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -49,9 +53,9 @@ class InventoryCtrl extends DomainBaseCtrl
 
         $delete = [];
 
-       foreach($request->inventory as $inventory){
-           $delete[] = $inventory['inventory'];
-       }
+        foreach ($request->inventory as $inventory) {
+            $delete[] = $inventory['inventory'];
+        }
 
         if (! $this->repository->deleteByIds($delete)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
@@ -63,6 +67,7 @@ class InventoryCtrl extends DomainBaseCtrl
             'message' => 'Inventory Deleted',
         ]);
     }
+
     public function index($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -86,6 +91,7 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $collection);
     }
+
     public function view($inventory, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -107,6 +113,7 @@ class InventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function edit($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -120,7 +127,7 @@ class InventoryCtrl extends DomainBaseCtrl
         $request->validate([
             'inventory' => ['required', 'exists:App\Models\Inventory,id'], 'name' => ['nullable', 'min:2'],
             'amount' => ['nullable'], 'quantity' => ['nullable', 'integer'],
-            'unit' => ['nullable'], 'selling_price' => ['nullable']
+            'unit' => ['nullable'], 'selling_price' => ['nullable'],
         ]);
 
         if (! $this->repository->update($id, $request->only($this->requestKeysFilterUpdate))) {

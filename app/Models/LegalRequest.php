@@ -9,4 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class LegalRequest extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $guarded = [];
+
 }

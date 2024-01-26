@@ -51,7 +51,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
     public function deleteByIds(array $ids)
     {
         try {
-            return $this->model->query()->whereIn('id',$ids)->delete();
+            return $this->model->query()->whereIn('id', $ids)->delete();
         } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
         }

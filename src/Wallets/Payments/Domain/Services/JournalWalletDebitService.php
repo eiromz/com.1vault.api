@@ -12,12 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 class JournalWalletDebitService
 {
     public object $accountInstance;
+
     public $request;
 
-    public $creationKeys = ["amount", "trx_ref" ,
-      "debit", "credit", "label", "source", "balance_before", "balance_after",'customer_id'
+    public $creationKeys = ['amount', 'trx_ref',
+        'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
     ];
-    public function __construct($accountInstance,$request=null)
+
+    public function __construct($accountInstance, $request = null)
     {
         $this->accountInstance = $accountInstance;
         $this->request = $request;
@@ -27,57 +29,57 @@ class JournalWalletDebitService
      * @throws InsufficientBalance
      */
     public function checkBalance()
-   {
-       if($this->request->amount > $this->accountInstance->balance_after){
-           throw new InsufficientBalance('Insufficient Balance',Response::HTTP_BAD_REQUEST);
-       }
-       return $this;
-   }
+    {
+        if ($this->request->amount > $this->accountInstance->balance_after) {
+            throw new InsufficientBalance('Insufficient Balance', Response::HTTP_BAD_REQUEST);
+        }
 
-   public function calculateNewBalance()
-   {
-       return ($this->accountInstance->balance_after - $this->request->amount);
-   }
+        return $this;
+    }
 
-   public function debit(){
+    public function calculateNewBalance()
+    {
+        return $this->accountInstance->balance_after - $this->request->amount;
+    }
+
+    public function debit()
+    {
         $this->request->merge([
             'balance_before' => $this->accountInstance->balance_after,
             'balance_after' => $this->calculateNewBalance(),
-            'customer_id'   => auth()->user()->id,
-            'debit'     => true,
-            'credit'    => false,
-            'trx_ref'   => generateTransactionReference()
+            'customer_id' => auth()->user()->id,
+            'debit' => true,
+            'credit' => false,
+            'trx_ref' => generateTransactionReference(),
         ]);
 
-       if(!Journal::query()->create($this->request->only($this->creationKeys))){
-           throw new Exception('Failed to process transaction',Response::HTTP_BAD_REQUEST);
-       }
+        if (! Journal::query()->create($this->request->only($this->creationKeys))) {
+            throw new Exception('Failed to process transaction', Response::HTTP_BAD_REQUEST);
+        }
 
-       return $this;
-   }
+        return $this;
+    }
 
-   public function notify()
-   {
-       $this->firebase();
-       return $this;
-   }
+    public function notify()
+    {
+        $this->firebase();
 
-   private function firebase(): void
-   {
-       $notification = [
-           'title'  => 'Debit Notification',
-           'body'   => "Your account has been debited the sum of {$this->request->amount}",
+        return $this;
+    }
+
+    private function firebase(): void
+    {
+        $notification = [
+            'title' => 'Debit Notification',
+            'body' => "Your account has been debited the sum of {$this->request->amount}",
         ];
 
-       SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
-   }
+        SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
+    }
 
-    /**
-     * @return void
-     */
     public function updateBalanceQueue(): void
     {
-       AccountBalanceUpdateQueue::dispatch(
-           $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
-   }
+        AccountBalanceUpdateQueue::dispatch(
+            $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
+    }
 }

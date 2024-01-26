@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Journal;
 use App\Models\Profile;
@@ -19,13 +21,19 @@ describe('Payment Routes', function () {
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
-        $this->customer         = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
-        $this->service          = Service::factory()->count(3)->create();
-        $this->service_benefit  = ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $this->service->first()->id
+        $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
+        $this->service = Service::factory()->count(3)->create();
+        $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
+            'service_id' => $this->service->first()->id,
         ]);
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
+        ]);
+
+        $this->cart = Cart::factory()->count(3)->create([
+            'price' => 2000,
+            'customer_id' => $this->customer->id,
+            'service_id' => $this->service->first()->id
         ]);
     });
 
@@ -38,27 +46,27 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can fetch all journal transactions', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal',[
+    test('Customer can fetch all journal transactions', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
             'filter_type' => 'default',
-            'start_date'    => '2024-01-24',
-            'end_date'      => '2024-01-27',
+            'start_date' => '2024-01-24',
+            'end_date' => '2024-01-27',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can fetch a single journal transaction', function() {
-        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view',[
+    test('Customer can fetch a single journal transaction', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view', [
             'trx_ref' => $this->journal->first()->trx_ref,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can perform transaction transfers', function(){
+    test('Customer can perform transaction transfers', function () {
         $customer2 = Customer::factory()->create([
-            'email' => 'crayolu2@gmail.com'
+            'email' => 'crayolu2@gmail.com',
         ]);
 
         Profile::factory()->create([
@@ -68,17 +76,52 @@ describe('Payment Routes', function () {
         ]);
 
         Journal::factory()->create([
-            'customer_id' => $customer2->id
+            'customer_id' => $customer2->id,
         ]);
 
-        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer',[
-            'account_number'    => $customer2->profile->account_number,
-            'amount'            => 10000,
-            'transaction_pin'   => '123456'
+        $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer', [
+            'account_number' => $customer2->profile->account_number,
+            'amount' => 10000,
+            'transaction_pin' => '123456',
         ]);
 
         $response->dump();
 
+        expect($response->status())->toBe(200);
+    });
+
+    test('Customer can add to cart  with service_id', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/cart', [
+            'service_id' => $this->service->first()->id,
+            'price' => $this->service->first()->amount,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
+    test('Customer can view all in cart', function () {
+        $response = $this->actingAs($this->customer)->get('/api/v1/cart');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
+    test('Customer can delete from cart', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/cart/delete', [
+            'cart_id' => $this->cart->first()->id,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
+    test('Customer can pay for service', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/pay-now/service', [
+            'total'     => 10000,
+            'cart'      => [
+                ['cart'=>$this->cart->first()->id],
+            ],
+            'transaction_pin' => '123456'
+        ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
 });

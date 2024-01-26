@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CreateJournalRequest extends FormRequest
 {
     public $profile;
+
     public function authorize(): bool
     {
         return true;
@@ -23,9 +24,9 @@ class CreateJournalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'account_number'    => ['required','exists:App\Models\Profile,account_number'],
-            'amount'            => ['required'],
-            'transaction_pin'   => ['required']
+            'account_number' => ['required', 'exists:App\Models\Profile,account_number'],
+            'amount' => ['required'],
+            'transaction_pin' => ['required'],
         ];
     }
 
@@ -35,9 +36,9 @@ class CreateJournalRequest extends FormRequest
     public function execute()
     {
         $this->merge([
-            'trx_ref'   => generateTransactionReference(),
-            'label'     => 'wallet to wallet transfer',
-            'source'    => 'wallet transaction',
+            'trx_ref' => generateTransactionReference(),
+            'label' => 'wallet to wallet transfer',
+            'source' => 'wallet transaction',
         ]);
 
         $this->verifyTransactionPin();
@@ -48,17 +49,17 @@ class CreateJournalRequest extends FormRequest
     public function getAccountNumberInformation(): void
     {
         $this->profile = Profile::query()
-            ->where('account_number','=',$this->account_number)
+            ->where('account_number', '=', $this->account_number)
             ->with('customer')
             ->first();
     }
 
     public function verifyTransactionPin()
     {
-        if(Hash::check($this->transaction_pin, auth()->user()->transaction_pin)){
+        if (Hash::check($this->transaction_pin, auth()->user()->transaction_pin)) {
             return;
         }
 
-        throw new \Exception('Invalid Transaction pin',Response::HTTP_BAD_REQUEST);
+        throw new \Exception('Invalid Transaction pin', Response::HTTP_BAD_REQUEST);
     }
 }

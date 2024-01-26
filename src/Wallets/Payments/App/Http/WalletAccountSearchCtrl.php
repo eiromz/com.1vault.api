@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class WalletAccountSearchCtrl extends DomainBaseCtrl
 {
     /**
@@ -18,13 +17,13 @@ class WalletAccountSearchCtrl extends DomainBaseCtrl
      */
     public function index(Request $request): JsonResponse
     {
-        try{
+        try {
             $request->validate([
                 'account_number' => ['required', 'exists:App\Models\Profile,account_number'],
             ]);
 
             $profile = Profile::query()
-                ->where('customer_id','<>',auth()->user()->id)
+                ->where('customer_id', '<>', auth()->user()->id)
                 ->where('account_number', '=', $request->account_number)
                 ->with('customer')
                 ->firstOrFail();
@@ -32,13 +31,13 @@ class WalletAccountSearchCtrl extends DomainBaseCtrl
             $account = GetAccountInstance::getActiveInstance($profile);
 
             $collection = collect([
-                'account_balance'   => $account->balance_after,
-                'account_infomation' => $profile->only(['firstname','lastname','account_number'])
+                'account_balance' => $account->balance_after,
+                'account_infomation' => $profile->only(['firstname', 'lastname', 'account_number']),
             ]);
 
             return jsonResponse(Response::HTTP_OK, $collection);
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, ['message' => 'Invalid Account Number']);
         }
     }

@@ -1,12 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\WelcomeController;
-use App\Models\Customer;
-use App\Support\Firebase;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeController::class);
-
 
 Route::prefix('v1')->middleware(['json.response'])->group(function () {
     require __DIR__.'/api/v1/customer.php';

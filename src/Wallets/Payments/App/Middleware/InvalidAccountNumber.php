@@ -15,8 +15,8 @@ class InvalidAccountNumber
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->profile->account_number === $request->account_number){
-            abort(400,"You can't perform this transaction");
+        if ($request->user()->profile->account_number === $request->account_number) {
+            abort(400, "You can't perform this transaction");
         }
 
         return $next($request);

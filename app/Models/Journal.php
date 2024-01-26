@@ -13,16 +13,19 @@ class Journal extends Model
 
     protected $guarded = [];
 
-    protected $with = ['customer','service'];
+    protected $with = ['customer', 'service'];
+
     protected $casts = [
         'debit' => 'boolean',
         'credit' => 'boolean',
-        'payload' => 'array'
+        'payload' => 'array',
     ];
-    public function customer():BelongsTo
+
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
+
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);

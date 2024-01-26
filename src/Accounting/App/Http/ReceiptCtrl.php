@@ -17,12 +17,12 @@ class ReceiptCtrl extends DomainBaseCtrl
 
     public array $storeRequestFilterKeys = [
         'client_id', 'business_id', 'transaction_date', 'items', 'description',
-        'amount_received', 'payment_method', 'discount', 'tax',  'total'
+        'amount_received', 'payment_method', 'discount', 'tax',  'total',
     ];
 
     public array $updateRequestFilterKeys = [
         'transaction_date', 'items', 'description',
-        'amount_received', 'payment_method', 'discount', 'tax', 'total'
+        'amount_received', 'payment_method', 'discount', 'tax', 'total',
     ];
 
     public function __construct(ReceiptRepositoryInterface $repository)
@@ -58,7 +58,7 @@ class ReceiptCtrl extends DomainBaseCtrl
             'receipt' => ['required', 'exists:App\Models\Receipt,id'],
         ]);
 
-        if (!$this->repository->delete($request->receipt)) {
+        if (! $this->repository->delete($request->receipt)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Receipt',
             ]);
@@ -84,7 +84,6 @@ class ReceiptCtrl extends DomainBaseCtrl
             'message' => 'Receipt Updated',
         ]);
     }
-
 
     public function view($receipt, $business, Request $request): JsonResponse
     {

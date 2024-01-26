@@ -36,7 +36,7 @@ class ChangePasswordCtrl extends DomainBaseCtrl
 
             $customer->password = Hash::make($request->password);
 
-            if($customer->save()){
+            if ($customer->save()) {
                 return jsonResponse(Response::HTTP_OK, [
                     'message' => 'Successfully Updated Your Password',
                 ]);

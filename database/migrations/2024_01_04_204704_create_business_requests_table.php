@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('business_requests', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->string('type',15);
+            $table->foreignUuid('customer_id');
+            $table->string('type', 15);
             $table->jsonb('business_name')->comment('name of the business');
             $table->string('nature_of_business')->comment('nature of the business');
             $table->string('government_id_pdf')->comment('A government issued id for the individual');

@@ -30,7 +30,6 @@ return new class extends Migration
             $table->integer('pos_quantity')->comment('this designation should accept integer ');
             $table->jsonb('pos_locations')->nullable();
 
-
             $table->boolean('receive_notification')->default(0);
             $table->string('notification_email_address', 40)->nullable();
             $table->string('notification_phone_number', 20)->nullable();

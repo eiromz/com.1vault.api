@@ -13,6 +13,6 @@ class BusinessRequest extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'business_name' => 'array'
+        'business_name' => 'array',
     ];
 }

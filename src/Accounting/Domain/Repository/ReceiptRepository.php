@@ -4,7 +4,6 @@ namespace Src\Accounting\Domain\Repository;
 
 use App\Models\Receipt;
 use Illuminate\Support\Arr;
-use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Src\Accounting\Domain\Repository\Interfaces\ReceiptRepositoryInterface;
 
 class ReceiptRepository extends BaseRepository implements ReceiptRepositoryInterface

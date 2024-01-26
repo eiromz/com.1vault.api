@@ -16,24 +16,25 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-        $billing_cycle = ['one-time','monthly','quarterly','yearly'];
+        $billing_cycle = ['one-time', 'monthly', 'quarterly', 'yearly'];
+
         return [
-            'title'         => fake()->lastName,
-            'type'          => fake()->randomElement(['airtime','data','electricity','legal']),
-            'provider'      => 'wema bank',
-            'description'   => fake()->lastName,
-            'amount'        => fake()->numberBetween(1000,100000),
-            'commission'    => fake()->numberBetween(1000,100000),
-            'is_recurring'  => fake()->boolean,
+            'title' => fake()->lastName,
+            'type' => fake()->randomElement(['airtime', 'data', 'electricity', 'legal']),
+            'provider' => 'wema bank',
+            'description' => fake()->lastName,
+            'amount' => fake()->numberBetween(1000, 100000),
+            'commission' => fake()->numberBetween(1000, 100000),
+            'is_recurring' => fake()->boolean,
             'billing_cycle' => 'monthly',
-            'is_request'    => fake()->boolean(50),
-            'discount'      => fake()->numberBetween(1000,100000),
-            'status'        => fake()->boolean,
-            'category'      => fake()->randomElement(['social_media','business_registration','legal','pos','store_front']),
-            'benefit'       => [
-                'content_creation','building house', 'running helter skelter'
+            'is_request' => fake()->boolean(50),
+            'discount' => fake()->numberBetween(1000, 100000),
+            'status' => fake()->boolean,
+            'category' => fake()->randomElement(['social_media', 'business_registration', 'legal', 'pos', 'store_front']),
+            'benefit' => [
+                'content_creation', 'building house', 'running helter skelter',
             ],
-            'quantity'      => 8,
+            'quantity' => 8,
         ];
     }
 }

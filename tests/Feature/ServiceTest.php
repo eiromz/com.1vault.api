@@ -1,7 +1,7 @@
 <?php
+
 use App\Models\Customer;
 use App\Models\Journal;
-use App\Models\Profile;
 use App\Models\Service;
 use App\Models\ServiceBenefit;
 use App\Models\State;
@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
-describe('Payment Routes', function () {
+describe('Service Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 
@@ -19,10 +19,10 @@ describe('Payment Routes', function () {
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
-        $this->customer         = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
-        $this->service          = Service::factory()->count(3)->create();
-        $this->service_benefit  = ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $this->service->first()->id
+        $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
+        $this->service = Service::factory()->count(3)->create([]);
+        $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
+            'service_id' => $this->service->first()->id,
         ]);
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
@@ -37,11 +37,11 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for business_name',function(){
+    test('Customer can fill service request for business_name', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'business_name',
-            'business_name'  => ['bookworm','title'],
-            'nature_of_business'  => 'bookworm',
+            'business_name' => ['bookworm', 'title'],
+            'nature_of_business' => 'bookworm',
             'government_id_pdf' => fake()->url,
             'email_address' => fake()->email,
             'phone_number' => fake()->phoneNumber,
@@ -61,11 +61,11 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for business llc',function(){
+    test('Customer can fill service request for business llc', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'business_llc',
-            'business_name'  => ['bookworm','title'],
-            'nature_of_business'  => 'bookworm',
+            'business_name' => ['bookworm', 'title'],
+            'nature_of_business' => 'bookworm',
             'government_id_pdf' => fake()->url,
             'email_address' => fake()->email,
             'phone_number' => fake()->phoneNumber,
@@ -77,6 +77,14 @@ describe('Payment Routes', function () {
             'signature_of_directors_pdf' => fake()->url,
             'passport_photograph_of_directors_pdf' => fake()->url,
             'comments' => fake()->phoneNumber,
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Customer can fill service request for legal', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
+            'type' => 'legal',
+            'description' => 'Welcome to the land of the living',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

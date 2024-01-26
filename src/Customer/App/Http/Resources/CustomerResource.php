@@ -31,28 +31,33 @@ class CustomerResource extends JsonResource
             'profile' => (new ProfileResource($this->whenLoaded('profile'))),
             'pin-set' => $this->pinSet(),
             'kyc-complete' => $this->kycComplete(),
+            'can_receive_notification' => $this->can_receive_notification,
+            'can_receive_subscription_reminder' => $this->can_receive_subscription_reminder,
         ];
     }
 
     public function pinSet(): bool
     {
         $boolean = false;
-        if(!is_null($this->transaction_pin)){
+        if (! is_null($this->transaction_pin)) {
             $boolean = true;
         }
+
         return $boolean;
     }
+
     public function kycComplete(): bool
     {
         $kyc = KnowYourCustomer::query()
-            ->where('customer_id','=',$this->id)
-            ->where('status','=',1)
+            ->where('customer_id', '=', $this->id)
+            ->where('status', '=', 1)
             ->first();
         $boolean = false;
 
-        if(!is_null($this->transaction_pin)){
+        if (! is_null($this->transaction_pin)) {
             $boolean = true;
         }
+
         return $boolean;
     }
 }

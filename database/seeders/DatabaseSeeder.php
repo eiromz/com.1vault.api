@@ -12,7 +12,6 @@ use App\Models\Journal;
 use App\Models\KnowYourCustomer;
 use App\Models\Profile;
 use App\Models\Service;
-use App\Models\ServiceBenefit;
 use App\Models\State;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -82,16 +81,59 @@ class DatabaseSeeder extends Seeder
             'client_id' => $client->id,
         ]);
 
-
-        $service  = Service::factory()->count(3)->create([
-            'category' => 'social_media'
+        $service = Service::factory()->count(3)->create([
+            'category' => 'social_media',
         ]);
+        Service::query()->create($this->business_name());
+        Service::query()->create($this->business_llc());
 
-//        ServiceBenefit::factory()->count(3)->create([
-//            'service_id' => $service->first()->id
-//        ]);
         $journal = Journal::factory()->count(3)->create([
             'customer_id' => $customer->id,
         ]);
     }
+
+    public function business_name(): array
+    {
+        return [
+            'title' => 'Business Name Registration',
+            'type' => fake()->randomElement(['airtime', 'data', 'electricity', 'legal']),
+            'provider' => '1vault',
+            'description' => fake()->lastName,
+            'amount' => fake()->numberBetween(1000, 100000),
+            'commission' => fake()->numberBetween(1000, 100000),
+            'is_recurring' => 0,
+            'billing_cycle' => 'one-time',
+            'is_request' => fake()->boolean(50),
+            'discount' => fake()->numberBetween(1000, 100000),
+            'status' => fake()->boolean,
+            'category' => 'business_registration',
+            'benefit' => [
+                'content_creation',
+            ],
+            'quantity' => 0,
+        ];
+    }
+
+    public function business_llc(): array
+    {
+        return [
+            'title' => 'Business Name Registration',
+            'type' => fake()->randomElement(['airtime', 'data', 'electricity', 'legal']),
+            'provider' => '1vault',
+            'description' => fake()->lastName,
+            'amount' => fake()->numberBetween(1000, 100000),
+            'commission' => fake()->numberBetween(1000, 100000),
+            'is_recurring' => 0,
+            'billing_cycle' => 'one-time',
+            'is_request' => fake()->boolean(50),
+            'discount' => fake()->numberBetween(1000, 100000),
+            'status' => fake()->boolean,
+            'category' => 'business_registration',
+            'benefit' => [
+                'content_creation',
+            ],
+            'quantity' => 0,
+        ];
+    }
+
 }

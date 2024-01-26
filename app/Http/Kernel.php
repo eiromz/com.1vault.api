@@ -73,6 +73,6 @@ class Kernel extends HttpKernel
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
         'kyc.completed' => KycCompleted::class,
         'providus.origin.verification' => ProvidusBankOriginVerification::class,
-        'invalid.accountNumber' => InvalidAccountNumber::class
+        'invalid.accountNumber' => InvalidAccountNumber::class,
     ];
 }

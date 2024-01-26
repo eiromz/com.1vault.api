@@ -27,7 +27,7 @@ class InvoiceRepository extends BaseRepository implements InvoiceRepositoryInter
             }
 
             return $this->model->query()->where($details)
-                ->whereBetween('due_date',[$start_date,$end_date])
+                ->whereBetween('due_date', [$start_date, $end_date])
                 ->get();
         } catch (\Exception $e) {
             logExceptionErrorMessage('InvoiceRepository=>getDebtorList', $e);

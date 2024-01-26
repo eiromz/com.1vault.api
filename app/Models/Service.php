@@ -13,8 +13,9 @@ class Service extends Model
     use HasFactory,HasUuids,SoftDeletes;
 
     protected $casts = [
-        'benefit' => 'array'
+        'benefit' => 'array',
     ];
+
     public function serviceBenefit(): HasMany
     {
         return $this->hasMany(ServiceBenefit::class);

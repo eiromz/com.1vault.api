@@ -26,7 +26,7 @@ class JournalRepository extends BaseRepository implements JournalRepositoryInter
         }
     }
 
-    public function getAllByCreatedAtDate($start_date,$end_date,$details)
+    public function getAllByCreatedAtDate($start_date, $end_date, $details)
     {
         try {
             Arr::set($details, 'customer_id', $this->customer);
@@ -34,7 +34,7 @@ class JournalRepository extends BaseRepository implements JournalRepositoryInter
             return $this->model->query()->where($details)
                 ->limit(100)
                 ->latest()
-                ->whereBetween('created_at',[$start_date,$end_date])
+                ->whereBetween('created_at', [$start_date, $end_date])
                 ->get();
         } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);

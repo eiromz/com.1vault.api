@@ -15,12 +15,12 @@ class ServiceCtrl extends DomainBaseCtrl
     public function index(Request $request)
     {
         $request->validate([
-            'category' => ['required','in:business_registration,social_media,legal,pos,store_front']
+            'category' => ['required', 'in:business_registration,social_media,legal,pos,store_front'],
         ]);
 
-        $service = Service::query()->where('category','=',$request->category)->get();
+        $service = Service::query()->where('category', '=', $request->category)->get();
 
-        return  jsonResponse(Response::HTTP_OK, $service);
+        return jsonResponse(Response::HTTP_OK, $service);
     }
 
     /**
@@ -28,6 +28,10 @@ class ServiceCtrl extends DomainBaseCtrl
      */
     public function store(ServiceRequest $request): JsonResponse
     {
+        $request->merge([
+            'customer_id' => auth()->user()->id
+        ]);
+
         $request->validated();
 
         $data = $request->getModel()->create($request->getOnly());

@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ServiceBenefit extends Model
 {
     use HasFactory,HasUuids,SoftDeletes;
+
     protected $guarded = [];
+
     public function Service(): BelongsTo
     {
         return $this->belongsTo(Service::class);

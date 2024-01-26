@@ -25,7 +25,7 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
         ]);
 
         $request->merge([
-            'bvn' => base64_encode($request->bvn)
+            'bvn' => base64_encode($request->bvn),
         ]);
 
         if (is_null(auth()->user()->image)) {

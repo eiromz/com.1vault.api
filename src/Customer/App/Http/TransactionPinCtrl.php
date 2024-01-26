@@ -4,7 +4,6 @@ namespace Src\Customer\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
-use App\Models\Profile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,20 +15,20 @@ class TransactionPinCtrl extends DomainBaseCtrl
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'type' => ['required','in:forgot,change,create'],
+            'type' => ['required', 'in:forgot,change,create'],
             'current_pin' => ['required_if:type,change', 'size:6', Password::min(5)->numbers()],
             'password' => ['required_if:type,forgot'],
             'pin' => ['required', 'confirmed', 'size:6', Password::min(5)->numbers()],
             'pin_confirmation' => ['required'],
         ]);
 
-        if ($request->type === 'change' && !Hash::check($request->current_pin, auth()->user()->transaction_pin)) {
+        if ($request->type === 'change' && ! Hash::check($request->current_pin, auth()->user()->transaction_pin)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to update your pin',
             ]);
         }
 
-        if ($request->type === 'forgot' && !Hash::check($request->password, auth()->user()->getAuthPassword())) {
+        if ($request->type === 'forgot' && ! Hash::check($request->password, auth()->user()->getAuthPassword())) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to update your pin',
             ]);
@@ -39,7 +38,7 @@ class TransactionPinCtrl extends DomainBaseCtrl
 
         $customer->transaction_pin = Hash::make($request->pin);
 
-        if(!$customer->save()){
+        if (! $customer->save()) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => "Failed {$request->type} pin operation ",
             ]);

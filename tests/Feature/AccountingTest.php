@@ -246,11 +246,11 @@ describe('Business Routes', function () {
     test('Business can edit Inventory', function () {
         $link = '/api/v1/inventory/edit/'.$this->inventory->first()->id;
         $response = $this->actingAs($this->customer)->post($link, [
-            'name' => "ola Damilola Update",
+            'name' => 'ola Damilola Update',
             'amount' => fake()->numberBetween(100, 1000),
             'selling_price' => fake()->numberBetween(100, 1000),
             'quantity' => fake()->numberBetween(100, 1000),
-            'unit' => fake()->numberBetween(100, 1000)
+            'unit' => fake()->numberBetween(100, 1000),
         ]);
 
         $response->dump();
@@ -363,8 +363,8 @@ describe('Business Routes', function () {
     test('Business can Retrieve Report', function () {
         $response = $this->actingAs($this->customer)->post('/download/pdf', [
             'start_date' => '2024-01-01',
-            'end_date'  => '2024-02-10',
-            'business'  => $this->business->id,
+            'end_date' => '2024-02-10',
+            'business' => $this->business->id,
             'type' => 'debtors',
         ]);
         $response->dump();
