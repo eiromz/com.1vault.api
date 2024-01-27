@@ -87,6 +87,10 @@ class DatabaseSeeder extends Seeder
         ]);
         Service::query()->create($this->business_name());
         Service::query()->create($this->business_llc());
+        Service::query()->create($this->social_media_1());
+        Service::query()->create($this->social_media_2());
+        Service::query()->create($this->store_front_1());
+        Service::query()->create($this->store_front_2());
 
         $journal = Journal::factory()->count(3)->create([
             'customer_id' => $customer->id,
@@ -112,6 +116,107 @@ class DatabaseSeeder extends Seeder
             'category' => 'business_registration',
             'benefit' => [
                 'content_creation',
+            ],
+            'quantity' => 0,
+        ];
+    }
+
+
+    public function social_media_1()
+    {
+        return [
+            'title' => 'Basic Plan',
+            'type' => 'social_media_subscription',
+            'provider' => '1vault',
+            'description' => 'N/A',
+            'amount' => 50000,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'monthly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'social_media',
+            'benefit' => [
+                'Content Generation',
+                'Graphic Design',
+                'Sponsored ads',
+                'Posting across Instagram,Facebook and Twitter',
+            ],
+            'quantity' => 8,
+        ];
+    }
+
+    public function social_media_2()
+    {
+        return [
+            'title' => 'Basic Plan',
+            'type' => 'service.social_media_subscription',
+            'provider' => '1vault',
+            'description' => 'N/A',
+            'amount' => 600000,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'yearly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'social_media',
+            'benefit' => [
+                'Content Generation',
+                'Graphic Design',
+                'Sponsored ads',
+                'Posting across Instagram,Facebook and Twitter',
+            ],
+            'quantity' => 8,
+        ];
+    }
+
+    public function store_front_1()
+    {
+        return [
+            'title' => 'Basic Plan',
+            'type' => 'service.store_front_subscription',
+            'provider' => '1vault',
+            'description' => 'N/A',
+            'amount' => 4500,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'quarterly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'store_front',
+            'benefit' => [
+                'Store url created for your shop',
+                'Receive payments directly to your 1vault wallet',
+                '50 product listings',
+                'No hidden charges or commissions',
+            ],
+            'quantity' => 0,
+        ];
+    }
+
+    public function store_front_2()
+    {
+        return [
+            'title' => 'Basic Plan',
+            'type' => 'service.store_front_subscription',
+            'provider' => '1vault',
+            'description' => 'N/A',
+            'amount' => 15000,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'yearly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'store_front',
+            'benefit' => [
+                'Store url created for your shop',
+                'Receive payments directly to your 1vault wallet',
+                '50 product listings',
+                'No hidden charges or commissions',
             ],
             'quantity' => 0,
         ];
