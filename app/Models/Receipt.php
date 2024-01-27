@@ -14,6 +14,7 @@ class Receipt extends Model
     protected $casts = [
         'transaction_date' => 'datetime',
         'items' => 'array',
+        'created_date' => 'date'
     ];
 
     protected $guarded = [];

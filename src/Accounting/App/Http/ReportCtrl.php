@@ -59,37 +59,46 @@ class ReportCtrl extends DomainBaseCtrl
 
     public function download(Request $request)
     {
-        $request->validate([
-            'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-            'identifier' => ['required'],
-        ]);
+       try{
+           $request->validate([
+               'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+               'identifier' => ['required'],
+           ]);
 
-        $getView = match ($request->type) {
-            'sales' => 'pdf-template.sales',
-            'debtors' => 'pdf-template.debtors',
-            'receipt' => 'pdf-template.receipt',
-            'invoice' => 'pdf-template.invoice',
-        };
+           $getView = match ($request->type) {
+               'sales' => 'pdf-template.sales',
+               'debtors' => 'pdf-template.debtors',
+               'receipt' => 'pdf-template.receipt',
+               'invoice' => 'pdf-template.invoice',
+           };
 
-        $getModel = match ($request->type) {
-            'sales','debtors','invoice' => Invoice::query(),
-            'receipt' => Receipt::query(),
-        };
+           $getModel = match ($request->type) {
+               'sales','debtors','invoice' => Invoice::query(),
+               'receipt' => Receipt::query(),
+           };
 
-        $data = $getModel->findOrFail($request->identifier);
+           $data = $getModel->findOrFail($request->identifier);
 
-        $collection = collect($data->items);
+           $collection = collect($data->items);
 
-        $data->item = $collection->pluck('name')->all();
+           $data->item = $collection->pluck('name')->all();
 
-        $data->qty  = $collection->pluck('quantity')->sum();
+           $data->qty  = $collection->pluck('quantity')->sum();
 
-        $filename = generateTransactionReference();
+           $filename = generateTransactionReference();
 
-        return Pdf::view($getView,compact('data'))
-            ->withBrowsershot(function (Browsershot $browsershot) {
-                $browsershot->setNodeBinary(config('app.which_node'))
-                    ->setNpmBinary(config('app.which_npm'));
-            })->save($filename.'.pdf');
+           return Pdf::view($getView,compact('data'))
+               ->withBrowsershot(function (Browsershot $browsershot) {
+                   $browsershot->setNodeBinary(config('app.which_node'))
+                       ->setNpmBinary(config('app.which_npm'));
+               })->save($filename.'.pdf');
+       }
+       catch (Exception $e){
+           return Pdf::view('pdf-template.notice')
+               ->withBrowsershot(function (Browsershot $browsershot) {
+                   $browsershot->setNodeBinary(config('app.which_node'))
+                       ->setNpmBinary(config('app.which_npm'));
+               })->save($filename.'.pdf');
+       }
     }
 }
