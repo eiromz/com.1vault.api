@@ -10,7 +10,7 @@
                 <td class="w-full align-top">
                     <div class="pb-5">
                         <h1 class="font-weight-bolder font-40px pl-2">RECEIPT</h1>
-                        <p class="font-weight-bolder py-3 pl-2">REC0001</p>
+                        <p class="font-weight-bolder py-3 pl-2">{{$data->receiptNumber}}</p>
                     </div>
                 </td>
             </tr>
@@ -52,21 +52,17 @@
                 <td class="w-1/2 align-top">
                     <div class="text-sm text-neutral-600">
                         <p class="font-bold">Billed to</p>
-                        <p>Number: 23456789</p>
-                        <p>VAT: 23456789</p>
-                        <p>6622 Abshire Mills</p>
-                        <p>Port Orlofurt, 05820</p>
-                        <p>United States</p>
+                        <p>{{ $data->client->fullname ?? 'N/A'}}</p>
+                        <p>{{ $data->client->address ?? 'N/A'}}</p>
+                        <p>{{ $data->client->phone_number ?? 'N/A'}}</p>
                     </div>
                 </td>
                 <td class="w-1/2 align-top text-right">
                     <div class="text-sm text-neutral-600">
                         <p class="font-bold">From</p>
-                        <p>Number: 123456789</p>
-                        <p>VAT: 23456789</p>
-                        <p>9552 Vandervort Spurs</p>
-                        <p>Paradise, 43325</p>
-                        <p>United States</p>
+                        <p>{{ $data->business->fullname ?? 'N/A'}}</p>
+                        <p>{{ $data->business->address ?? 'N/A'}}</p>
+                        <p>{{ $data->business->email ?? 'N/A'}}</p>
                     </div>
                 </td>
             </tr>
@@ -88,10 +84,10 @@
             <tbody>
             <tr>
                 <td class="border-b py-3 pl-3">1.</td>
-                <td class="border-b py-3 pl-2">Monthly accounting services</td>
+                <td class="border-b py-3 pl-2">{{ implode(',',$data->item) }}</td>
                 <td class="border-b py-3 pl-2 text-center">1</td>
-                <td class="border-b py-3 pl-2 text-right">$150.00</td>
-                <td class="border-b py-3 pl-2 pr-3 text-right">$150.00</td>
+                <td class="border-b py-3 pl-2 text-right">{{ $data->qty }}</td>
+                <td class="border-b py-3 pl-2 pr-3 text-right">{{ $data->total }}</td>
             </tr>
             <tr>
                 <td colspan="7">
@@ -107,7 +103,9 @@
                                             <div class="whitespace-nowrap font-bold text-white">Total amount:</div>
                                         </td>
                                         <td class="bg-main p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-white">$384.00</div>
+                                            <div class="whitespace-nowrap font-bold text-white">
+                                                {{ $data->total  }}
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -115,7 +113,7 @@
                                             <div class="whitespace-nowrap text-slate-400">Amount received:</div>
                                         </td>
                                         <td class="border-b p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-main">$384.00</div>
+                                            <div class="whitespace-nowrap font-bold text-main">{{ $data->amount_received }}</div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -123,7 +121,9 @@
                                             <div class="whitespace-nowrap text-slate-400">Balance Due:</div>
                                         </td>
                                         <td class="border-b p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-main">$384.00</div>
+                                            <div class="whitespace-nowrap font-bold text-main">
+                                                {{ ($data->total - $data->amount_received) }}
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>

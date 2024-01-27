@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Browsershot\Browsershot;
+use Src\Accounting\App\Http\ReportCtrl;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -41,32 +42,32 @@ Route::get('/business/sectors', function () {
     return jsonResponse(Response::HTTP_OK, (new Business())->businessSector());
 });
 
-
-Route::post('/download/pdf', function (Request $request) {
-    $model = \App\Models\Inventory::first();
-    $request->validate([
-        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-        'identifier' => ['required'],
-    ]);
-
-    $getView = match ($request->type) {
-        'sales' => 'pdf-template.sales',
-        'debtors' => 'pdf-template.debtors',
-        'receipt' => 'pdf-template.receipt',
-        'invoice' => 'pdf-template.invoice',
-    };
-
-    $getModel = match ($request->type) {
-        'sales','debtors','invoice' => App\Models\Invoice::query(),
-        'receipt' => App\Models\Receipt::query(),
-    };
-
-    $getModel->findOrFail($request->identifier);
-
-    $pdf = Pdf::loadView($getView, ['welcome']);
-
-    return $pdf->download('invoice.pdf');
-});
+Route::post('download/pdf',[ReportCtrl::class,'download']);
+//Route::post('/download/pdf', function (Request $request) {
+//    $model = \App\Models\Inventory::first();
+//    $request->validate([
+//        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+//        'identifier' => ['required'],
+//    ]);
+//
+//    $getView = match ($request->type) {
+//        'sales' => 'pdf-template.sales',
+//        'debtors' => 'pdf-template.debtors',
+//        'receipt' => 'pdf-template.receipt',
+//        'invoice' => 'pdf-template.invoice',
+//    };
+//
+//    $getModel = match ($request->type) {
+//        'sales','debtors','invoice' => App\Models\Invoice::query(),
+//        'receipt' => App\Models\Receipt::query(),
+//    };
+//
+//    $getModel->findOrFail($request->identifier);
+//
+//    $pdf = Pdf::loadView($getView, ['welcome']);
+//
+//    return $pdf->download('invoice.pdf');
+//});
 
 Route::post('/testing',function (Request $request){
 

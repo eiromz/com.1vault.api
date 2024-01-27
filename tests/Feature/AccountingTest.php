@@ -45,6 +45,22 @@ describe('Business Routes', function () {
             'business_id' => $this->business->id,
             'customer_id' => $this->customer->id,
             'client_id' => $this->client->id,
+            'items' => [
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+            ],
         ]);
 
         $this->inventory = Inventory::factory()->count(3)->create([
@@ -373,6 +389,16 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+
+    test('Business can Download Pdf Receipt Report', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+            'type' => 'receipt',
+            'identifier' => $this->receipt->first()->id
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
 
     /************* StoreFront *************/
     test('Customer can create a store front', function () {
