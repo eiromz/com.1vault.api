@@ -21,7 +21,11 @@ Route::get('/', function () {
 });
 
 Route::get('/view/template/receipt', function () {
-    return Pdf::view('pdf-template.receipt',['welcome'])->save('sample.pdf');
+    return Pdf::view('pdf-template.receipt',['welcome'])
+        ->withBrowsershot(function (Browsershot $browsershot) {
+            $browsershot->setNodeBinary(config('app.which_node'))
+                ->setNpmBinary(config('app.which_npm'));
+        })->save('sample.pdf');
 });
 
 Route::get('/view/template/sales', function () {
