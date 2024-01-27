@@ -21,7 +21,7 @@ class Profile extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => ($attributes['firstname'] - $attributes['lastname']),
+            get: fn (mixed $value, array $attributes) => ($attributes['firstname'].' '.$attributes['lastname']),
         );
     }
 

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('label')->nullable();
             $table->string('source')->comment('wallet,card,providus');
             $table->jsonb('payload')->nullable();
+            $table->string('remark')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

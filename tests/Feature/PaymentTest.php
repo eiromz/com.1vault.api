@@ -82,6 +82,7 @@ describe('Payment Routes', function () {
             'account_number' => $customer2->profile->account_number,
             'amount' => 10000,
             'transaction_pin' => '123456',
+            'remark' => 'this is good'
         ]);
 
         $response->dump();
