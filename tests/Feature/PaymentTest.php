@@ -41,7 +41,7 @@ describe('Payment Routes', function () {
     /*************Report ******************/
     test('Customer can perform name search', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/name-search', [
-            'account_number' => $this->customer2->profile->account_number,
+            'account_number' => '9977581538',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

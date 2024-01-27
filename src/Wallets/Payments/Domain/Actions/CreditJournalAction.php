@@ -45,8 +45,8 @@ class CreditJournalAction
             'credit' => true,
             'balance_before' => $c->balance_after,
             'balance_after' => $newBalance,
-            'label' => 'Webhook Providus',
-            'source' => 'Providus',
+            'label' => 'Transfer',
+            'source' => $p->sourceAccountName ?? 'N/A',
             'payload' => json_encode($params->all()),
         ];
     }

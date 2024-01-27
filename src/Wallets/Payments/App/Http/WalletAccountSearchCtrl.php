@@ -28,7 +28,7 @@ class WalletAccountSearchCtrl extends DomainBaseCtrl
                 ->with('customer')
                 ->firstOrFail();
 
-            $account = GetAccountInstance::getActiveInstance($profile);
+            $account = GetAccountInstance::getActiveInstance(auth()->user()->profile);
 
             $collection = collect([
                 'account_balance' => $account->balance_after,

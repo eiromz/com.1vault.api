@@ -8,8 +8,10 @@ use App\Models\State;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Spatie\Browsershot\Browsershot;
 use Symfony\Component\HttpFoundation\Response;
-use function App\Models\PosRequest;
+
+
 
 Route::get('/doc-types', function () {
     return jsonResponse(Response::HTTP_OK, Profile::DOC_TYPES);
@@ -62,4 +64,24 @@ Route::post('/download/pdf', function (Request $request) {
     $pdf = Pdf::loadView($getView, ['welcome']);
 
     return $pdf->download('invoice.pdf');
+});
+
+Route::post('/testing',function (Request $request){
+
+    $request->validate([
+        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+        'identifier' => ['required'],
+    ]);
+
+    $url = config('app.url').'/api/v1/download/pdf';
+
+
+
+    return Browsershot::url($url)
+        ->noSandbox()
+        ->post([
+            'type' => $request->type,
+            'identifier' => $request->identifier
+        ])
+        ->screenshot();
 });

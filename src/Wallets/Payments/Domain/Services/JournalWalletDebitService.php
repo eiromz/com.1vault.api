@@ -55,6 +55,8 @@ class JournalWalletDebitService
             'debit' => true,
             'credit' => false,
             'trx_ref' => generateTransactionReference(),
+            'label'  => 'Transfer',
+            'source'  => $this->request->profile->fullname ?? 'Inward Transfer',
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,13 @@ class Profile extends Model
     const DOC_TYPES = ['drivers_license', 'international_passport', 'voters_card'];
 
     protected $with = ['state'];
+
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes['firstname'] - $attributes['lastname']),
+        );
+    }
 
     public function customer(): BelongsTo
     {

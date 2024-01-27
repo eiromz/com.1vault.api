@@ -189,4 +189,6 @@ return [
     ])->toArray(),
 
     'firebase_service_file' => env('FIREBASE_SERVICE_FILE'),
+    'which_node' => env('WHICH_NODE',"/usr/bin/npm"),
+    'which_npm' => env('WHICH_NPM',"/usr/bin/node"),
 ];

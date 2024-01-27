@@ -46,7 +46,7 @@ class JournalFactory extends Factory
             'balance_before' => 0,
             'balance_after' => $payload['transactionAmount'],
             'label' => 'Transfer',
-            'source' => 'Providus',
+            'source' => $payload['sourceAccountName'],
             'payload' => json_encode($payload),
         ];
 
