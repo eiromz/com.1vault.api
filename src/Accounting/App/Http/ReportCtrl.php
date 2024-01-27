@@ -51,4 +51,35 @@ class ReportCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
+
+    public function download(Request $request)
+    {
+        $request->validate([
+            'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+            'identifier' => ['required'],
+        ]);
+
+        $getView = match ($request->type) {
+            'sales' => 'pdf-template.sales',
+            'debtors' => 'pdf-template.debtors',
+            'receipt' => 'pdf-template.receipt',
+            'invoice' => 'pdf-template.invoice',
+        };
+
+        $getModel = match ($request->type) {
+            'sales','debtors','invoice' => App\Models\Invoice::query(),
+            'receipt' => App\Models\Receipt::query(),
+        };
+
+        $data = $getModel->findOrFail($request->identifier);
+
+        return view($getView,$data);
+
+        $pdf = Pdf::loadView($getView, ['welcome']);
+
+        return $pdf->download('invoice.pdf');
+    }
+
+
 }

@@ -41,7 +41,9 @@ Route::get('/business/sectors', function () {
     return jsonResponse(Response::HTTP_OK, (new Business())->businessSector());
 });
 
+
 Route::post('/download/pdf', function (Request $request) {
+    $model = \App\Models\Inventory::first();
     $request->validate([
         'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
         'identifier' => ['required'],

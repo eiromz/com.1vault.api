@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder
 
         $account = Account::factory()->create([
             'customer_id' => $customer->id,
+            'balance_after' => 10000000
         ]);
 
         $kyc = KnowYourCustomer::factory()->create([
