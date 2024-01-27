@@ -29,6 +29,7 @@ class CustomerResource extends JsonResource
             'is_member' => $this->is_member,
             'image' => $this->image,
             'profile' => (new ProfileResource($this->whenLoaded('profile'))),
+            'account' => (new AccountResource($this->whenLoaded('account'))),
             'pin-set' => $this->pinSet(),
             'kyc-complete' => $this->kycComplete(),
             'can_receive_notification' => $this->can_receive_notification,

@@ -3,48 +3,52 @@
 namespace Src\Accounting\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Invoice;
-use App\Models\Receipt;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Spatie\Browsershot\Browsershot;
-use Spatie\LaravelPdf\Facades\Pdf;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReportCtrl extends DomainBaseCtrl
 {
+    private $repository;
+
+    public array $indexRequestFilterKeys = [
+        'business_id', 'payment_status',
+    ];
+
+    public function __construct(InvoiceRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $request->validate([
-            'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-            'identifier' => ['required'],
+            'type' => ['required', 'in:sales,debtors'],
+            'start_date' => ['required', 'date_format:Y-m-d'],
+            'end_date' => ['required', 'date_format:Y-m-d'],
+            'business' => ['required', 'exists:App\Models\Business,id'],
         ]);
 
-        $getView = match ($request->type) {
-            'sales' => 'pdf-template.sales',
-            'debtors' => 'pdf-template.debtors',
-            'receipt' => 'pdf-template.receipt',
-            'invoice' => 'pdf-template.invoice',
-        };
+        $payment_status = ($request->type === 'debtors') ? 0 : 1;
 
-        $getModel = match ($request->type) {
-            'sales','debtors','invoice' => Invoice::query(),
-            'receipt' => Receipt::query(),
-        };
+        $request->merge([
+            'business_id' => $request->business,
+            'payment_status' => $payment_status,
+        ]);
 
-        $getModel->findOrFail($request->identifier);
+        $this->repository->setUser(auth()->user());
 
-        $filename = generateTransactionReference();
+        $data = $this->repository->getSalesAndDebtorList(
+            $request->only($this->indexRequestFilterKeys),
+            $request->start_date, $request->end_date
+        );
 
-        return Pdf::view('pdf-template.receipt',['welcome'])
-            ->withBrowsershot(function (Browsershot $browsershot) {
-                $browsershot->setNodeBinary(config('app.which_node'))
-                    ->setNpmBinary(config('app.which_npm'));
-            })->save($filename.'.pdf');
+        return jsonResponse(Response::HTTP_OK, $data);
     }
 }

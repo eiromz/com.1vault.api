@@ -73,7 +73,7 @@ class Customer extends Authenticatable
     ];
 
     //FIXME : anything i add
-    //protected $with = ['account','knowYourCustomer', 'profile'];
+    protected $with = ['account'];
 
     public function profile(): HasOne
     {
