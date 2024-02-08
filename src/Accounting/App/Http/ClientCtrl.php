@@ -100,7 +100,7 @@ class ClientCtrl extends DomainBaseCtrl
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Customer updated',
+            'message' => 'Merchant updated',
         ]);
     }
 
@@ -114,12 +114,12 @@ class ClientCtrl extends DomainBaseCtrl
 
         if (! $this->repository->delete($request->business)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Failed to Delete Customer',
+                'message' => 'Failed to Delete Merchant',
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Customer Deleted',
+            'message' => 'Merchant Deleted',
         ]);
     }
 }

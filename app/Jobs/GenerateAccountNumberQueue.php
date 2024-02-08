@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Customer\Domain\Services\GenerateAccountNumber;
+use Src\Merchant\Domain\Services\GenerateAccountNumber;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class GenerateAccountNumberQueue implements ShouldQueue

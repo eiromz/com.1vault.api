@@ -1,19 +1,19 @@
 <?php
 
 use Src\Accounting\App\Http\StoreFrontCtrl;
-use Src\Customer\App\Http\AuthenticateSessionCtrl;
-use Src\Customer\App\Http\ChangePasswordCtrl;
-use Src\Customer\App\Http\CompleteCustomerProfileCtrl;
-use Src\Customer\App\Http\ForgotPasswordCtrl;
-use Src\Customer\App\Http\KnowYourCustomerCtrl;
-use Src\Customer\App\Http\ProfileCtrl;
-use Src\Customer\App\Http\RegisterCustomerCtrl;
-use Src\Customer\App\Http\ResendOtpCtrl;
-use Src\Customer\App\Http\ResetPasswordCtrl;
-use Src\Customer\App\Http\StaffCtrl;
-use Src\Customer\App\Http\TransactionPinCtrl;
-use Src\Customer\App\Http\VerifyEmailCtrl;
-use Src\Customer\App\Http\VerifyOtpCtrl;
+use Src\Merchant\App\Http\AuthenticateSessionCtrl;
+use Src\Merchant\App\Http\ChangePasswordCtrl;
+use Src\Merchant\App\Http\CompleteCustomerProfileCtrl;
+use Src\Merchant\App\Http\ForgotPasswordCtrl;
+use Src\Merchant\App\Http\KnowYourCustomerCtrl;
+use Src\Merchant\App\Http\ProfileCtrl;
+use Src\Merchant\App\Http\RegisterCustomerCtrl;
+use Src\Merchant\App\Http\ResendOtpCtrl;
+use Src\Merchant\App\Http\ResetPasswordCtrl;
+use Src\Merchant\App\Http\StaffCtrl;
+use Src\Merchant\App\Http\TransactionPinCtrl;
+use Src\Merchant\App\Http\VerifyEmailCtrl;
+use Src\Merchant\App\Http\VerifyOtpCtrl;
 
 Route::post('auth/register', [RegisterCustomerCtrl::class, 'store']);
 Route::post('auth/verify-email', [VerifyEmailCtrl::class, 'store']);
@@ -42,9 +42,11 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     Route::post('profile/transaction-pin', [TransactionPinCtrl::class, 'store']);
     Route::post('profile/change-password', ChangePasswordCtrl::class);
-    Route::post('profile/staff', [StaffCtrl::class, 'index']);
-    Route::post('profile/delete-staff', [StaffCtrl::class, 'destroy']);
-    Route::post('profile/create-staff', [StaffCtrl::class, 'store']);
-    Route::post('profile/update-staff', [StaffCtrl::class, 'update']);
+
+    Route::get('staff',[StaffCtrl::class,'index']);
+    Route::post('staff',[StaffCtrl::class,'store']);
+    Route::get('staff/view/{staff}',[StaffCtrl::class,'view']);
+    Route::post('staff/edit/{staff}',[StaffCtrl::class,'update']);
+    Route::post('staff/delete/{staff}',[StaffCtrl::class,'update']);
 
 });

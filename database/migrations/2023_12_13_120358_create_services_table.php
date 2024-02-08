@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string('billing_cycle')->comment('this is how the queue job will charge the subscription plan, one-time,monthly,quarterly,yearly');
             $table->boolean('is_request')->default(0);
             $table->jsonb('benefit')->nullable();
-            $table->double('discount')->nullable()->default(0);
+            $table->integer('discount')->nullable()->default(0);
+            $table->boolean('has_discount')->default(0);
             $table->boolean('status')->default(1)->comment('confirm if the service is active or disabled.');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

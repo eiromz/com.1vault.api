@@ -74,18 +74,15 @@ class Customer extends Authenticatable
 
     //FIXME : anything i add
     protected $with = ['account'];
-
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class, 'customer_id');
     }
-
     public function account(): HasOne
     {
         return $this->hasOne(Account::class);
     }
-
-    public function knowYourCustomer(): HasOne
+    public function knowYourCustomer(): HasOneclea
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }

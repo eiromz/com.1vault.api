@@ -77,7 +77,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can complete profile', function () {
+    test('Merchant can complete profile', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/auth/complete-profile', [
             'first_name' => fake()->firstName,
             'last_name' => fake()->lastName,
@@ -92,7 +92,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can resend otp', function () {
+    test('Merchant can resend otp', function () {
 
         //only resend otp for emails that have not been verified
         $this->customer = Customer::factory()->create([
@@ -107,7 +107,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Verify Customer Email Using Otp', function () {
+    test('Verify Merchant Email Using Otp', function () {
 
         $this->customer = Customer::factory()->create([
             'otp_expires_at' => now()->addMinutes(15),

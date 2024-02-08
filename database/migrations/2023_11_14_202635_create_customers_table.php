@@ -17,23 +17,18 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone_number', 15)->nullable();
             $table->string('password')->nullable();
-            $table->string('role')
-                ->default('business_owner')
-                ->comment('Different approved roles : business_owner,employee,admin');
+            $table->string('role')->default('merchant')
+                ->comment('Different approved roles : merchant,employee,admin');
             $table->string('firebase_token')->nullable();
             $table->boolean('accept_terms_conditions')
                 ->default(0);
-            $table->boolean('is_owner')
-                ->default(true)
+            $table->boolean('is_owner')->default(true)
                 ->comment('identify if the account is the owner account');
-            $table->boolean('is_member')
-                ->default(false)
+            $table->boolean('is_member')->default(false)
                 ->comment('identify if the account is the employee account');
-            $table->tinyInteger('status')
-                ->default(1)
+            $table->tinyInteger('status')->default(1)
                 ->comment('approved status pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5');
-            $table->string('ACCOUNTID', 12)
-                ->unique()
+            $table->string('ACCOUNTID', 12)->unique()
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');
             $table->string('transaction_pin')->nullable();
             $table->string('referral_code', 7);

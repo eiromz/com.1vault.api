@@ -14,18 +14,17 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
             $table->foreignUuid('customer_id');
-            $table->foreignUuid('service_id')->nullable();
+            $table->foreignUuid('service_id');
             $table->double('amount');
-            $table->string('trx_ref');
+            $table->string('trx_ref')->nullable();
             $table->string('source')->comment('wallet');
+            $table->boolean('cancel_subscription')->default(0);
             $table->timestamp('subscription_date')->nullable();
             $table->timestamp('expiration_date')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
         });
-        //customer_service
-        //subscription id,service_id,[charge_type:one-time,recurring],description,amount,trx_ref,source:wallet,subscription_date,expiration_date
     }
 
     /**

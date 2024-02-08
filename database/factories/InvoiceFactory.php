@@ -19,10 +19,18 @@ class InvoiceFactory extends Factory
         return [
             'items' => [
                 [
-                    'name' => fake()->uuid,
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 1000,
+                    'unit' => 10,
+                    'quantity' => 3,
                 ],
                 [
-                    'name' => fake()->uuid,
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 1000,
+                    'unit' => 10,
+                    'quantity' => 3,
                 ],
             ],
             'note' => 'welcome',

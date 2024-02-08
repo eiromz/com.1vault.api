@@ -27,7 +27,7 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $request->validate([
             'total' => ['required'],
-            'cart' => ['nullable'],
+            'cart' => ['nullable','array'],
             'transaction_pin' => ['required']
         ]);
 
@@ -39,6 +39,8 @@ class PayNowCtrl extends DomainBaseCtrl
         $source->validateTransactionPin();
 
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
+
+        //we need to create a subscription
 
         //$transaction = (new ProcessCartTransaction($source->request));
 

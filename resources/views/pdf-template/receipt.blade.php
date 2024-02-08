@@ -31,7 +31,7 @@
                                 <td class="border-r pr-4">
                                     <div>
                                         <p class="whitespace-nowrap text-black text-right">Issue Date</p>
-                                        <p class="whitespace-nowrap font-bold text-main text-right">{{ $data->created_at->format('g:i a l jS F Y') }}</p>
+                                        <p class="whitespace-nowrap font-bold text-main text-right">{{ $data->created_at->format('l jS F Y') }}</p>
                                     </div>
                                 </td>
                             </tr>

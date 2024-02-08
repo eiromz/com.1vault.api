@@ -71,7 +71,7 @@ class JournalWalletDebitService
     public function notify()
     {
         $this->firebase();
-
+        $this->email();
         return $this;
     }
 
@@ -84,6 +84,10 @@ class JournalWalletDebitService
 
         SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
     }
+
+    //TODO : write email for notifying a person about a transction on his/her account.
+    private function email()
+    {}
 
     public function updateBalanceQueue(): void
     {

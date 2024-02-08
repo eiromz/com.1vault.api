@@ -39,7 +39,7 @@ describe('Payment Routes', function () {
     });
 
     /*************Report ******************/
-    test('Customer can perform name search', function () {
+    test('Merchant can perform name search', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/name-search', [
             'account_number' => '9977581538',
         ]);
@@ -47,7 +47,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can fetch all journal transactions', function () {
+    test('Merchant can fetch all journal transactions', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
             'filter_type' => 'default'
         ]);
@@ -55,7 +55,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can fetch a single journal transaction', function () {
+    test('Merchant can fetch a single journal transaction', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view', [
             'trx_ref' => $this->journal->first()->trx_ref,
         ]);
@@ -63,7 +63,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can perform transaction transfers', function () {
+    test('Merchant can perform transaction transfers', function () {
         $customer2 = Customer::factory()->create([
             'email' => 'crayolu2@gmail.com',
         ]);
@@ -90,7 +90,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can add to cart  with service_id', function () {
+    test('Merchant can add to cart  with service_id', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart', [
             'service_id' => $this->service->first()->id,
             'price' => $this->service->first()->amount,
@@ -99,13 +99,13 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can view all in cart', function () {
+    test('Merchant can view all in cart', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/cart');
         $response->dump();
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can delete from cart', function () {
+    test('Merchant can delete from cart', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart/delete', [
             'cart_id' => $this->cart->first()->id,
         ]);
@@ -113,7 +113,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customer can pay for service', function() {
+    test('Merchant can pay for service', function() {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total'     => 10000,
             'cart'      => [

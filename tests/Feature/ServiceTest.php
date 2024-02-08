@@ -20,7 +20,11 @@ describe('Service Routes', function () {
             ->where('name', '=', 'Lagos')->first();
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
-        $this->service = Service::factory()->count(3)->create([]);
+        $this->service = Service::factory()->count(100)->create([
+            'discount' => 10,
+            'amount' => 100000,
+            'has_discount' => 1,
+        ]);
         $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
             'service_id' => $this->service->first()->id,
         ]);
@@ -30,14 +34,14 @@ describe('Service Routes', function () {
     });
 
     /*************Report ******************/
-    test('Customer can view services by category', function () {
+    test('Merchant can view services by category', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service', [
             'category' => $this->service->first()->category,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for business_name', function () {
+    test('Merchant can fill service request for business_name', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'business_name',
             'business_name' => ['bookworm', 'title'],
@@ -61,7 +65,7 @@ describe('Service Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for business llc', function () {
+    test('Merchant can fill service request for business llc', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'business_llc',
             'business_name' => ['bookworm', 'title'],
@@ -81,7 +85,7 @@ describe('Service Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for pos', function () {
+    test('Merchant can fill service request for pos', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'pos',
             'business_name' => 'BusinessName',
@@ -138,7 +142,7 @@ describe('Service Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fill service request for legal', function () {
+    test('Merchant can fill service request for legal', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'legal',
             'description' => 'Welcome to the land of the living',

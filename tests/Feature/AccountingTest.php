@@ -39,6 +39,22 @@ describe('Business Routes', function () {
             'business_id' => $this->business->id,
             'customer_id' => $this->customer->id,
             'client_id' => $this->client->id,
+            'items' => [
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+                [
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 'Stark',
+                    'unit' => 'Johnston',
+                    'quantity' => 3,
+                ],
+            ],
         ]);
 
         $this->receipt = Receipt::factory()->count(3)->create([
@@ -72,7 +88,7 @@ describe('Business Routes', function () {
     });
 
     /*************Business******************/
-    test('Customer can create a business', function () {
+    test('Merchant can create a business', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/business', [
             'name' => '12345678090',
             'phone_number' => '08103797739',
@@ -85,19 +101,19 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can view a business', function () {
+    test('Merchant can view a business', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/business/view', [
             'business' => $this->business->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can view all business', function () {
+    test('Merchant can view all business', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/business');
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can edit a business', function () {
+    test('Merchant can edit a business', function () {
         $link = '/api/v1/business/update/'.$this->business->id;
         $response = $this->actingAs($this->customer)->post($link, [
             'name' => 'The company',
@@ -106,7 +122,7 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can delete a business', function () {
+    test('Merchant can delete a business', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/business/delete', [
             'business' => $this->business->id,
         ]);
@@ -114,7 +130,7 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    /*************Customer******************/
+    /*************Merchant******************/
     test('Business can create client for invoice', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client', [
             'name' => 'Maxwell Camelo',
@@ -399,9 +415,18 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
 
+    test('Business can Download Pdf Invoice Report', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+            'type' => 'invoice',
+            'identifier' => $this->invoice->first()->id
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
 
     /************* StoreFront *************/
-    test('Customer can create a store front', function () {
+    test('Merchant can create a store front', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front', [
             'name' => '12345678090',
             'phone_number' => '08103797739',
@@ -420,7 +445,7 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can create a store front inventory', function () {
+    test('Merchant can create a store front inventory', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front/inventory', [
             'name' => fake()->lastName,
             'amount' => fake()->numberBetween(100, 1000),
@@ -432,13 +457,13 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can create a view single store front inventory', function () {
+    test('Merchant can create a view single store front inventory', function () {
         $link = '/api/v1/store-front/inventory/'.$this->inventory->first()->id.'/business/'.$this->business->id;
         $response = $this->actingAs($this->customer)->get($link);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can destroy a a single inventory', function () {
+    test('Merchant can destroy a a single inventory', function () {
         $link = '/api/v1/store-front/inventory/delete';
         $response = $this->actingAs($this->customer)->post($link,[
             'inventory' => [
@@ -450,7 +475,7 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can update a single inventory', function () {
+    test('Merchant can update a single inventory', function () {
         $link = '/api/v1/store-front/inventory/edit/'.$this->inventory->first()->id;
         $response = $this->actingAs($this->customer)->post($link,[
             'name'      => 'wella health',
@@ -461,7 +486,7 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can view all inventory', function () {
+    test('Merchant can view all inventory', function () {
         $response = $this->actingAs($this->customer)->get(
             '/api/v1/store-front/inventory/business/'.$this->business->id
         );

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Src\Customer\App\Enum\Role;
+use Src\Merchant\App\Enum\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customer>
@@ -22,7 +22,7 @@ class CustomerFactory extends Factory
             'email_verified_at' => now(),
             'phone_number' => '0810379'.fake()->randomNumber(4, true),
             'password' => null,
-            'role' => Role::BUSINESS_OWNER->value,
+            'role' => Role::MERCHANT->value,
             'accept_terms_conditions' => true,
             'is_owner' => true,
             'is_member' => false,

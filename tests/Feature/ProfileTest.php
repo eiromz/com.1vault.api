@@ -18,7 +18,7 @@ describe('Profile Routes', function () {
         ]);
     });
 
-    test('Customer can submit kyc information', function () {
+    test('Merchant can submit kyc information', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc', [
             'bvn' => '12345678090',
             'doc_type' => 'drivers_license',
@@ -28,7 +28,7 @@ describe('Profile Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Customer can fetch doc types', function () {
+    test('Merchant can fetch doc types', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/doc-types');
         $response->dump();
         expect($response->status())->toBe(200);

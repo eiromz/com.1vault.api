@@ -4,6 +4,7 @@ namespace Src\Accounting\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Invoice;
+use App\Models\PosRequest;
 use App\Models\Receipt;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -56,49 +57,68 @@ class ReportCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
-
     public function download(Request $request)
     {
-       try{
-           $request->validate([
-               'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-               'identifier' => ['required'],
-           ]);
+        $filename = generateTransactionReference();
 
-           $getView = match ($request->type) {
-               'sales' => 'pdf-template.sales',
-               'debtors' => 'pdf-template.debtors',
-               'receipt' => 'pdf-template.receipt',
-               'invoice' => 'pdf-template.invoice',
-           };
+        $request->validate([
+            'type'       => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+            'identifier' => ['required'],
+            'start_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
+            'end_date'   => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
+        ]);
 
-           $getModel = match ($request->type) {
-               'sales','debtors','invoice' => Invoice::query(),
-               'receipt' => Receipt::query(),
-           };
+        $getView = match ($request->type) {
+            'sales' => 'pdf-template.sales',
+            'debtors' => 'pdf-template.debtors',
+            'receipt' => 'pdf-template.receipt',
+            'invoice' => 'pdf-template.invoice',
+        };
 
-           $data = $getModel->findOrFail($request->identifier);
+        $getModel = match ($request->type) {
+            'receipt' => Receipt::query(),
+            'pos'     => PosRequest::query(),
+            'sales','debtors','invoice' => Invoice::query(),
+        };
 
-           $collection = collect($data->items);
+        $data = $getModel->findOrFail($request->identifier);
 
-           $data->item = $collection->pluck('name')->all();
+        $this->is_receipt($data,$request->type);
 
-           $data->qty  = $collection->pluck('quantity')->sum();
+        $this->is_invoice($data,$request->type);
 
-           $filename = generateTransactionReference();
+        //dd($data);
 
-           return Pdf::view($getView,compact('data'))
-               ->withBrowsershot(function (Browsershot $browsershot) {
-                   $browsershot->setNodeBinary(config('app.which_node'))
-                       ->setNpmBinary(config('app.which_npm'));
-               })->save($filename.'.pdf');
-       }
-       catch (Exception $e){
-           return Pdf::view('pdf-template.notice')
-               ->withBrowsershot(function (Browsershot $browsershot) {
-                   $browsershot->setNodeBinary(config('app.which_node'))
-                       ->setNpmBinary(config('app.which_npm'));
-               })->save($filename.'.pdf');
-       }
+        return Pdf::view($getView,compact('data'))
+            ->withBrowsershot(function (Browsershot $browsershot) {
+                $browsershot->setNodeBinary(config('app.which_node'))
+                    ->setNpmBinary(config('app.which_npm'));
+            })->save($filename.'.pdf');
+    }
+
+    /**
+     * @param $data
+     * @param $type
+     * @return void
+     */
+    public function is_receipt($data,$type)
+    {
+        if($type === 'receipt'){
+            $collection = collect($data->items);
+
+            $data->item = $collection->pluck('name')->all();
+
+            $data->qty  = $collection->pluck('quantity')->sum();
+        }
+    }
+
+    public function is_invoice($data,$type)
+    {
+        if($type === 'invoice') {
+            $collection = collect($data->items);
+            dd($collection->sum('quantity'));
+            //looop through the items and display
+            //calculate the total and show it in the view
+        }
     }
 }

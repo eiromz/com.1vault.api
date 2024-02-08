@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Src\Customer\App\Http\Data\Auth\LoginRequest;
+use Src\Merchant\App\Http\Data\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller
 {

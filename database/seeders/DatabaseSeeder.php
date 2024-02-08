@@ -13,8 +13,10 @@ use App\Models\KnowYourCustomer;
 use App\Models\Profile;
 use App\Models\Service;
 use App\Models\State;
+use App\Models\Subscription;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Src\Services\App\Enum\BillingCycle;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +25,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
         $this->call([
             CountrySeeder::class,
             StateSeeder::class,
@@ -35,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $admin = Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '0810379'.fake()->randomNumber(5, true),
-            'otp_expires_at' => now(),
+            'otp_expires_at' => $now,
             'email' => 'crayoluadmin@gmail.com',
             'transaction_pin' => Hash::make('123456'),
             'role' => 'admin',
@@ -44,7 +47,7 @@ class DatabaseSeeder extends Seeder
         $customer = Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '08103797739',
-            'otp_expires_at' => now(),
+            'otp_expires_at' => $now,
             'email' => 'crayolu@gmail.com',
             'transaction_pin' => Hash::make('123456'),
             //'firebase_token' => 'fwb71Cn3N0TLgZR8yH97r-:APA91bHAsd8RCraGU2aRdwqLgjRztSc52NOw6ibxmfjP0w4GioDACV-b-iCnqXHPxkU9FAl-bDO2tZHz53rrRtnaXgcI_DKqX0BYvY-uPniSoXXMkjlOI-KzIAPiNF0TDppFopnlGppj',
@@ -56,12 +59,12 @@ class DatabaseSeeder extends Seeder
             'state_id' => $state->id,
         ]);
 
-        $account = Account::factory()->create([
+        Account::factory()->create([
             'customer_id' => $customer->id,
             'balance_after' => 10000000
         ]);
 
-        $kyc = KnowYourCustomer::factory()->create([
+        KnowYourCustomer::factory()->create([
             'customer_id' => $customer->id,
         ]);
 
@@ -76,15 +79,12 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'Apostle Atokolos',
         ]);
 
-        $invoice = Invoice::factory()->count(3)->create([
+        Invoice::factory()->count(3)->create([
             'business_id' => $client->business_id,
             'customer_id' => $customer->id,
             'client_id' => $client->id,
         ]);
 
-        $service = Service::factory()->count(3)->create([
-            'category' => 'social_media',
-        ]);
         Service::query()->create($this->business_name());
         Service::query()->create($this->business_llc());
         Service::query()->create($this->social_media_1());
@@ -92,14 +92,21 @@ class DatabaseSeeder extends Seeder
         Service::query()->create($this->store_front_1());
         Service::query()->create($this->store_front_2());
 
-        $journal = Journal::factory()->count(3)->create([
-            'customer_id' => $customer->id,
+        $service =  Service::query()->where('category','=','store_front')->first();
+
+        Subscription::factory()->create([
+            'customer_id'       => $customer->id,
+            'service_id'        => $service->id,
+            'amount'            => $service->amount,
+            'subscription_date' => $now,
+            'expiration_date'   => determineExpirationDate($now,$service->billing_cycle)
         ]);
+
+        Journal::factory()->count(3)->create(['customer_id' => $customer->id]);
 
         $this->customer2($state);
     }
-
-    public function business_name(): array
+    private function business_name(): array
     {
         return [
             'title' => 'Register a business name in Nigeria',
@@ -120,9 +127,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
-
-
-    public function social_media_1()
+    private function social_media_1(): array
     {
         return [
             'title' => 'Basic Plan',
@@ -132,7 +137,7 @@ class DatabaseSeeder extends Seeder
             'amount' => 50000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'monthly',
+            'billing_cycle' => BillingCycle::MONTHLY->value,
             'is_request' => 0,
             'discount' => 0,
             'status' => 1,
@@ -146,8 +151,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 8,
         ];
     }
-
-    public function social_media_2()
+    private function social_media_2(): array
     {
         return [
             'title' => 'Basic Plan',
@@ -157,7 +161,7 @@ class DatabaseSeeder extends Seeder
             'amount' => 600000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'yearly',
+            'billing_cycle' => BillingCycle::YEARLY->value,
             'is_request' => 0,
             'discount' => 0,
             'status' => 1,
@@ -171,8 +175,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 8,
         ];
     }
-
-    public function store_front_1()
+    private function store_front_1(): array
     {
         return [
             'title' => 'Basic Plan',
@@ -182,7 +185,7 @@ class DatabaseSeeder extends Seeder
             'amount' => 4500,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'quarterly',
+            'billing_cycle' => BillingCycle::QUARTERLY->value,
             'is_request' => 0,
             'discount' => 0,
             'status' => 1,
@@ -196,8 +199,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
-
-    public function store_front_2()
+    private function store_front_2(): array
     {
         return [
             'title' => 'Basic Plan',
@@ -207,7 +209,7 @@ class DatabaseSeeder extends Seeder
             'amount' => 15000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'yearly',
+            'billing_cycle' => BillingCycle::YEARLY->value,
             'is_request' => 0,
             'discount' => 0,
             'status' => 1,
@@ -221,8 +223,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
-
-    public function business_llc(): array
+    private function business_llc(): array
     {
         return [
             'title' => 'Register a Limited Liability Company in Nigeria',
@@ -243,8 +244,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
-
-    public function customer2($state)
+    private function customer2($state): void
     {
         $customer = Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
