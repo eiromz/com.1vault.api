@@ -28,11 +28,12 @@ describe('Auth Routes', function () {
         $this->profile = Profile::factory()->create([
             'customer_id' => $this->customer->id,
             'firstname' => 'Babatunde',
+            'state_id' => $this->state->id,
         ]);
 
     });
 
-    test('Customers verify otp', function () {
+    test('Merchant verify otp', function () {
         $response = $this->post('/api/v1/auth/verify-otp', [
             'email' => $this->customer->email,
             'otp' => $this->customer->otp,
@@ -41,7 +42,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customers reset password using otp', function () {
+    test('Merchant can reset password using otp', function () {
 
         $response = $this->post('/api/v1/auth/reset-password', [
             'email' => $this->customer->email,
@@ -52,7 +53,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customers forgot password', function () {
+    test('Mercha forgot password', function () {
 
         $response = $this->post('/api/v1/auth/forgot-password', [
             'email' => $this->customer->email,

@@ -139,8 +139,8 @@ if (! function_exists('determineExpirationDate')) {
     function determineExpirationDate(Carbon $currentDate, string $billing_cycle): Carbon
     {
         return match($billing_cycle){
-           BillingCycle::MONTHLY->value => $currentDate->addMonth(),
-           BillingCycle::QUARTERLY->value => $currentDate->addMonths(3),
+            BillingCycle::MONTHLY->value => $currentDate->addMonth(),
+            BillingCycle::QUARTERLY->value => $currentDate->addMonths(3),
             BillingCycle::YEARLY->value   => $currentDate->addMonths(12)
         };
     }

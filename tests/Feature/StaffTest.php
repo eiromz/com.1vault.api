@@ -5,10 +5,12 @@ use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Inventory;
 use App\Models\Invoice;
+use App\Models\Profile;
 use App\Models\Receipt;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Src\Merchant\App\Enum\Role;
 use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
@@ -23,68 +25,17 @@ describe('Business Routes', function () {
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
-        $this->business = Business::factory()->create([
-            'state_id' => $this->state->id,
-            'customer_id' => $this->customer->id,
-            'is_store_front' => false
+        $this->staff = Customer::factory()->create([
+            'is_owner' => false,
+            'is_member' => true,
+            'ACCOUNTID' => $this->customer->ACCOUNTID,
+            'role'  => Role::EMPLOYEE->value,
         ]);
 
-        $this->client = Client::factory()->create([
-            'business_id' => $this->business->id,
-            'customer_id' => $this->customer->id,
-            'fullname' => 'Apostle Atokolos',
+        $this->staff_profile =  Profile::factory()->create([
+            'customer_id' => $this->staff->id,
+            'state_id' => $this->state->id
         ]);
-
-        $this->invoice = Invoice::factory()->count(3)->create([
-            'business_id' => $this->business->id,
-            'customer_id' => $this->customer->id,
-            'client_id' => $this->client->id,
-            'items' => [
-                [
-                    'inventory_id' => fake()->uuid,
-                    'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
-                    'quantity' => 3,
-                ],
-                [
-                    'inventory_id' => fake()->uuid,
-                    'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
-                    'quantity' => 3,
-                ],
-            ],
-        ]);
-
-        $this->receipt = Receipt::factory()->count(3)->create([
-            'business_id' => $this->business->id,
-            'customer_id' => $this->customer->id,
-            'client_id' => $this->client->id,
-            'items' => [
-                [
-                    'inventory_id' => fake()->uuid,
-                    'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
-                    'quantity' => 3,
-                ],
-                [
-                    'inventory_id' => fake()->uuid,
-                    'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
-                    'quantity' => 3,
-                ],
-            ],
-        ]);
-
-        $this->inventory = Inventory::factory()->count(3)->create([
-            'business_id' => $this->business->id,
-            'customer_id' => $this->customer->id,
-        ]);
-
-        $this->journal = \App\Models\Journal::latest()->first();
     });
 
     /*********** Staff ****************/

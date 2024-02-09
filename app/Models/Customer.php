@@ -82,7 +82,7 @@ class Customer extends Authenticatable
     {
         return $this->hasOne(Account::class);
     }
-    public function knowYourCustomer(): HasOneclea
+    public function knowYourCustomer(): HasOne
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }

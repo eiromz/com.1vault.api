@@ -23,6 +23,7 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
             'doc_type' => ['required', 'string', Rule::in(Profile::DOC_TYPES)],
             'doc_image' => ['required', 'string', 'url'],
             'selfie' => ['required', 'string', 'url'],
+            'utility_bill' => ['required','string','url']
         ]);
 
         $request->merge([
@@ -38,7 +39,7 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
         }
 
         $kyc = new KnowYourCustomer();
-        $kyc->fill($request->only(['bvn', 'doc_type', 'doc_image', 'selfie']));
+        $kyc->fill($request->only(['bvn', 'doc_type', 'doc_image', 'selfie','utility_bill']));
         $kyc->customer_id = $request->user()->id;
         $kyc->save();
 

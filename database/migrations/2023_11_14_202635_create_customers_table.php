@@ -28,7 +28,7 @@ return new class extends Migration
                 ->comment('identify if the account is the employee account');
             $table->tinyInteger('status')->default(1)
                 ->comment('approved status pending:0,active:1,suspended:2,blocked:3,contact-admin:4,fraud:5');
-            $table->string('ACCOUNTID', 12)->unique()
+            $table->string('ACCOUNTID', 12)
                 ->comment('Account id for the owner of the account, it is always unique to avoid issues');
             $table->string('transaction_pin')->nullable();
             $table->string('referral_code', 7);
