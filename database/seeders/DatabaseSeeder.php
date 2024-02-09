@@ -139,7 +139,8 @@ class DatabaseSeeder extends Seeder
             'is_recurring' => 1,
             'billing_cycle' => BillingCycle::MONTHLY->value,
             'is_request' => 0,
-            'discount' => 0,
+            'discount' => 10,
+            'has_discount' => true,
             'status' => 1,
             'category' => 'social_media',
             'benefit' => [
