@@ -45,8 +45,8 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     Route::get('staff',[StaffCtrl::class,'index']);
     Route::post('staff',[StaffCtrl::class,'store']);
-    Route::get('staff/view/{staff}',[StaffCtrl::class,'view']);
+    Route::get('staff/{staff}',[StaffCtrl::class,'view']);
     Route::post('staff/edit/{staff}',[StaffCtrl::class,'update']);
-    Route::post('staff/delete/{staff}',[StaffCtrl::class,'update']);
+    Route::post('staff/delete/{staff}',[StaffCtrl::class,'destroy']);
 
 });

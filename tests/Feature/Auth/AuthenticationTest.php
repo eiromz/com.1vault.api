@@ -69,7 +69,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customers can login', function () {
+    test('MERCHCANT CAN LOGIN', function () {
         $response = $this->post('/api/v1/auth/login', [
             'email' => $this->customer->email,
             'password' => 'sampleTim@123',

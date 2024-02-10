@@ -20,34 +20,14 @@ class Customer extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'email',
-        'password',
-        'is_owner',
-        'is_member',
-        'otp',
-        'otp_expires_at',
-        'accept_terms_conditions',
-        'role',
-        'referral_code',
-        'account_number',
-        'phone_number',
-        'firebase_token',
-        'image',
-        'ACCOUNTID',
-        'status',
-    ];
-
+    protected $guarded = [];
     protected $table = 'customers';
-
     const OWNER_ABILITIES = [
         'wallets', 'customer', 'services', 'staff', 'invoices', 'services',
     ];
-
-    const COLLABORATOR_ABILITIES = [
+    const EMPLOYEE_ABILITIES = [
         'customer', 'services', 'invoices',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -57,7 +37,6 @@ class Customer extends Authenticatable
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -70,9 +49,9 @@ class Customer extends Authenticatable
         'is_member' => 'boolean',
         'is_owner' => 'boolean',
         'accept_terms_conditions' => 'boolean',
+        'can_receive_notification' => 'boolean',
+        'can_receive_subscription_reminder' => 'boolean'
     ];
-
-    //FIXME : anything i add
     protected $with = ['account'];
     public function profile(): HasOne
     {

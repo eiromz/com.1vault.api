@@ -15,7 +15,7 @@ class  CreateStaffRequest extends FormRequest
     public $staff;
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->role === Role::MERCHANT->value;
     }
 
     public function rules(): array
@@ -57,9 +57,11 @@ class  CreateStaffRequest extends FormRequest
             'is_owner','is_member','status','ACCOUNTID','referral_code','image'
         ]));
 
-        if($this->staff) $this->merge(
-            ['customer_id' => $this->staff->id]
-        );
+        if($this->staff) {
+            $this->merge(
+                ['customer_id' => $this->staff->id]
+            );
+        }
     }
 
     public function createStaffProfile(): void
@@ -67,5 +69,7 @@ class  CreateStaffRequest extends FormRequest
         Profile::query()->create($this->only([
             'customer_id','firstname','lastname','country_id','state_id'
         ]));
+
+        $this->staff->load('profile');
     }
 }

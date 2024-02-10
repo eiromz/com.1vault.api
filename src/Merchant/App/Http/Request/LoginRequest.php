@@ -7,6 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Src\Merchant\App\Enum\Role;
 
 class LoginRequest extends FormRequest
 {
@@ -31,7 +32,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function authenticate()
+    public function authenticate() : string
     {
         $this->validated();
 
@@ -43,7 +44,12 @@ class LoginRequest extends FormRequest
 
         $name = createNameForToken($this->email);
 
+        $abilities = match(auth()->user()->role) {
+            Role::MERCHANT->value => Customer::OWNER_ABILITIES,
+            Role::EMPLOYEE->value => Customer::EMPLOYEE_ABILITIES,
+        };
+
         return auth()->user()
-            ->createToken($name, Customer::OWNER_ABILITIES)->plainTextToken;
+            ->createToken($name, $abilities)->plainTextToken;
     }
 }

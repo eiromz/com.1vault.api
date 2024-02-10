@@ -10,19 +10,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class AuthenticateSessionCtrl extends DomainBaseCtrl
 {
-    /**
-     * Create a new session
-     */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): JsonResponse
     {
         return jsonResponse(ResponseAlias::HTTP_OK, [
             'token' => $request->authenticate(),
         ]);
     }
-
-    /**
-     * Destroy an authenticated session
-     */
     public function destroy(Request $request): JsonResponse
     {
         auth()->user()->tokens()->delete();
