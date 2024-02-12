@@ -32,7 +32,7 @@ class PosRequest extends Model
     public function businessTypes()
     {
         $collection = collect([
-            'sole owner', 'partnership', 'limited liability company', 'public limited company', 'others',
+            'sole_owner', 'partnership', 'limited_liability_company', 'public_limited_company', 'others',
         ]);
 
         return $collection->values();

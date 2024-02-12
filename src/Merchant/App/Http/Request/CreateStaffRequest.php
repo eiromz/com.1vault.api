@@ -2,10 +2,12 @@
 
 namespace Src\Merchant\App\Http\Request;
 
+use App\Mail\NewStaffCreationMail;
 use App\Models\Profile;
 use App\Models\State;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Src\Merchant\App\Enum\Role;
 use App\Models\Customer as Staff;
@@ -73,8 +75,12 @@ class  CreateStaffRequest extends FormRequest
         $this->staff->load('profile');
     }
 
-    public function sendWelcomeEmail()
+    public function sendWelcomeEmail(): void
     {
-        //
+        $profile = auth()->user()->profile ?? null;
+
+        if($profile){
+            Mail::to($this->email)->queue(new NewStaffCreationMail($profile->fullname,auth()->user()->email));
+        }
     }
 }

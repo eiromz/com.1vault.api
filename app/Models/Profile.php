@@ -18,6 +18,8 @@ class Profile extends Model
 
     protected $with = ['state'];
 
+    protected $appends = ['fullname'];
+
     protected function fullName(): Attribute
     {
         return Attribute::make(
