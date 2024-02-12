@@ -30,14 +30,21 @@ class ServiceCtrl extends DomainBaseCtrl
      */
     public function store(ServiceRequest $request): JsonResponse
     {
-        $request->merge([
-            'customer_id' => auth()->user()->id
-        ]);
+        try{
+            $request->merge([
+                'customer_id' => auth()->user()->id
+            ]);
 
-        $request->validated();
+            $request->validated();
 
-        $data = $request->getModel()->create($request->getOnly());
+            $data = $request->getModel()->create($request->getOnly());
 
-        return jsonResponse(Response::HTTP_OK, $data);
+            return jsonResponse(Response::HTTP_OK, $data);
+        } catch (Exception $e){
+            logExceptionErrorMessage('ServiceCtrl',$e);
+            return jsonResponse(Response::HTTP_BAD_REQUEST,[
+                'message' => 'Failed to create pos request'
+            ]);
+        }
     }
 }

@@ -88,8 +88,8 @@ describe('Service Routes', function () {
     test('Merchant can fill service request for pos', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service/create-request', [
             'type' => 'pos',
-            'business_name' => 'BusinessName',
-            'merchant_trade_name' => 'MerchantTrade',
+            'business_name' => 'BusinessNamedaklmdlamkdlmasd',
+            'merchant_trade_name' => 'MerchantTraddadasdadasdasdasdasdasdae',
             'business_type' => 'sole_owner',
             'category' => 'restaurant',
             'office_address' => fake()->lastName,

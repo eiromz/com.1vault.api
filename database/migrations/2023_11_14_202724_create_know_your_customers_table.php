@@ -22,7 +22,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0)
                 ->comment('pending:0,approved:1,suspended:2,blocked:3,contact-admin:4,fraud:5,6:failed');
             $table->string('utility_bill');
-            $table->string('comments')->comment('Leave comment for user for viewing');
+            $table->string('comments')->nullable()->comment('Leave comment for user for viewing');
             $table->jsonb('bvn_validation_payload')->comment('payload of bvn validation for the user')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
