@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('category');
 
             $table->string('office_address');
-            $table->string('local_govt_area', 30);
+            $table->string('local_govt_area');
             $table->foreignId('state_id');
 
             $table->jsonb('primary_contact_person')->nullable();
@@ -31,17 +31,17 @@ return new class extends Migration
             $table->jsonb('pos_locations')->nullable();
 
             $table->boolean('receive_notification')->default(0);
-            $table->string('notification_email_address', 40)->nullable();
-            $table->string('notification_phone_number', 20)->nullable();
+            $table->string('notification_email_address')->nullable();
+            $table->string('notification_phone_number')->nullable();
             $table->boolean('real_time_transaction_viewing')->default(0);
 
-            $table->string('settlement_account_name', 20)->nullable();
-            $table->string('settlement_account_number', 20)->nullable();
-            $table->string('settlement_branch', 30)->nullable();
+            $table->string('settlement_account_name')->nullable();
+            $table->string('settlement_account_number')->nullable();
+            $table->string('settlement_branch')->nullable();
 
             $table->longText('other_information')->nullable();
-            $table->string('attestation', 40)->comment('On behalf of');
-            $table->string('card_type', 20)->nullable();
+            $table->string('attestation')->comment('On behalf of whom it may concern');
+            $table->string('card_type')->nullable();
             $table->string('signature_pdf_link')->nullable();
             $table->string('designation')->nullable();
 

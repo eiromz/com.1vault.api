@@ -130,7 +130,7 @@ class ServiceRequest extends FormRequest
             'description' => ['required','max:100']
         ];
     }
-    public function getOnly()
+    public function getOnly(): array
     {
         return match ($this->type) {
             'business_name' => $this->only($this->businessName),

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('beneficiaries', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->string('type')->comment('wallet or bank'); //wallet, bank
+            $table->string('type')->comment('1vault or bank');
             $table->foreignUuid('customer_id');
             $table->string('bank_name')->nullable();
             $table->string('bank_code')->nullable();

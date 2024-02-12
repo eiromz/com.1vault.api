@@ -72,4 +72,9 @@ class  CreateStaffRequest extends FormRequest
 
         $this->staff->load('profile');
     }
+
+    public function sendWelcomeEmail()
+    {
+        //
+    }
 }

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->double('balance_before');
             $table->double('balance_after');
             $table->boolean('restrict')->default(0);
+            $table->boolean('has_transaction_lock')->default(0);
+            $table->timestamp('transaction_lock_time_stamp')->nullable();
+            $table->timestamp('prev_transaction_lock_time_stamp')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

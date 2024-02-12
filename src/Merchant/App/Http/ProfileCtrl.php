@@ -31,6 +31,7 @@ class ProfileCtrl extends DomainBaseCtrl
         }
     }
 
+    //TODO : refactor request into a request class to make it look cleaner
     public function update(Request $request): JsonResponse
     {
         $request->validate([
@@ -49,7 +50,9 @@ class ProfileCtrl extends DomainBaseCtrl
         ]);
 
         $customer = Customer::query()->findOrFail($request->user()->id);
-        $customer->fill($request->only(['email', 'phone_number', 'firebase_token', 'image']));
+        $customer->fill($request->only(['email', 'phone_number', 'firebase_token', 'image',
+            'can_receive_notification','can_receive_subscription_reminder'
+        ]));
 
         if (($request->email !== auth()->user()->email) && $customer->isDirty('email')) {
             $customer->email_verified_at = null;

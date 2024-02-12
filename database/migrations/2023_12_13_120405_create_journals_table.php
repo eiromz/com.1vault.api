@@ -15,7 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary()->index();
             $table->foreignUuid('service_id')->nullable();
             $table->foreignUuid('customer_id');
-            $table->string('trx_ref')->unique()->comment('this is also the settlelment id for the providusbank api');
+            $table->string('bank_code')->nullable()->comment('Bank code for the receiving bank');
+            $table->string('bank_name')->nullable()->comment('Bank name for the receiving bank');
+            $table->string('account_number')->nullable()->comment('Account Number for bank');
+            $table->string('trx_ref')->unique()->comment('this is also the settlement id for the providusbank api');
             $table->string('session_id')->nullable()->comment('The session id is null for other transactions');
             $table->double('amount')->default(0);
             $table->integer('commission')->default(0)->comment('commission in percentage');
@@ -23,7 +26,7 @@ return new class extends Migration
             $table->boolean('credit')->default(0);
             $table->double('balance_before')->default(0);
             $table->double('balance_after')->default(0);
-            $table->string('label')->nullable();
+            $table->string('label')->nullable()->comment('this can also be used as');
             $table->string('source')->comment('wallet,card,providus');
             $table->jsonb('payload')->nullable();
             $table->string('remark')->nullable();

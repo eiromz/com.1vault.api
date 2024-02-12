@@ -32,6 +32,7 @@ class StaffCtrl extends DomainBaseCtrl
         $request->validated();
         $request->createStaff();
         $request->createStaffProfile();
+        $request->sendWelcomeEmail();
         return jsonResponse(Response::HTTP_OK,new StaffResource($request->staff));
     }
     public function update($staff,Request $request): JsonResponse
