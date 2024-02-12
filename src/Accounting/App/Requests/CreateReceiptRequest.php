@@ -19,7 +19,7 @@ class CreateReceiptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transaction_date' => ['required', 'date', 'after_or_equal:today'],
+            'transaction_date' => ['required', 'date'],
             'items' => ['required', 'array'],
             'description' => ['nullable'],
             'amount_received' => ['required'],
