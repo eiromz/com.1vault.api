@@ -21,7 +21,7 @@ class StaffCtrl extends DomainBaseCtrl
     public function index(): JsonResponse
     {
         $staffs = Staff::query()
-            ->where('ACCOUNTID', '=',$this->customer->ACCOUNTID)
+            ->where('ACCOUNTID', '=',auth()->user()->ACCOUNTID)
             ->where('is_member', '=',true)
             ->where('status','=',1)
             ->get();
