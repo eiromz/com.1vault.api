@@ -73,6 +73,7 @@ class ReportCtrl extends DomainBaseCtrl
             'debtors' => 'pdf-template.debtors',
             'receipt' => 'pdf-template.receipt',
             'invoice' => 'pdf-template.invoice',
+            'pos'       => 'pdf-template.pos',
         };
 
         $getModel = match ($request->type) {

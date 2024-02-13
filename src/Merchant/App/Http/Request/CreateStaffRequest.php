@@ -77,10 +77,14 @@ class  CreateStaffRequest extends FormRequest
 
     public function sendWelcomeEmail(): void
     {
-        $profile = auth()->user()->profile ?? null;
+        try {
+            $profile = auth()->user()->profile ?? null;
 
-        if($profile){
-            Mail::to($this->email)->queue(new NewStaffCreationMail($profile->fullname,auth()->user()->email));
+            if($profile){
+                Mail::to($this->email)->queue(new NewStaffCreationMail($profile->fullname,auth()->user()->email));
+            }
+        } catch (\Exception $e){
+
         }
     }
 }
