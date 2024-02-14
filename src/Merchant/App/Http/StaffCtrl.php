@@ -9,6 +9,7 @@ use App\Models\Profile;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Merchant\App\Http\Resources\CustomerResource;
 use Src\Merchant\App\Http\Resources\StaffResource;
 use Symfony\Component\HttpFoundation\Response;
 use Src\Merchant\App\Http\Request\CreateStaffRequest;
@@ -24,8 +25,9 @@ class StaffCtrl extends DomainBaseCtrl
             ->where('ACCOUNTID', '=',auth()->user()->ACCOUNTID)
             ->where('is_member', '=',true)
             ->where('status','=',1)
+            ->with('profile')
             ->get();
-        return jsonResponse(Response::HTTP_OK, $staffs);
+        return jsonResponse(Response::HTTP_OK, CustomerResource::collection($staffs));
     }
     public function store(CreateStaffRequest $request): JsonResponse
     {
@@ -33,7 +35,7 @@ class StaffCtrl extends DomainBaseCtrl
         $request->createStaff();
         $request->createStaffProfile();
         $request->sendWelcomeEmail();
-        return jsonResponse(Response::HTTP_OK,new StaffResource($request->staff));
+        return jsonResponse(Response::HTTP_OK,new StaffResource($request->staff->refresh()));
     }
     public function update($staff,Request $request): JsonResponse
     {
@@ -66,23 +68,30 @@ class StaffCtrl extends DomainBaseCtrl
     }
     public function destroy($staff, Request $request): JsonResponse
     {
-        $request->merge(['staff' => $staff])->validate([
+        try{
+            $request->merge(['staff' => $staff])->validate([
                 'staff' => ['required','exists:App\Models\Customer,id']
             ]);
 
-        $staff = Staff::query()
-            ->where('ACCOUNTID','=',auth()->user()->ACCOUNTID)
-            ->where('id','=',$request->staff)
-            ->first();
+            $staff = Staff::query()
+                ->where('ACCOUNTID','=',auth()->user()->ACCOUNTID)
+                ->where('id','=',$request->staff)
+                ->first();
 
-        if(!$staff->delete()){
+            if(!$staff->delete()){
+                return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                    'message' => 'Staff not removed'
+                ]);
+            }
+
+            return jsonResponse(Response::HTTP_OK, [
+                'message' => 'Staff removed'
+            ]);
+        }catch (Exception $e) {
+            logExceptionErrorMessage('StaffCtrl',$e);
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Staff not removed'
             ]);
         }
-
-        return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Staff removed'
-        ]);
     }
 }

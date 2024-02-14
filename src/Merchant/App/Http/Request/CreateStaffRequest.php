@@ -84,7 +84,7 @@ class  CreateStaffRequest extends FormRequest
                 Mail::to($this->email)->queue(new NewStaffCreationMail($profile->fullname,auth()->user()->email));
             }
         } catch (\Exception $e){
-
+            logExceptionErrorMessage('sendWelcomeEmail',$e);
         }
     }
 }

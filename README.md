@@ -24,4 +24,9 @@
 * Subscriptions happen from the wallet only.
 
 ### SUBCRIPTION CREATION.
-* once a person subscribes for a plan that is recurring via any method or via a cart make sure that you loop through and 
+* once a person subscribes for a plan that is recurring via any method or via a cart make sure that you loop through and .
+* Subcription service would recieve the subscription and run a job to do the following
+
+### JOURNAL APPROVAL TABLE
+* Once a journal needs approval send the journal data to the approval table and debit the user's wallet for 1vault transactions and also do same for transactions going out.
+* 

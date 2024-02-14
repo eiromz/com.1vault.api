@@ -7,7 +7,7 @@ use App\Models\Service;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Services\App\Requests\ServiceRequest;
+use Src\Services\App\Http\Requests\ServiceRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServiceCtrl extends DomainBaseCtrl

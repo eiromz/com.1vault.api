@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $state = State::query()
-            ->where('name', '=', 'Lagos')->first();
+            ->where('name', '=', 'Lagos')
+            ->first();
 
         //Create admin
         $admin = Customer::factory()->create([
@@ -131,7 +132,7 @@ class DatabaseSeeder extends Seeder
     {
         return [
             'title' => 'Basic Plan',
-            'type' => 'social_media_subscription',
+            'type' => 'service.social_media',
             'provider' => '1vault',
             'description' => 'N/A',
             'amount' => 50000,
@@ -156,7 +157,7 @@ class DatabaseSeeder extends Seeder
     {
         return [
             'title' => 'Basic Plan',
-            'type' => 'service.social_media_subscription',
+            'type' => 'service.social_media',
             'provider' => '1vault',
             'description' => 'N/A',
             'amount' => 600000,
@@ -180,7 +181,7 @@ class DatabaseSeeder extends Seeder
     {
         return [
             'title' => 'Basic Plan',
-            'type' => 'service.store_front_subscription',
+            'type' => 'service.store_front',
             'provider' => '1vault',
             'description' => 'N/A',
             'amount' => 4500,
@@ -204,7 +205,7 @@ class DatabaseSeeder extends Seeder
     {
         return [
             'title' => 'Basic Plan',
-            'type' => 'service.store_front_subscription',
+            'type' => 'service.store_front',
             'provider' => '1vault',
             'description' => 'N/A',
             'amount' => 15000,

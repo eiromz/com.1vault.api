@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Services\App\Requests;
+namespace Src\Services\App\Http\Requests;
 
 use App\Models\BusinessRequest;
 use App\Models\LegalRequest;

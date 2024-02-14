@@ -18,7 +18,7 @@ return new class extends Migration
             $table->double('amount');
             $table->string('trx_ref')->nullable();
             $table->string('source')->comment('wallet');
-            $table->boolean('cancel_subscription')->default(0);
+            $table->boolean('auto_renewal')->default(1);
             $table->timestamp('subscription_date')->nullable();
             $table->timestamp('expiration_date')->nullable();
             $table->timestamp('created_at')->useCurrent();
@@ -35,3 +35,5 @@ return new class extends Migration
         Schema::dropIfExists('subscriptions');
     }
 };
+
+//determine the subscriptions that are active

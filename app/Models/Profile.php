@@ -20,7 +20,7 @@ class Profile extends Model
 
     protected $appends = ['fullname'];
 
-    protected function fullName(): Attribute
+    protected function fullname(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => ($attributes['firstname'].' '.$attributes['lastname']),
