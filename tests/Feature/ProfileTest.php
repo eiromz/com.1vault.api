@@ -17,7 +17,6 @@ describe('Profile Routes', function () {
             'email' => 'crayoluman@gmail.com',
         ]);
     });
-
     test('Merchant can submit kyc information', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/profile/kyc', [
             'bvn' => '12345678090',
