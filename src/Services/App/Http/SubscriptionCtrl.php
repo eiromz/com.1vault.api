@@ -23,7 +23,6 @@ class SubscriptionCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, SubscriptionResource::collection($subscriptions));
     }
-
     public function view($subscription, Request $request)
     {
         $request
@@ -38,17 +37,4 @@ class SubscriptionCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, new SubscriptionResource($subscription));
     }
-
-    //delete
-    public function destroy()
-    {
-
-    }
-
-    /**
-     * @throws Exception
-     */
-    //delete method will handle cancel subscription
-
-    //view will handle data about viewing a subscription
 }

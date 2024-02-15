@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
-describe('Profile Routes', function () {
+describe('Subscription Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 

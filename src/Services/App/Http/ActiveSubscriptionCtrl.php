@@ -3,32 +3,26 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Service;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Src\Services\App\Requests\ServiceRequest;
+use App\Models\Subscription;
+use Src\Services\App\Http\Resource\SubscriptionResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActiveSubscriptionCtrl extends DomainBaseCtrl
 {
-    public function index(Request $request)
+    public function __invoke()
     {
-        $request->validate([
-            'category' => ['required', 'in:business_registration,social_media,legal,pos,store_front'],
-        ]);
-
-        $service = Service::query()
-            ->where('category', '=', $request->category)
+        $subscriptions = Subscription::query()
+            ->where('customer_id', '=', auth()->user()->id)
+            ->with('service')
             ->get();
 
-        return jsonResponse(Response::HTTP_OK, $service);
+        dd($subscriptions);
+
+        $activeSubscription = $subscriptions->where('is_active','=',true)->all();
+
+        dd($activeSubscription);
+
+        return jsonResponse(Response::HTTP_OK, SubscriptionResource::collection($activeSubscription));
     }
 
-    /**
-     * @throws Exception
-     */
-    //delete method will handle cancel subscription
-
-    //view will handle data about viewing a subscription
 }

@@ -15,13 +15,10 @@ class Subscription extends Model
     use HasFactory,HasUuids,SoftDeletes;
 
     protected $guarded = [];
-
     protected $appends = ['is_active'];
-
     protected $casts = [
         'subscription_date' => 'date',
-        'expiration_date' => 'date',
-        'cancel_subscription' => 'boolean'
+        'expiration_date' => 'date'
     ];
 
     protected function isActive(): Attribute
