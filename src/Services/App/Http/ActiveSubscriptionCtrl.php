@@ -9,20 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ActiveSubscriptionCtrl extends DomainBaseCtrl
 {
-    public function __invoke()
+    public function index()
     {
-        $subscriptions = Subscription::query()
-            ->where('customer_id', '=', auth()->user()->id)
-            ->with('service')
-            ->get();
-
-        dd($subscriptions);
-
-        $activeSubscription = $subscriptions->where('is_active','=',true)->all();
-
-        dd($activeSubscription);
-
-        return jsonResponse(Response::HTTP_OK, SubscriptionResource::collection($activeSubscription));
+        return 'true';
     }
-
 }

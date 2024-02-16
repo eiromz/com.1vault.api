@@ -15,21 +15,21 @@ class Subscription extends Model
     use HasFactory,HasUuids,SoftDeletes;
 
     protected $guarded = [];
-    protected $appends = ['is_active'];
+    protected $appends = ['subscription_active'];
     protected $casts = [
         'subscription_date' => 'date',
         'expiration_date' => 'date'
     ];
 
-    protected function isActive(): Attribute
+    protected function subscriptionActive(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => !Carbon::parse($attributes['expiration_date'])->isPast(),
         );
     }
 
-    public  function service(): BelongsTo
-    {
-        return $this->belongsTo(Service::class);
-    }
+//    public  function service(): BelongsTo
+//    {
+//        return $this->belongsTo(Service::class);
+//    }
 }

@@ -12,7 +12,8 @@ describe('Subscription Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 
-        $this->customer = Customer::where('email', 'crayolu@gmail.com')->with('profile')->first();
+        $this->customer = Customer::query()->where('email', '=','crayolu@gmail.com')
+            ->with('profile')->first();
 
         $this->subscription = Subscription::query()
             ->where('customer_id','=',$this->customer->id)
@@ -22,7 +23,6 @@ describe('Subscription Routes', function () {
             'email' => 'crayoluman@gmail.com',
         ]);
     });
-
     test('Merchant can view all subscriptions', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/subscriptions');
         $response->dump();

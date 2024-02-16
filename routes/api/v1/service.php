@@ -9,6 +9,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/service', [ServiceCtrl::class, 'index']);
     Route::get('/subscriptions',[SubscriptionCtrl::class,'index']);
     Route::get('/subscriptions/{subscription}',[SubscriptionCtrl::class,'view']);
-    Route::post('/subscriptions/cancel',[SubscriptionCtrl::class,'delete']);
-    Route::get('/subscriptions/active',ActiveSubscriptionCtrl::class);
+    //Route::post('/subscriptions/cancel',[SubscriptionCtrl::class,'delete']);
+    Route::get('/subscriptions/active',[ActiveSubscriptionCtrl::class,'index']);
 });

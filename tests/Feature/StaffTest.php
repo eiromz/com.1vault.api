@@ -37,7 +37,6 @@ describe('Business Routes', function () {
             'state_id' => $this->state->id
         ]);
     });
-
     /*********** Staff ****************/
     test('Merchant can create a staff', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/staff', [
@@ -62,7 +61,7 @@ describe('Business Routes', function () {
     });
     test('Merchant can update staff', function(){
         $response = $this->actingAs($this->customer)->post('/api/v1/staff/edit/'.$this->staff->id,[
-            'firstname' => 'SamMad',
+            'firstname' => 'SammmMad',
             'lastname' => 'BajadMan',
             'email' => 'crayolubiz@gmail.com',
         ]);

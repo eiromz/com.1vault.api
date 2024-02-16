@@ -3,18 +3,15 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Service;
 use App\Models\Subscription;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Services\App\Http\Resource\SubscriptionResource;
-use Src\Services\App\Requests\ServiceRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionCtrl extends DomainBaseCtrl
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $subscriptions = Subscription::query()
             ->where('customer_id', '=', auth()->user()->id)
@@ -23,7 +20,7 @@ class SubscriptionCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, SubscriptionResource::collection($subscriptions));
     }
-    public function view($subscription, Request $request)
+    public function view($subscription, Request $request): JsonResponse
     {
         $request
             ->merge(['subscription' => $subscription])

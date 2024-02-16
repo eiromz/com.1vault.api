@@ -3,9 +3,7 @@
 namespace Src\Merchant\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Customer;
 use App\Models\Customer as Staff;
-use App\Models\Profile;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,10 +20,10 @@ class StaffCtrl extends DomainBaseCtrl
     public function index(): JsonResponse
     {
         $staffs = Staff::query()
+            ->with('profile')
             ->where('ACCOUNTID', '=',auth()->user()->ACCOUNTID)
             ->where('is_member', '=',true)
             ->where('status','=',1)
-            ->with('profile')
             ->get();
         return jsonResponse(Response::HTTP_OK, CustomerResource::collection($staffs));
     }
@@ -40,8 +38,8 @@ class StaffCtrl extends DomainBaseCtrl
     public function update($staff,Request $request): JsonResponse
     {
         $request->merge(['staff' => $staff])->validate([
-            'staff' => ['required','exists:App\Models\Customer,id'],
-            'firstname'    => ['required','string','min:3'],
+            'staff'         => ['required','exists:App\Models\Customer,id'],
+            'firstname'     => ['required','string','min:3'],
             'lastname'      => ['required','string','min:3'],
             'email'         => ['nullable','unique:App\Models\Customer,email'],
         ]);
@@ -56,9 +54,7 @@ class StaffCtrl extends DomainBaseCtrl
 
         $profile = $staffObject->profile->fill($request->only(['firstname','lastname']));
 
-        $saved = $staffObject->fill($request->only(['email']))->save() && $profile->save();
-
-        if(!$saved){
+        if(!($staffObject->fill($request->only(['email']))->save() && $profile->save())){
             return jsonResponse(Response::HTTP_UNAUTHORIZED, [
                 'message' => 'Failed to modify profile'
             ]);
