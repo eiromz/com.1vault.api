@@ -13,6 +13,9 @@ class SubscriptionCtrl extends DomainBaseCtrl
 {
     public function index(): JsonResponse
     {
+        //default = fetch all subscriptions
+        //active = fetch all active subscriptions
+
         $subscriptions = Subscription::query()
             ->where('customer_id', '=', auth()->user()->id)
             ->with('service')

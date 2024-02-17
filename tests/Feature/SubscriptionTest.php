@@ -33,4 +33,8 @@ describe('Subscription Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Merchant can identify active subscriptions', function (){
+        $response = $this->actingAs($this->customer)->get('/api/v1/active/subscriptions');
+        expect($response->status())->toBe(404);
+    });
 });

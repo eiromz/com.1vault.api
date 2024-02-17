@@ -18,7 +18,7 @@ class ProfileCtrl extends DomainBaseCtrl
     {
         try {
             $profile = Profile::query()->where('customer_id', auth()->user()->id)
-                ->with(['customer', 'customer.profile'])
+                ->with(['customer', 'customer.profile','customer.storeFront'])
                 ->firstOrFail();
 
             return jsonResponse(Response::HTTP_OK,

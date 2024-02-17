@@ -65,4 +65,10 @@ class Customer extends Authenticatable
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }
+
+    public function storeFront() : HasOne
+    {
+        return $this->hasOne(StoreFront::class)
+            ->where('is_store_front','=',true);
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Business;
 use App\Models\Customer;
+use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,6 +17,16 @@ describe('Profile Routes', function () {
 
         $this->customerWithOutProfile = Customer::factory()->create([
             'email' => 'crayoluman@gmail.com',
+        ]);
+
+        $this->state = State::query()
+            ->where('name', '=', 'Lagos')
+            ->first();
+
+        $this->store_front = Business::factory()->create([
+            'state_id' => $this->state->id,
+            'customer_id' => $this->customer->id,
+            'is_store_front' => true
         ]);
     });
     test('Merchant can submit kyc information', function () {
