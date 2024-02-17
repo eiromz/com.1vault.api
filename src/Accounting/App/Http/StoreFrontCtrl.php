@@ -92,7 +92,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'twitter_x' => ['nullable'],
         ]);
 
-        $data = StoreFront::query()->findOrFail($storefront);
+        $data = StoreFront::query()->firstOrFail($storefront);
         $data->fill($request->only($this->updateRequestkeys))->save();
 
         return jsonResponse(Response::HTTP_OK, $data);

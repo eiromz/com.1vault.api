@@ -45,8 +45,8 @@ class ProfileCtrl extends DomainBaseCtrl
                 'business_zip_code' => ['nullable', 'string'],
                 'business_logo' => ['nullable', 'string'],
                 'image' => ['nullable', 'string'],
-                'can_receive_notification' => ['nullable', 'boolean', 'in:0,1'],
-                'can_receive_subscription_reminder' => ['nullable', 'boolean', 'in:0,1'],
+                'can_receive_notification' => ['nullable', 'boolean'],
+                'can_receive_subscription_reminder' => ['nullable', 'boolean'],
             ]);
 
             $customer = Customer::query()

@@ -95,6 +95,8 @@ describe('Profile Routes', function () {
             'business_physical_address' => 'Olubekunooo',
             'business_zip_code' => 'Olubekun',
             'business_logo' => 'Olubekun',
+            'can_receive_notification' => 1,
+            'can_receive_subscription_reminder' => 1,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
