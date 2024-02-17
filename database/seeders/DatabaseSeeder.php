@@ -95,13 +95,13 @@ class DatabaseSeeder extends Seeder
 
         $service =  Service::query()->where('category','=','store_front')->first();
 
-//       Subscription::factory()->create([
-//            'customer_id'       => $customer->id,
-//            'service_id'        => $service->id,
-//            'amount'            => $service->amount,
-//            'subscription_date' => $now,
-//            'expiration_date'   => determineExpirationDate($now,$service->billing_cycle)
-//        ]);
+       Subscription::factory()->create([
+            'customer_id'       => $customer->id,
+            'service_id'        => $service->id,
+            'amount'            => $service->amount,
+            'subscription_date' => $now,
+            'expiration_date'   => determineExpirationDate($now,$service->billing_cycle)
+        ]);
 
         Journal::factory()->count(3)->create(['customer_id' => $customer->id]);
 
