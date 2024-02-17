@@ -31,7 +31,6 @@ class ProfileCtrl extends DomainBaseCtrl
         }
     }
 
-    //TODO : refactor request into a request class to make it look cleaner
     public function update(Request $request): JsonResponse
     {
         try {
@@ -61,14 +60,13 @@ class ProfileCtrl extends DomainBaseCtrl
 
             $customer->save();
 
-            $profile = Profile::where('id', auth()->user()->profile->id)->with(['customer', 'customer.account'])->firstOrFail();
+            $profile = Profile::where('id', auth()->user()->profile->id)
+                ->with(['customer', 'customer.account'])->firstOrFail();
 
             $profile->fill($request->only([
                 'firstname', 'lastname', 'business_name', 'business_physical_address',
                 'business_logo', 'business_zip_code',
-            ]));
-
-            $profile->save();
+            ]))->save();
 
             return jsonResponse(Response::HTTP_OK, new ProfileResource($profile));
         } catch (Exception $e) {

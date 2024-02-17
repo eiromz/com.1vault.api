@@ -78,8 +78,8 @@ describe('Profile Routes', function () {
             'lastname' => fake()->lastName,
             'phone_number' => '08139691937',
             'firebase_token' => 'wekjnskdjnkfndfknjsdf',
-            'business_name' => 'Olubekun',
-            'business_physical_address' => 'Olubekun',
+            'business_name' => 'Olubekunaa',
+            'business_physical_address' => 'Olubekunooo',
             'business_zip_code' => 'Olubekun',
             'business_logo' => 'Olubekun',
         ]);
