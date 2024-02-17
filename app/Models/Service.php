@@ -32,10 +32,12 @@ class Service extends Model
             $builder->where('status', '=', true);
         });
     }
+
     public function serviceBenefit(): HasMany
     {
         return $this->hasMany(ServiceBenefit::class);
     }
+
     protected function amount(): Attribute
     {
         return Attribute::make(
@@ -44,6 +46,7 @@ class Service extends Model
             ))->execute(),
         );
     }
+
     public function subscription(): HasMany
     {
         return $this->hasMany(Subscription::class);

@@ -3,7 +3,6 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Service;
 use App\Models\Subscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,17 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
 class SubscriptionCtrl extends DomainBaseCtrl
 {
     private $subscriptions;
-    public function index($status,Request $request): JsonResponse
+
+    public function index($status, Request $request): JsonResponse
     {
         $request->merge(['status' => $status])->validate([
-            'status' => ['required','string','in:default,active']
+            'status' => ['required', 'string', 'in:default,active'],
         ]);
 
         $this->subscriptions = Subscription::query()->where('customer_id', '=', auth()->user()->id)->with('service');
 
-        $subscriptions = match($request->status) {
+        $subscriptions = match ($request->status) {
             'default' => SubscriptionResource::collection($this->subscriptions->get()),
-            'active'  => $this->subscriptions->where('expiration_date','>',now())->get()->pluck('service.category'),
+            'active' => $this->subscriptions->where('expiration_date', '>', now())->get()->pluck('service.category'),
         };
 
         return jsonResponse(Response::HTTP_OK, $subscriptions);
