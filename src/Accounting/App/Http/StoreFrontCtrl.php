@@ -5,6 +5,7 @@ namespace Src\Accounting\App\Http;
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Business;
+use App\Models\StoreFront;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
@@ -19,6 +20,12 @@ class StoreFrontCtrl extends DomainBaseCtrl
         'zip_code', 'trx_ref', 'is_store_front', 'customer_id', 'whatsapp_number',
         'trx_ref', 'sector', 'facebook', 'instagram', 'twitter_x',
     ];
+
+    private array $updateRequestkeys = [
+        'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
+        'zip_code', 'trx_ref', 'whatsapp_number','sector', 'facebook', 'instagram', 'twitter_x',
+    ];
+
 
     public function __construct(BusinessRepositoryInterface $repository)
     {
@@ -57,14 +64,43 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'twitter_x' => ['nullable'],
         ]);
 
-        $data = Business::query()->create($request->only($this->createRequestkeys));
+        $data = StoreFront::query()->create($request->only($this->createRequestkeys));
+
+        return jsonResponse(Response::HTTP_OK, $data);
+    }
+
+    public function update($storefront,Request $request)
+    {
+        $request->merge([
+            'storefront' => $storefront,
+            'fullname' => $request->name,
+        ]);
+
+        $request->validate([
+            'storefront' => ['nullable', 'exists:App\Models\StoreFront,id'],
+            'name' => ['nullable', 'min:2'],
+            'phone_number' => ['nullable', 'min:11'],
+            'email' => ['nullable', 'email', 'unique:App\Models\Business,email'],
+            'address' => ['nullable', 'min:3'],
+            'state_id' => ['nullable', 'exists:App\Models\State,id'],
+            'logo' => ['nullable', 'url'],
+            'sector' => ['nullable', 'string'],
+            'trx_ref' => ['nullable', 'exists:App\Models\Journal,trx_ref'],
+            'whatsapp_number' => ['nullable'],
+            'facebook' => ['nullable'],
+            'instagram' => ['nullable'],
+            'twitter_x' => ['nullable'],
+        ]);
+
+        $data = StoreFront::query()->findOrFail($storefront);
+        $data->fill($request->only($this->updateRequestkeys))->save();
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
     private function storeFrontExists(): void
     {
-        $storeFrontExists = Business::query()
+        $storeFrontExists = StoreFront::query()
             ->where('customer_id', '=', auth()->user()->id)
             ->where('is_store_front', '=', true)
             ->exists();

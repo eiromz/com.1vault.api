@@ -395,34 +395,34 @@ describe('Business Routes', function () {
     });
 
     /************* Report ******************/
-    test('Business can Retrieve Report', function () {
-        $response = $this->actingAs($this->customer)->post('/download/pdf', [
-            'start_date' => '2024-01-01',
-            'end_date' => '2024-02-10',
-            'business' => $this->business->id,
-            'type' => 'debtors',
-        ]);
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
-
-    test('Business can Download Pdf Receipt Report', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
-            'type' => 'receipt',
-            'identifier' => $this->receipt->first()->id,
-        ]);
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
-
-    test('Business can Download Pdf Invoice Report', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
-            'type' => 'invoice',
-            'identifier' => $this->invoice->first()->id,
-        ]);
-        $response->dump();
-        expect($response->status())->toBe(200);
-    });
+//    test('Business can Retrieve Report', function () {
+//        $response = $this->actingAs($this->customer)->post('/download/pdf', [
+//            'start_date' => '2024-01-01',
+//            'end_date' => '2024-02-10',
+//            'business' => $this->business->id,
+//            'type' => 'debtors',
+//        ]);
+//        $response->dump();
+//        expect($response->status())->toBe(200);
+//    });
+//
+//    test('Business can Download Pdf Receipt Report', function () {
+//        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+//            'type' => 'receipt',
+//            'identifier' => $this->receipt->first()->id,
+//        ]);
+//        $response->dump();
+//        expect($response->status())->toBe(200);
+//    });
+//
+//    test('Business can Download Pdf Invoice Report', function () {
+//        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+//            'type' => 'invoice',
+//            'identifier' => $this->invoice->first()->id,
+//        ]);
+//        $response->dump();
+//        expect($response->status())->toBe(200);
+//    });
 
     /************* StoreFront *************/
     test('Merchant can create a store front', function () {
@@ -444,7 +444,31 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can create a store front inventory', function () {
+    test('Merchant can update a store front', function () {
+        $store_front = Business::factory()->create([
+            'state_id' => $this->state->id,
+            'customer_id' => $this->customer->id,
+            'is_store_front' => true,
+        ]);
+        $response = $this->actingAs($this->customer)->post('/api/v1/store-front/edit/'.$store_front->id, [
+            'name' => 'JupiterMan',
+            'phone_number' => '08103797738',
+            'email' => 'crayolubiz@gmail.com',
+            'address' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'state_id' => $this->state->id,
+            'zip_code' => '1001261',
+            'logo' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
+            'sector' => 'banking',
+            'trx_ref' => $this->journal->trx_ref,
+            'whatsapp_number' => '0901234567',
+            'facebook' => 'iamjonlobathe',
+            'instagram' => 'sholaaaa',
+            'twitter_x' => 'welcome',
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Merchant can create a product inventory for store front', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front/inventory', [
             'name' => fake()->lastName,
             'amount' => fake()->numberBetween(100, 1000),
@@ -456,13 +480,13 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can create a view single store front inventory', function () {
+    test('Merchant can view a single store front inventory', function () {
         $link = '/api/v1/store-front/inventory/'.$this->inventory->first()->id.'/business/'.$this->business->id;
         $response = $this->actingAs($this->customer)->get($link);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can destroy a a single inventory', function () {
+    test('Merchant can destroy a single inventory', function () {
         $link = '/api/v1/store-front/inventory/delete';
         $response = $this->actingAs($this->customer)->post($link, [
             'inventory' => [

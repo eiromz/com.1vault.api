@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
 
         $service = Service::query()->where('category', '=', 'store_front')->first();
 
-        Subscription::factory()->create([
+        Subscription::factory()->count(2)->create([
             'customer_id' => $customer->id,
             'service_id' => $service->id,
             'amount' => $service->amount,

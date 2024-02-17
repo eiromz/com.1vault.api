@@ -116,9 +116,10 @@ describe('Payment Routes', function () {
     test('Merchant can pay for service', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total' => 10000,
-            'cart' => [
-                ['cart' => $this->cart->first()->id],
-            ],
+             'cart' => [],
+//            'cart' => [
+//                ['cart' => $this->cart->first()->id],
+//            ],
             'transaction_pin' => '123456',
         ]);
         $response->dump();

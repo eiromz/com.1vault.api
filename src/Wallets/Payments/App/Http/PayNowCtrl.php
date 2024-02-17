@@ -25,7 +25,7 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $request->validate([
             'total' => ['required'],
-            'cart' => ['nullable', 'array'],
+            'cart'  =>  ['required', 'array'],
             'transaction_pin' => ['required'],
         ]);
 
@@ -38,11 +38,20 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
+        $request->merge(['journal' => $source->journal]);
+
+        if($request->has('cart') && !is_null($request->cart)){
+            dd($request->all());
+        }
+
+
         //we need to create a subscription
 
         //$transaction = (new ProcessCartTransaction($source->request));
 
         //$transaction->process();
+
+        //attach the tx_refercence to the user profile.
 
         return jsonResponse(Response::HTTP_OK, $source->journal);
     }
