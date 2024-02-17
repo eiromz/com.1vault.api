@@ -33,6 +33,7 @@ class KnowYourCustomer extends Model
         'doc_image',
         'selfie',
         'status',
+        'utility_bill',
     ];
 
     const STATUS_CODES = [

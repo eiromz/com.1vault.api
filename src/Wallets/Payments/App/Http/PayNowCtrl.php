@@ -3,8 +3,6 @@
 namespace Src\Wallets\Payments\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Cart;
-use App\Models\Journal;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,13 +20,13 @@ class PayNowCtrl extends DomainBaseCtrl
     {
         $request->merge([
             'source' => 'wallet',
-            'amount' => $request->total
+            'amount' => $request->total,
         ]);
 
         $request->validate([
             'total' => ['required'],
-            'cart' => ['nullable','array'],
-            'transaction_pin' => ['required']
+            'cart' => ['nullable', 'array'],
+            'transaction_pin' => ['required'],
         ]);
 
         $source = new JournalWalletDebitService(

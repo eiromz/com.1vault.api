@@ -55,13 +55,13 @@ class JournalWalletDebitService
             'debit' => true,
             'credit' => false,
             'trx_ref' => generateTransactionReference(),
-            'label'  => 'Transfer',
-            'source'  => $this->request->profile->fullname ?? 'Inward Transfer',
+            'label' => 'Transfer',
+            'source' => $this->request->profile->fullname ?? 'Inward Transfer',
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (!$this->journal) {
+        if (! $this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
@@ -72,6 +72,7 @@ class JournalWalletDebitService
     {
         $this->firebase();
         $this->email();
+
         return $this;
     }
 
@@ -87,7 +88,8 @@ class JournalWalletDebitService
 
     //TODO : write email for notifying a person about a transction on his/her account.
     private function email()
-    {}
+    {
+    }
 
     public function updateBalanceQueue(): void
     {
@@ -100,8 +102,8 @@ class JournalWalletDebitService
      */
     public function validateTransactionPin(): void
     {
-        if (!Hash::check($this->request->transaction_pin, auth()->user()->transaction_pin)) {
-            throw new BaseException('Invalid Transaction Pin',Response::HTTP_BAD_REQUEST);
+        if (! Hash::check($this->request->transaction_pin, auth()->user()->transaction_pin)) {
+            throw new BaseException('Invalid Transaction Pin', Response::HTTP_BAD_REQUEST);
         }
     }
 }

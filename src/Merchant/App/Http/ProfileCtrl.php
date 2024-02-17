@@ -18,7 +18,7 @@ class ProfileCtrl extends DomainBaseCtrl
     {
         try {
             $profile = Profile::query()->where('customer_id', auth()->user()->id)
-                ->with(['customer', 'customer.profile','customer.storeFront'])
+                ->with(['customer', 'customer.profile', 'customer.storeFront'])
                 ->firstOrFail();
 
             return jsonResponse(Response::HTTP_OK,
@@ -45,34 +45,40 @@ class ProfileCtrl extends DomainBaseCtrl
                 'business_zip_code' => ['nullable', 'string'],
                 'business_logo' => ['nullable', 'string'],
                 'image' => ['nullable', 'string'],
-                'can_receive_notification' => ['nullable','boolean','in:0,1'],
-                'can_receive_subscription_reminder' => ['nullable','boolean','in:0,1'],
+                'can_receive_notification' => ['nullable', 'boolean', 'in:0,1'],
+                'can_receive_subscription_reminder' => ['nullable', 'boolean', 'in:0,1'],
             ]);
 
-            $customer = Customer::query()->findOrFail($request->user()->id);
-            $customer->fill($request->only(['email', 'phone_number', 'firebase_token', 'image',
-                'can_receive_notification','can_receive_subscription_reminder'
-            ]));
+            $customer = Customer::query()
+                ->findOrFail($request->user()->id)
+                ->fill($request->only(['email', 'phone_number', 'firebase_token', 'image',
+                    'can_receive_notification', 'can_receive_subscription_reminder',
+                ]));
 
-            if (($request->email !== auth()->user()->email) && $customer->isDirty('email')) {
-                $customer->email_verified_at = null;
-            }
+            $isModifiedEmail = ($request->email !== auth()->user()->email) && $customer->isDirty('email');
+
+            $customer->email_verified_at = ($isModifiedEmail) ? null : $customer->email_verified_at;
 
             $customer->save();
 
-            $profile = Profile::where('id', auth()->user()->profile->id)
-                ->with(['customer', 'customer.account'])->firstOrFail();
+            $profile = Profile::query()
+                ->where('id', auth()->user()->profile->id)
+                ->with(['customer', 'customer.account', 'customer.storeFront'])
+                ->firstOrFail();
 
-            $profile->fill($request->only([
-                'firstname', 'lastname', 'business_name', 'business_physical_address',
-                'business_logo', 'business_zip_code',
-            ]))->save();
+            $profile
+                ->fill($request->only([
+                    'firstname', 'lastname', 'business_name', 'business_physical_address',
+                    'business_logo', 'business_zip_code',
+                ]))
+                ->save();
 
             return jsonResponse(Response::HTTP_OK, new ProfileResource($profile));
         } catch (Exception $e) {
-            logExceptionErrorMessage('ProfileCtrl',$e);
-            return jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => 'Failed to update profile'
+            logExceptionErrorMessage('ProfileCtrl', $e);
+
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => 'Failed to update profile',
             ]);
         }
     }

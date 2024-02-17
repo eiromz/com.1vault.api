@@ -47,10 +47,10 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('/inventory/{inventory}/business/{business}', [InventoryCtrl::class, 'view']);
     Route::post('/inventory/delete', [InventoryCtrl::class, 'destroy']);
 
-    Route::post('/store-front',[StoreFrontCtrl::class,'store']);
-    Route::post('/store-front/inventory',[StoreFrontInventoryCtrl::class,'store']);
-    Route::post('/store-front/inventory/delete',[StoreFrontInventoryCtrl::class,'destroy']);
-    Route::get('/store-front/inventory/{inventory}/business/{business}',[StoreFrontInventoryCtrl::class,'view']);
-    Route::post('/store-front/inventory/edit/{id}',[StoreFrontInventoryCtrl::class,'edit']);
-    Route::get('/store-front/inventory/business/{id}',[StoreFrontInventoryCtrl::class,'index']);
+    Route::post('/store-front', [StoreFrontCtrl::class, 'store']);
+    Route::post('/store-front/inventory', [StoreFrontInventoryCtrl::class, 'store']);
+    Route::post('/store-front/inventory/delete', [StoreFrontInventoryCtrl::class, 'destroy']);
+    Route::get('/store-front/inventory/{inventory}/business/{business}', [StoreFrontInventoryCtrl::class, 'view']);
+    Route::post('/store-front/inventory/edit/{id}', [StoreFrontInventoryCtrl::class, 'edit']);
+    Route::get('/store-front/inventory/business/{id}', [StoreFrontInventoryCtrl::class, 'index']);
 });

@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
-use function Spatie\LaravelPdf\Support\pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +21,8 @@ Route::get('/', function () {
 
 Route::get('/view/template/receipt', function () {
     $filename = generateTransactionReference();
-    return Pdf::view('pdf-template.receipt',['welcome'])
+
+    return Pdf::view('pdf-template.receipt', ['welcome'])
         ->withBrowsershot(function (Browsershot $browsershot) {
             $browsershot->setNodeBinary(config('app.which_node'))
                 ->setNpmBinary(config('app.which_npm'));

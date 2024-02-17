@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,7 +15,7 @@ class StoreFront extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'is_store_front' => 'boolean'
+        'is_store_front' => 'boolean',
     ];
 
     public function customer(): BelongsTo

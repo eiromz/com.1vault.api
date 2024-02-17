@@ -1,12 +1,7 @@
 <?php
 
-use App\Models\Business;
-use App\Models\Client;
 use App\Models\Customer;
-use App\Models\Inventory;
-use App\Models\Invoice;
 use App\Models\Profile;
-use App\Models\Receipt;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -29,12 +24,12 @@ describe('Business Routes', function () {
             'is_owner' => false,
             'is_member' => true,
             'ACCOUNTID' => $this->customer->ACCOUNTID,
-            'role'  => Role::EMPLOYEE->value,
+            'role' => Role::EMPLOYEE->value,
         ]);
 
-        $this->staff_profile =  Profile::factory()->create([
+        $this->staff_profile = Profile::factory()->create([
             'customer_id' => $this->staff->id,
-            'state_id' => $this->state->id
+            'state_id' => $this->state->id,
         ]);
     });
     /*********** Staff ****************/
@@ -49,18 +44,18 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can list all staffs', function() {
+    test('Merchant can list all staffs', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/staff');
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can delete staff', function() {
+    test('Merchant can delete staff', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/staff/delete/'.$this->staff->id);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can update staff', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/staff/edit/'.$this->staff->id,[
+    test('Merchant can update staff', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/staff/edit/'.$this->staff->id, [
             'firstname' => 'SammmMad',
             'lastname' => 'BajadMan',
             'email' => 'crayolubiz@gmail.com',

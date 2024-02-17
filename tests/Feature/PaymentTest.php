@@ -34,7 +34,7 @@ describe('Payment Routes', function () {
         $this->cart = Cart::factory()->count(3)->create([
             'price' => 2000,
             'customer_id' => $this->customer->id,
-            'service_id' => $this->service->first()->id
+            'service_id' => $this->service->first()->id,
         ]);
     });
 
@@ -49,7 +49,7 @@ describe('Payment Routes', function () {
 
     test('Merchant can fetch all journal transactions', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
-            'filter_type' => 'default'
+            'filter_type' => 'default',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -82,7 +82,7 @@ describe('Payment Routes', function () {
             'account_number' => $customer2->profile->account_number,
             'amount' => 10000,
             'transaction_pin' => '123456',
-            'remark' => 'this is good'
+            'remark' => 'this is good',
         ]);
 
         $response->dump();
@@ -113,13 +113,13 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Merchant can pay for service', function() {
+    test('Merchant can pay for service', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
-            'total'     => 10000,
-            'cart'      => [
-                ['cart'=>$this->cart->first()->id],
+            'total' => 10000,
+            'cart' => [
+                ['cart' => $this->cart->first()->id],
             ],
-            'transaction_pin' => '123456'
+            'transaction_pin' => '123456',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

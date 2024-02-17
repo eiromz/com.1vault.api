@@ -26,7 +26,7 @@ describe('Business Routes', function () {
         $this->business = Business::factory()->create([
             'state_id' => $this->state->id,
             'customer_id' => $this->customer->id,
-            'is_store_front' => false
+            'is_store_front' => false,
         ]);
 
         $this->client = Client::factory()->create([
@@ -409,7 +409,7 @@ describe('Business Routes', function () {
     test('Business can Download Pdf Receipt Report', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
             'type' => 'receipt',
-            'identifier' => $this->receipt->first()->id
+            'identifier' => $this->receipt->first()->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -418,12 +418,11 @@ describe('Business Routes', function () {
     test('Business can Download Pdf Invoice Report', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
             'type' => 'invoice',
-            'identifier' => $this->invoice->first()->id
+            'identifier' => $this->invoice->first()->id,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
 
     /************* StoreFront *************/
     test('Merchant can create a store front', function () {
@@ -452,7 +451,7 @@ describe('Business Routes', function () {
             'business' => $this->business->id,
             'image' => fake()->url,
             'stock_status' => 1,
-            'description' => 'This is a transaction for all things'
+            'description' => 'This is a transaction for all things',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
@@ -465,7 +464,7 @@ describe('Business Routes', function () {
     });
     test('Merchant can destroy a a single inventory', function () {
         $link = '/api/v1/store-front/inventory/delete';
-        $response = $this->actingAs($this->customer)->post($link,[
+        $response = $this->actingAs($this->customer)->post($link, [
             'inventory' => [
                 [
                     'inventory' => $this->inventory->first()->id,
@@ -477,9 +476,9 @@ describe('Business Routes', function () {
     });
     test('Merchant can update a single inventory', function () {
         $link = '/api/v1/store-front/inventory/edit/'.$this->inventory->first()->id;
-        $response = $this->actingAs($this->customer)->post($link,[
-            'name'      => 'wella health',
-            'amount'    => 10000,
+        $response = $this->actingAs($this->customer)->post($link, [
+            'name' => 'wella health',
+            'amount' => 10000,
             'stock_status' => 1,
             'description' => 'welcome to the land of the living',
         ]);

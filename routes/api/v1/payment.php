@@ -24,6 +24,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/cart', [CartCtrl::class, 'store']);
     Route::post('/cart/delete', [CartCtrl::class, 'destroy']);
     Route::get('/cart', [CartCtrl::class, 'index']);
-    Route::post('/pay-now',[PayNowCtrl::class,'store']);
+    Route::post('/pay-now', [PayNowCtrl::class, 'store']);
 
 });

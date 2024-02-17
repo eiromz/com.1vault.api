@@ -62,10 +62,10 @@ class ReportCtrl extends DomainBaseCtrl
         $filename = generateTransactionReference();
 
         $request->validate([
-            'type'       => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+            'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
             'identifier' => ['required'],
             'start_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
-            'end_date'   => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
+            'end_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
         ]);
 
         $getView = match ($request->type) {
@@ -73,24 +73,24 @@ class ReportCtrl extends DomainBaseCtrl
             'debtors' => 'pdf-template.debtors',
             'receipt' => 'pdf-template.receipt',
             'invoice' => 'pdf-template.invoice',
-            'pos'       => 'pdf-template.pos',
+            'pos' => 'pdf-template.pos',
         };
 
         $getModel = match ($request->type) {
             'receipt' => Receipt::query(),
-            'pos'     => PosRequest::query(),
+            'pos' => PosRequest::query(),
             'sales','debtors','invoice' => Invoice::query(),
         };
 
         $data = $getModel->findOrFail($request->identifier);
 
-        $this->is_receipt($data,$request->type);
+        $this->is_receipt($data, $request->type);
 
-        $this->is_invoice($data,$request->type);
+        $this->is_invoice($data, $request->type);
 
         //dd($data);
 
-        return Pdf::view($getView,compact('data'))
+        return Pdf::view($getView, compact('data'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->setNodeBinary(config('app.which_node'))
                     ->setNpmBinary(config('app.which_npm'));
@@ -98,24 +98,22 @@ class ReportCtrl extends DomainBaseCtrl
     }
 
     /**
-     * @param $data
-     * @param $type
      * @return void
      */
-    public function is_receipt($data,$type)
+    public function is_receipt($data, $type)
     {
-        if($type === 'receipt'){
+        if ($type === 'receipt') {
             $collection = collect($data->items);
 
             $data->item = $collection->pluck('name')->all();
 
-            $data->qty  = $collection->pluck('quantity')->sum();
+            $data->qty = $collection->pluck('quantity')->sum();
         }
     }
 
-    public function is_invoice($data,$type)
+    public function is_invoice($data, $type)
     {
-        if($type === 'invoice') {
+        if ($type === 'invoice') {
             $collection = collect($data->items);
             dd($collection->sum('quantity'));
             //looop through the items and display

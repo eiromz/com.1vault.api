@@ -56,7 +56,7 @@ class RegisterCustomerData extends Data
             'otp' => generateOtpCode(),
             'otp_expires_at' => now()->addMinutes(15),
             'accept_terms_conditions' => $this->accept_terms_conditions,
-            'image' => "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/avatar.jpg"
+            'image' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/avatar.jpg',
         ]);
     }
 }

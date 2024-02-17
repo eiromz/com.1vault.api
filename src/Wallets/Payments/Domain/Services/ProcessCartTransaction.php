@@ -5,8 +5,10 @@ namespace Src\Wallets\Payments\Domain\Services;
 class ProcessCartTransaction
 {
     private array $params;
+
     private $service;
-   //SUBSCRIPTION
+
+    //SUBSCRIPTION
     //ONE TIME PAYMENT
     //ADD ORDER TO CART
     //check if cart is present in the request

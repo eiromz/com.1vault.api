@@ -102,6 +102,7 @@ if (! function_exists('generateTransactionReference')) {
     function generateTransactionReference(): string
     {
         $random = fake()->randomNumber(6);
+
         return 'trx'.time().uniqid().$random;
     }
 }
@@ -112,17 +113,17 @@ if (! function_exists('calculateDiscount')) {
      */
     function calculateDiscount($discount, $amount): float|int
     {
-        if($discount > 100){
+        if ($discount > 100) {
             throw new BaseException('Invalid discount', Response::HTTP_BAD_REQUEST);
         }
 
-        $discount = ($discount/100);
+        $discount = ($discount / 100);
 
         $calculateDiscountAmount = $discount * $amount;
 
         $newAmount = ($amount - $calculateDiscountAmount);
 
-        if(0 > $newAmount){
+        if ($newAmount < 0) {
             throw new BaseException('Invalid discount amount', Response::HTTP_BAD_REQUEST);
         }
 
@@ -131,17 +132,13 @@ if (! function_exists('calculateDiscount')) {
 }
 
 if (! function_exists('determineExpirationDate')) {
-    /**
-     * @param Carbon $currentDate
-     * @param string $billing_cycle
-     * @return Carbon
-     */
+
     function determineExpirationDate(Carbon $currentDate, string $billing_cycle): Carbon
     {
-        return match($billing_cycle){
+        return match ($billing_cycle) {
             BillingCycle::MONTHLY->value => $currentDate->addMonth(),
             BillingCycle::QUARTERLY->value => $currentDate->addMonths(3),
-            BillingCycle::YEARLY->value   => $currentDate->addMonths(12)
+            BillingCycle::YEARLY->value => $currentDate->addMonths(12)
         };
     }
 }

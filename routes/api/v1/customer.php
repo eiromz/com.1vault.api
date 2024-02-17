@@ -1,6 +1,5 @@
 <?php
 
-use Src\Accounting\App\Http\StoreFrontCtrl;
 use Src\Merchant\App\Http\AuthenticateSessionCtrl;
 use Src\Merchant\App\Http\ChangePasswordCtrl;
 use Src\Merchant\App\Http\CompleteCustomerProfileCtrl;
@@ -43,10 +42,10 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('profile/transaction-pin', [TransactionPinCtrl::class, 'store']);
     Route::post('profile/change-password', ChangePasswordCtrl::class);
 
-    Route::get('staff',[StaffCtrl::class,'index']);
-    Route::post('staff',[StaffCtrl::class,'store']);
-    Route::get('staff/{staff}',[StaffCtrl::class,'view']);
-    Route::post('staff/edit/{staff}',[StaffCtrl::class,'update']);
-    Route::post('staff/delete/{staff}',[StaffCtrl::class,'destroy']);
+    Route::get('staff', [StaffCtrl::class, 'index']);
+    Route::post('staff', [StaffCtrl::class, 'store']);
+    Route::get('staff/{staff}', [StaffCtrl::class, 'view']);
+    Route::post('staff/edit/{staff}', [StaffCtrl::class, 'update']);
+    Route::post('staff/delete/{staff}', [StaffCtrl::class, 'destroy']);
 
 });

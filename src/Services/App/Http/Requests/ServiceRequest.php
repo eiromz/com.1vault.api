@@ -14,14 +14,16 @@ class ServiceRequest extends FormRequest
     public array $businessName = [
         'type', 'business_name', 'nature_of_business', 'government_id_pdf', 'email_address',
         'phone_number', 'physical_address', 'email_address_proprietors', 'phone_number_proprietors',
-        'signature_of_proprietors_pdf', 'utility_bill_pdf','customer_id'
+        'signature_of_proprietors_pdf', 'utility_bill_pdf', 'customer_id',
     ];
+
     public array $businessLlc = [
         'type', 'business_name', 'nature_of_business', 'government_id_pdf', 'email', 'email_address',
         'phone_number', 'physical_address', 'physical_address_of_directors',
         'email_address_directors', 'phone_number_directors', 'name_of_directors',
-        'signature_of_proprietors_pdf', 'passport_photograph_of_directors_pdf','customer_id'
+        'signature_of_proprietors_pdf', 'passport_photograph_of_directors_pdf', 'customer_id',
     ];
+
     public array $pos = [
         'business_name',
         'customer_id',
@@ -48,14 +50,17 @@ class ServiceRequest extends FormRequest
         'signature_pdf_link',
         'designation',
     ];
+
     public array $legal = [
         'customer_id',
-        'description'
+        'description',
     ];
+
     public function authorize(): bool
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -69,6 +74,7 @@ class ServiceRequest extends FormRequest
             'legal' => $this->legalRequestRules()
         };
     }
+
     public function registerBusinessRequestRules(): array
     {
         return [
@@ -94,6 +100,7 @@ class ServiceRequest extends FormRequest
             'comments' => ['nullable'],
         ];
     }
+
     public function registerPosRequestRules(): array
     {
         $new = new PosRequest();
@@ -111,7 +118,7 @@ class ServiceRequest extends FormRequest
             'secondary_contact_person' => ['required', 'array'],
             'pos_quantity' => ['required', 'integer'],
             'pos_locations' => ['required', 'array'],
-            'receive_notification' => ['required', 'boolean','in:1,0'],
+            'receive_notification' => ['required', 'boolean', 'in:1,0'],
             'notification_email_address' => ['nullable', 'email'],
             'notification_phone_number' => ['nullable'],
             'real_time_transaction_viewing' => ['nullable', 'boolean'],
@@ -122,16 +129,18 @@ class ServiceRequest extends FormRequest
             'attestation' => ['required', 'string'],
             'card_type' => ['nullable', 'string'],
             'signature_pdf_link' => ['required', 'url'],
-            'designation' => ['nullable']
+            'designation' => ['nullable'],
         ];
     }
+
     public function legalRequestRules(): array
     {
         return [
             'type' => ['required', 'in:business_name,business_llc,pos,legal'],
-            'description' => ['required','max:100']
+            'description' => ['required', 'max:100'],
         ];
     }
+
     public function getOnly(): array
     {
         return match ($this->type) {
@@ -141,6 +150,7 @@ class ServiceRequest extends FormRequest
             'legal' => $this->only($this->legal)
         };
     }
+
     public function getModel(): Builder
     {
         return match ($this->type) {

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -17,7 +16,7 @@ class NewStaffCreationMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(protected string $fullname,protected string $merchantEmail)
+    public function __construct(protected string $fullname, protected string $merchantEmail)
     {
         //
     }
@@ -28,7 +27,7 @@ class NewStaffCreationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from : new Address($this->merchantEmail,$this->fullname),
+            from : new Address($this->merchantEmail, $this->fullname),
             subject: 'Welcome to 1vault',
         );
     }

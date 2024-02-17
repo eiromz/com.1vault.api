@@ -26,7 +26,7 @@ describe('Profile Routes', function () {
         $this->store_front = Business::factory()->create([
             'state_id' => $this->state->id,
             'customer_id' => $this->customer->id,
-            'is_store_front' => true
+            'is_store_front' => true,
         ]);
     });
     test('Merchant can submit kyc information', function () {
@@ -87,6 +87,7 @@ describe('Profile Routes', function () {
     test('Customers can update their profile', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/profile', [
             'firstname' => fake()->firstName,
+            'email' => 'jola@mailinator.com',
             'lastname' => fake()->lastName,
             'phone_number' => '08139691937',
             'firebase_token' => 'wekjnskdjnkfndfknjsdf',

@@ -28,7 +28,7 @@ class CreateJournalRequest extends FormRequest
             'account_number' => ['required', 'exists:App\Models\Profile,account_number'],
             'amount' => ['required'],
             'transaction_pin' => ['required'],
-            'remark' => ['nullable']
+            'remark' => ['nullable'],
         ];
     }
 

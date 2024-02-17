@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -21,13 +20,17 @@ class Customer extends Authenticatable
      * @var array<int, string>
      */
     protected $guarded = [];
+
     protected $table = 'customers';
+
     const OWNER_ABILITIES = [
         'wallets', 'customer', 'services', 'staff', 'invoices', 'services',
     ];
+
     const EMPLOYEE_ABILITIES = [
         'customer', 'services', 'invoices',
     ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -37,6 +40,7 @@ class Customer extends Authenticatable
         'password',
         'remember_token',
     ];
+
     /**
      * The attributes that should be cast.
      *
@@ -50,25 +54,29 @@ class Customer extends Authenticatable
         'is_owner' => 'boolean',
         'accept_terms_conditions' => 'boolean',
         'can_receive_notification' => 'boolean',
-        'can_receive_subscription_reminder' => 'boolean'
+        'can_receive_subscription_reminder' => 'boolean',
     ];
+
     protected $with = ['account'];
+
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class, 'customer_id');
     }
+
     public function account(): HasOne
     {
         return $this->hasOne(Account::class);
     }
+
     public function knowYourCustomer(): HasOne
     {
         return $this->hasOne(KnowYourCustomer::class, 'customer_id')->latest();
     }
 
-    public function storeFront() : HasOne
+    public function storeFront(): HasOne
     {
         return $this->hasOne(StoreFront::class)
-            ->where('is_store_front','=',true);
+            ->where('is_store_front', '=', true);
     }
 }

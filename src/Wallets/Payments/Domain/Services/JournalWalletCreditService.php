@@ -14,10 +14,11 @@ class JournalWalletCreditService
     public object $accountInstance;
 
     public $request;
+
     public $journal;
 
     public array $creationKeys = ['amount', 'trx_ref',
-        'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id','remark'
+        'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id', 'remark',
     ];
 
     public function __construct($accountInstance, $request = null)
@@ -41,13 +42,13 @@ class JournalWalletCreditService
             'trx_ref' => generateTransactionReference(),
             'debit' => false,
             'credit' => true,
-            'label'  => 'Transfer',
-            'source'  => auth()->user()->profile->fullname ?? 'Inward Transfer',
+            'label' => 'Transfer',
+            'source' => auth()->user()->profile->fullname ?? 'Inward Transfer',
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (!$this->journal) {
+        if (! $this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 

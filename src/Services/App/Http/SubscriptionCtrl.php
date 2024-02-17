@@ -3,6 +3,7 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Service;
 use App\Models\Subscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,26 +12,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionCtrl extends DomainBaseCtrl
 {
-    public function index(): JsonResponse
+    private $subscriptions;
+    public function index($status,Request $request): JsonResponse
     {
-        //default = fetch all subscriptions
-        //active = fetch all active subscriptions
+        $request->merge(['status' => $status])->validate([
+            'status' => ['required','string','in:default,active']
+        ]);
 
-        $subscriptions = Subscription::query()
-            ->where('customer_id', '=', auth()->user()->id)
-            ->with('service')
-            ->get();
+        $this->subscriptions = Subscription::query()->where('customer_id', '=', auth()->user()->id)->with('service');
 
-        return jsonResponse(Response::HTTP_OK, SubscriptionResource::collection($subscriptions));
+        $subscriptions = match($request->status) {
+            'default' => SubscriptionResource::collection($this->subscriptions->get()),
+            'active'  => $this->subscriptions->where('expiration_date','>',now())->get()->pluck('service.category'),
+        };
+
+        $return = match($request->status) {
+            'default' => $subscriptions,
+            'active'  => $subscriptions,
+        };
+
+        return jsonResponse(Response::HTTP_OK, $return);
     }
+
     public function view($subscription, Request $request): JsonResponse
     {
         $request
             ->merge(['subscription' => $subscription])
-            ->validate(['subscription' => ['required','exists:App\Models\Subscription,id']]);
+            ->validate(['subscription' => ['required', 'exists:App\Models\Subscription,id']]);
 
         $subscription = Subscription::query()
-            ->where('id','=',$request->subscription)
+            ->where('id', '=', $request->subscription)
             ->where('customer_id', '=', auth()->user()->id)
             ->with('service')
             ->firstOrFail();

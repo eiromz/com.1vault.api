@@ -32,7 +32,7 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    public function authenticate() : string
+    public function authenticate(): string
     {
         $this->validated();
 
@@ -44,7 +44,7 @@ class LoginRequest extends FormRequest
 
         $name = createNameForToken($this->email);
 
-        $abilities = match(auth()->user()->role) {
+        $abilities = match (auth()->user()->role) {
             Role::MERCHANT->value => Customer::OWNER_ABILITIES,
             Role::EMPLOYEE->value => Customer::EMPLOYEE_ABILITIES,
         };

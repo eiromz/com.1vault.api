@@ -44,19 +44,19 @@ class CartCtrl extends DomainBaseCtrl
     public function destroy(Request $request): JsonResponse
     {
         $request->validate([
-            'cart_id' => ['required','exists:App\Models\Cart,id']
+            'cart_id' => ['required', 'exists:App\Models\Cart,id'],
         ]);
 
         $cart = Cart::query()->find($request->cart_id);
 
-        if(!$cart->delete()){
+        if (! $cart->delete()) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Cart item not removed'
+                'message' => 'Cart item not removed',
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Cart item removed'
+            'message' => 'Cart item removed',
         ]);
     }
 }

@@ -35,12 +35,12 @@ class BusinessInformationCtrl extends DomainBaseCtrl
         ]);
 
         $customerBusinessExists = Business::query()
-            ->where('customer_id','=',auth()->user()->id)
-            ->where('is_store_front','=',false)
+            ->where('customer_id', '=', auth()->user()->id)
+            ->where('is_store_front', '=', false)
             ->exists();
 
-        if($customerBusinessExists){
-            throw new BaseException('Business already exists for this account',Response::HTTP_BAD_REQUEST);
+        if ($customerBusinessExists) {
+            throw new BaseException('Business already exists for this account', Response::HTTP_BAD_REQUEST);
         }
 
         $request->validated();
@@ -60,7 +60,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 
         $data = $this->repository->getDetailsByParams([
             'id' => $request->business,
-            'is_store_front' => false
+            'is_store_front' => false,
         ]);
 
         return jsonResponse(Response::HTTP_OK, $data);

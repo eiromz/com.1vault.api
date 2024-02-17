@@ -35,7 +35,7 @@ class CustomerResource extends JsonResource
             'kyc-complete' => $this->kycComplete(),
             'can_receive_notification' => $this->can_receive_notification,
             'can_receive_subscription_reminder' => $this->can_receive_subscription_reminder,
-            'store_front' => (new StoreFrontResource($this->whenLoaded('storeFront')))
+            'store_front' => (new StoreFrontResource($this->whenLoaded('storeFront'))),
         ];
     }
 

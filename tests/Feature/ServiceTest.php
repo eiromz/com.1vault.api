@@ -101,8 +101,8 @@ describe('Service Routes', function () {
                     'designation' => 'Hackett',
                     'office_phone' => 'Stark',
                     'mobile_phone' => 'Stark',
-                    'email_address' => 'Stark'
-                ]
+                    'email_address' => 'Stark',
+                ],
             ],
             'secondary_contact_person' => [
                 [
@@ -110,20 +110,20 @@ describe('Service Routes', function () {
                     'designation' => 'Hackett',
                     'office_phone' => 'Stark',
                     'mobile_phone' => 'Stark',
-                    'email_address' => 'Stark'
-                ]
+                    'email_address' => 'Stark',
+                ],
             ],
             'pos_quantity' => 10,
             'pos_locations' => [
                 [
                     'location_of_terminal' => fake()->uuid,
                     'contact_person' => 'Hackett',
-                    'mobile_phone' => 'Stark'
+                    'mobile_phone' => 'Stark',
                 ],
                 [
                     'location_of_terminal' => fake()->uuid,
                     'contact_person' => 'Hackett',
-                    'mobile_phone' => 'Stark'
+                    'mobile_phone' => 'Stark',
                 ],
             ],
             'receive_notification' => 1,
@@ -137,7 +137,7 @@ describe('Service Routes', function () {
             'attestation' => fake()->lastName,
             'card_type' => 'international_card',
             'signature_pdf_link' => fake()->url,
-            'designation' => fake()->lastName
+            'designation' => fake()->lastName,
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

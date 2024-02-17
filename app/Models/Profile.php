@@ -36,4 +36,11 @@ class Profile extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public function doctypes()
+    {
+        $collection = collect(Profile::DOC_TYPES);
+
+        return $collection->jsonSerialize();
+    }
 }

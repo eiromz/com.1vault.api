@@ -16,7 +16,7 @@ class Business extends Model
     protected $with = ['customer', 'state'];
 
     protected $casts = [
-        'is_store_front' => 'boolean'
+        'is_store_front' => 'boolean',
     ];
 
     public function customer(): BelongsTo
@@ -41,9 +41,9 @@ class Business extends Model
     public function businessSector()
     {
         $collection = collect([
-            'fashion','gadgets','election','home/decoration/garden','Sports & Outdoors','Baby & Kids',
-            'Pet Supplies','Books','Beauty & Personal Care','Health & Wellness','Industrial & Scientific',
-            'Office Supplies','Food & Beverages'
+            'fashion', 'gadgets', 'election', 'home/decoration/garden', 'Sports & Outdoors', 'Baby & Kids',
+            'Pet Supplies', 'Books', 'Beauty & Personal Care', 'Health & Wellness', 'Industrial & Scientific',
+            'Office Supplies', 'Food & Beverages',
         ]);
 
         return $collection->values();

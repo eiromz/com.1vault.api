@@ -5,17 +5,16 @@ use App\Models\Business;
 use App\Models\PosRequest;
 use App\Models\Profile;
 use App\Models\State;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Browsershot\Browsershot;
 use Src\Accounting\App\Http\ReportCtrl;
 use Symfony\Component\HttpFoundation\Response;
 
-
-
 Route::get('/doc-types', function () {
-    return jsonResponse(Response::HTTP_OK, Profile::DOC_TYPES);
+    $profile = (new Profile())->doctypes();
+
+    return jsonResponse(Response::HTTP_OK, $profile);
 });
 
 Route::get('/states', function () {
@@ -42,7 +41,7 @@ Route::get('/business/sectors', function () {
     return jsonResponse(Response::HTTP_OK, (new Business())->businessSector());
 });
 
-Route::post('download/pdf',[ReportCtrl::class,'download']);
+Route::post('download/pdf', [ReportCtrl::class, 'download']);
 //Route::post('/download/pdf', function (Request $request) {
 //    $model = \App\Models\Inventory::first();
 //    $request->validate([
@@ -69,7 +68,7 @@ Route::post('download/pdf',[ReportCtrl::class,'download']);
 //    return $pdf->download('invoice.pdf');
 //});
 
-Route::post('/testing',function (Request $request){
+Route::post('/testing', function (Request $request) {
 
     $request->validate([
         'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
@@ -78,13 +77,11 @@ Route::post('/testing',function (Request $request){
 
     $url = config('app.url').'/api/v1/download/pdf';
 
-
-
     return Browsershot::url($url)
         ->noSandbox()
         ->post([
             'type' => $request->type,
-            'identifier' => $request->identifier
+            'identifier' => $request->identifier,
         ])
         ->screenshot();
 });

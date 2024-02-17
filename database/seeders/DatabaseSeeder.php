@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
 
         Account::factory()->create([
             'customer_id' => $customer->id,
-            'balance_after' => 10000000
+            'balance_after' => 10000000,
         ]);
 
         KnowYourCustomer::factory()->create([
@@ -93,20 +93,21 @@ class DatabaseSeeder extends Seeder
         Service::query()->create($this->store_front_1());
         Service::query()->create($this->store_front_2());
 
-        $service =  Service::query()->where('category','=','store_front')->first();
+        $service = Service::query()->where('category', '=', 'store_front')->first();
 
-       Subscription::factory()->create([
-            'customer_id'       => $customer->id,
-            'service_id'        => $service->id,
-            'amount'            => $service->amount,
+        Subscription::factory()->create([
+            'customer_id' => $customer->id,
+            'service_id' => $service->id,
+            'amount' => $service->amount,
             'subscription_date' => $now,
-            'expiration_date'   => determineExpirationDate($now,$service->billing_cycle)
+            'expiration_date' => determineExpirationDate($now, $service->billing_cycle),
         ]);
 
         Journal::factory()->count(3)->create(['customer_id' => $customer->id]);
 
         $this->customer2($state);
     }
+
     private function business_name(): array
     {
         return [
@@ -128,6 +129,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
+
     private function social_media_1(): array
     {
         return [
@@ -153,6 +155,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 8,
         ];
     }
+
     private function social_media_2(): array
     {
         return [
@@ -177,6 +180,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 8,
         ];
     }
+
     private function store_front_1(): array
     {
         return [
@@ -201,6 +205,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
+
     private function store_front_2(): array
     {
         return [
@@ -225,6 +230,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
+
     private function business_llc(): array
     {
         return [
@@ -246,6 +252,7 @@ class DatabaseSeeder extends Seeder
             'quantity' => 0,
         ];
     }
+
     private function customer2($state): void
     {
         $customer = Customer::factory()->create([

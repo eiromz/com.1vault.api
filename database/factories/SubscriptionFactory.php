@@ -17,7 +17,7 @@ class SubscriptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'source' => 'wallet'
+            'source' => 'wallet',
         ];
     }
 }

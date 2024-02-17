@@ -14,11 +14,13 @@ class Receipt extends Model
     protected $casts = [
         'transaction_date' => 'datetime',
         'items' => 'array',
-        'created_date' => 'date'
+        'created_date' => 'date',
     ];
 
     protected $guarded = [];
+
     protected $appends = ['receipt_number'];
+
     protected $with = ['client'];
 
     protected function receiptNumber(): Attribute
@@ -27,18 +29,22 @@ class Receipt extends Model
             get: fn (mixed $value, array $attributes) => 'REC000'.$attributes['id'],
         );
     }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
+
     public function collaborator(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
+
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);
     }
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
