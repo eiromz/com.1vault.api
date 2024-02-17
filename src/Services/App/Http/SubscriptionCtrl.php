@@ -26,12 +26,7 @@ class SubscriptionCtrl extends DomainBaseCtrl
             'active'  => $this->subscriptions->where('expiration_date','>',now())->get()->pluck('service.category'),
         };
 
-        $return = match($request->status) {
-            'default' => $subscriptions,
-            'active'  => $subscriptions,
-        };
-
-        return jsonResponse(Response::HTTP_OK, $return);
+        return jsonResponse(Response::HTTP_OK, $subscriptions);
     }
 
     public function view($subscription, Request $request): JsonResponse
