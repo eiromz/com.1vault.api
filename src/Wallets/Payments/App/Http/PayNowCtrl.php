@@ -3,6 +3,7 @@
 namespace Src\Wallets\Payments\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Cart;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,6 +39,14 @@ class PayNowCtrl extends DomainBaseCtrl
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
         $request->merge(['journal' => $source->journal]);
+
+        $cart = Cart::query()
+            ->where('customer_id', '=', auth()->user()->id)
+            ->where('account_id', '=', auth()->user()->ACCOUNTID)
+            ->whereNull('order_number')
+            ->get();
+
+        //dd($cart);
 
       //loop through using cart
 
