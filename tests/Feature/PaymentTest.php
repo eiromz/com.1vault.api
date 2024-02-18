@@ -118,7 +118,6 @@ describe('Payment Routes', function () {
             'total' => 10000,
             'transaction_pin' => '123456'
         ]);
-        dd(Cart::all());
         expect($response->status())->toBe(200);
     });
 });

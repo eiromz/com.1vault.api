@@ -16,13 +16,13 @@ class StoreFrontCtrl extends DomainBaseCtrl
 
     private array $createRequestkeys = [
         'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
-        'zip_code', 'trx_ref', 'is_store_front', 'customer_id', 'whatsapp_number',
-        'trx_ref', 'sector', 'facebook', 'instagram', 'twitter_x',
+        'zip_code','is_store_front', 'customer_id', 'whatsapp_number',
+         'sector', 'facebook', 'instagram', 'twitter_x',
     ];
 
     private array $updateRequestkeys = [
         'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
-        'zip_code', 'trx_ref', 'whatsapp_number', 'sector', 'facebook', 'instagram', 'twitter_x',
+        'zip_code', 'whatsapp_number', 'sector', 'facebook', 'instagram', 'twitter_x',
     ];
 
     public function __construct(BusinessRepositoryInterface $repository)
@@ -36,11 +36,6 @@ class StoreFrontCtrl extends DomainBaseCtrl
      */
     public function store(Request $request): JsonResponse
     {
-
-        //subscription is created when payment is made
-        //check if a payment or subscription for front exists and fetch it from subscription table.
-
-        $this->storeFrontExists();
         $request->merge([
             'customer_id' => auth()->user()->id,
             'is_store_front' => true,
@@ -55,16 +50,21 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'state_id' => ['required', 'exists:App\Models\State,id'],
             'logo' => ['required', 'url'],
             'sector' => ['required', 'string'],
-            'trx_ref' => ['required', 'exists:App\Models\Journal,trx_ref'],
             'whatsapp_number' => ['required'],
             'facebook' => ['nullable'],
             'instagram' => ['nullable'],
             'twitter_x' => ['nullable'],
         ]);
 
-        $data = StoreFront::query()->create($request->only($this->createRequestkeys));
+        $storeFrontExists = StoreFront::query()
+            ->where('customer_id', '=', auth()->user()->id)
+            ->where('is_store_front', '=', true)->get();
 
-        return jsonResponse(Response::HTTP_OK, $data);
+        if($storeFrontExists->isEmpty()){
+            $storeFrontExists = StoreFront::query()->create($request->only($this->createRequestkeys));
+        }
+
+        return jsonResponse(Response::HTTP_OK, $storeFrontExists);
     }
 
     public function update($storefront, Request $request)
@@ -75,7 +75,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
         ]);
 
         $request->validate([
-            'storefront' => ['nullable', 'exists:App\Models\StoreFront,id'],
+            'storefront' => ['required'],
             'name' => ['nullable', 'min:2'],
             'phone_number' => ['nullable', 'min:11'],
             'email' => ['nullable', 'email', 'unique:App\Models\Business,email'],
@@ -83,7 +83,6 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'state_id' => ['nullable', 'exists:App\Models\State,id'],
             'logo' => ['nullable', 'url'],
             'sector' => ['nullable', 'string'],
-            'trx_ref' => ['nullable', 'exists:App\Models\Journal,trx_ref'],
             'whatsapp_number' => ['nullable'],
             'facebook' => ['nullable'],
             'instagram' => ['nullable'],
@@ -96,15 +95,4 @@ class StoreFrontCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
-    private function storeFrontExists(): void
-    {
-        $storeFrontExists = StoreFront::query()
-            ->where('customer_id', '=', auth()->user()->id)
-            ->where('is_store_front', '=', true)
-            ->exists();
-
-        if ($storeFrontExists) {
-            throw new BaseException('Store Front already exists for this account', Response::HTTP_BAD_REQUEST);
-        }
-    }
 }
