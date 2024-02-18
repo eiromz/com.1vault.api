@@ -3,6 +3,7 @@
 use Src\Wallets\Payments\App\Http\CartCtrl;
 use Src\Wallets\Payments\App\Http\JournalCtrl;
 use Src\Wallets\Payments\App\Http\PayNowCtrl;
+use Src\Wallets\Payments\App\Http\Providus\FetchBankAccountInformationCtrl;
 use Src\Wallets\Payments\App\Http\Providus\FetchBankCtrl;
 use Src\Wallets\Payments\App\Http\ProvidusWebhookCtrl;
 use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
@@ -29,6 +30,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
 
     Route::prefix('/providus/nip')->group(function(){
         Route::get('/banks', FetchBankCtrl::class);
+        Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
     });
 
 });

@@ -126,4 +126,14 @@ describe('Payment Routes', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/providus/nip/banks');
         expect($response->status())->toBe(200);
     });
+    test('Merchant can fetch nip account information', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/enquiry',[
+            'accountNumber' => "1018996198",
+            'beneficiaryBank' => "110000",
+            'userName' => "test",
+            'password' => "test",
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });
