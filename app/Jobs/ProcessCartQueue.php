@@ -37,7 +37,8 @@ class ProcessCartQueue implements ShouldQueue
             logExceptionErrorMessage(
                 'ProcessCartQueue',
                 null,
-                [$cart]
+                [$cart],
+                'info'
             );
             DB::commit();
         }

@@ -92,6 +92,8 @@ class DatabaseSeeder extends Seeder
         Service::query()->create($this->social_media_2());
         Service::query()->create($this->store_front_1());
         Service::query()->create($this->store_front_2());
+        Service::query()->create($this->business_analytics_monthly());
+        Service::query()->create($this->business_analytics_yearly());
 
         $service = Service::query()->where('category', '=', 'store_front')->first();
 
@@ -276,5 +278,55 @@ class DatabaseSeeder extends Seeder
         $kyc = KnowYourCustomer::factory()->create([
             'customer_id' => $customer->id,
         ]);
+    }
+
+    private function business_analytics_monthly()
+    {
+        return [
+            'title' => 'Business Analytics',
+            'type' => 'business_analytics',
+            'provider' => '1vault',
+            'description' => 'Make informed data-driven decisions for your business',
+            'amount' => 20000,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'monthly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'business_analytics',
+            'benefit' => [
+                'Analytics on Accounting Solutions',
+                'Analytics on Financial transactions made',
+                'Analytics on Social Media presence',
+                'Analytics on Online Storefront',
+            ],
+            'quantity' => 0,
+        ];
+    }
+
+    private function business_analytics_yearly()
+    {
+        return [
+            'title' => 'Business Analytics',
+            'type' => 'business_analytics',
+            'provider' => '1vault',
+            'description' => 'Make informed data-driven decisions for your business',
+            'amount' => 20000,
+            'commission' => 0,
+            'is_recurring' => 1,
+            'billing_cycle' => 'yearly',
+            'is_request' => 0,
+            'discount' => 0,
+            'status' => 1,
+            'category' => 'business_analytics',
+            'benefit' => [
+                'Analytics on Accounting Solutions',
+                'Analytics on Financial transactions made',
+                'Analytics on Social Media presence',
+                'Analytics on Online Storefront',
+            ],
+            'quantity' => 0,
+        ];
     }
 }

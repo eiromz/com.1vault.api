@@ -33,7 +33,7 @@
 ### STORE FRONT TABLES
 
 ### MIDDLEWARE 
-* Make sure there is a middleware that checks if the user has been approved for transactions before outward transfers can happen.
+* Make sure there is a middleware that checks if the user has been approved for transactions before outward transfers can happen. Which means approval for kyc for out
 * Make sure there is a middleware that checks if a user has stayed on the platform for a number of days before he can begin to make transactions
 * 1 million above transactions can not be made to go directly for both outward transfers.
 * 

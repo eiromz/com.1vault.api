@@ -59,7 +59,7 @@ if (! function_exists('createNameForToken')) {
 }
 
 if (! function_exists('logExceptionErrorMessage')) {
-    function logExceptionErrorMessage(string $name, $exception, array $context = []): void
+    function logExceptionErrorMessage(string $name, $exception, array $context = [],$level='error'): void
     {
         $context['class-identifier'] = $name;
 
@@ -72,7 +72,7 @@ if (! function_exists('logExceptionErrorMessage')) {
 
         $data = $context;
 
-        logger('error', $data);
+        logger($level, $data);
     }
 }
 
