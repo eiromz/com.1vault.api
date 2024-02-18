@@ -3,6 +3,7 @@
 use Src\Wallets\Payments\App\Http\CartCtrl;
 use Src\Wallets\Payments\App\Http\JournalCtrl;
 use Src\Wallets\Payments\App\Http\PayNowCtrl;
+use Src\Wallets\Payments\App\Http\Providus\FetchBankCtrl;
 use Src\Wallets\Payments\App\Http\ProvidusWebhookCtrl;
 use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
 
@@ -25,5 +26,9 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/cart/delete', [CartCtrl::class, 'destroy']);
     Route::get('/cart', [CartCtrl::class, 'index']);
     Route::post('/pay-now', [PayNowCtrl::class, 'store']);
+
+    Route::prefix('/providus/nip')->group(function(){
+        Route::get('/banks', FetchBankCtrl::class);
+    });
 
 });

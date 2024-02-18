@@ -120,7 +120,7 @@ class DatabaseSeeder extends Seeder
             'amount' => 20000,
             'commission' => 0,
             'is_recurring' => 0,
-            'billing_cycle' => 'one-time',
+            'billing_cycle' => BillingCycle::ONETIME->value,
             'is_request' => 1,
             'discount' => 0,
             'status' => 1,
@@ -144,8 +144,8 @@ class DatabaseSeeder extends Seeder
             'is_recurring' => 1,
             'billing_cycle' => BillingCycle::MONTHLY->value,
             'is_request' => 0,
-            'discount' => 10,
-            'has_discount' => true,
+            'discount' => 0,
+            'has_discount' => false,
             'status' => 1,
             'category' => 'social_media',
             'benefit' => [
@@ -161,14 +161,14 @@ class DatabaseSeeder extends Seeder
     private function social_media_2(): array
     {
         return [
-            'title' => 'Basic Plan',
+            'title' => 'Business Plan',
             'type' => 'service.social_media',
             'provider' => '1vault',
             'description' => 'N/A',
-            'amount' => 600000,
+            'amount' => 73000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => BillingCycle::YEARLY->value,
+            'billing_cycle' => BillingCycle::MONTHLY->value,
             'is_request' => 0,
             'discount' => 0,
             'status' => 1,
@@ -179,7 +179,7 @@ class DatabaseSeeder extends Seeder
                 'Sponsored ads',
                 'Posting across Instagram,Facebook and Twitter',
             ],
-            'quantity' => 8,
+            'quantity' => 12,
         ];
     }
 
@@ -243,9 +243,10 @@ class DatabaseSeeder extends Seeder
             'amount' => 70000,
             'commission' => 0,
             'is_recurring' => 0,
-            'billing_cycle' => 'one-time',
+            'billing_cycle' => BillingCycle::ONETIME->value,
             'is_request' => 1,
             'discount' => 0,
+            'has_discount' => 1,
             'status' => 1,
             'category' => 'business_registration',
             'benefit' => [
@@ -290,9 +291,10 @@ class DatabaseSeeder extends Seeder
             'amount' => 20000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'monthly',
+            'billing_cycle' => BillingCycle::MONTHLY->value,
             'is_request' => 0,
             'discount' => 0,
+            'has_discount' => 0,
             'status' => 1,
             'category' => 'business_analytics',
             'benefit' => [
@@ -315,9 +317,10 @@ class DatabaseSeeder extends Seeder
             'amount' => 20000,
             'commission' => 0,
             'is_recurring' => 1,
-            'billing_cycle' => 'yearly',
+            'billing_cycle' => BillingCycle::YEARLY->value,
             'is_request' => 0,
-            'discount' => 0,
+            'discount' => 10,
+            'has_discount' => 1,
             'status' => 1,
             'category' => 'business_analytics',
             'benefit' => [

@@ -120,4 +120,10 @@ describe('Payment Routes', function () {
         ]);
         expect($response->status())->toBe(200);
     });
+
+    /************* NIP *************/
+    test('Merchant can fetch nip banks', function(){
+        $response = $this->actingAs($this->customer)->get('/api/v1/providus/nip/banks');
+        expect($response->status())->toBe(200);
+    });
 });
