@@ -6,9 +6,17 @@ use App\Exceptions\BaseException;
 
 class ServiceAmount
 {
-    public function __construct(
-        public float $amount, private int $discount, private bool $has_discount)
+    public float $amount;
+
+    public int $discount;
+
+    public $has_discount;
+
+    public function __construct(public $attributes)
     {
+        $this->amount = $this->attributes['amount'];
+        $this->discount = $this->attributes['discount'];
+        $this->has_discount = $this->attributes['has_discount'];
     }
 
     /**
@@ -16,8 +24,9 @@ class ServiceAmount
      */
     public function execute(): float|int
     {
-        if ($this->has_discount && is_int($this->discount) && $this->discount > 0) {
-            $this->amount = calculateDiscount($this->discount, $this->amount);
+        //dd($this->attributes['has_discount']);
+        if ($this->attributes['has_discount'] && $this->discount > 0) {
+            $this->amount = calculateDiscount($this->attributes['has_discount'], $this->discount, $this->amount);
         }
 
         return $this->amount;

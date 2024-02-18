@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
-            $table->string('order_number')->nullable();
             $table->foreignUuid('customer_id');
             $table->foreignUuid('service_id');
             $table->foreignUuid('request_id')->nullable();
             $table->double('price');
+            $table->string('account_id');
+            $table->string('order_number')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

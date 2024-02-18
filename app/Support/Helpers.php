@@ -111,15 +111,19 @@ if (! function_exists('calculateDiscount')) {
     /**
      * @throws BaseException
      */
-    function calculateDiscount($discount, $amount): float|int
+    function calculateDiscount($attributes): float|int
     {
-        if ($discount > 100) {
-            throw new BaseException('Invalid discount', Response::HTTP_BAD_REQUEST);
+        $amount = $attributes['amount'];
+        $has_discount = $attributes['has_discount'];
+        $discount = $attributes['discount'];
+
+        if ($discount > 100 || !$has_discount ||$discount === 0) {
+            return $amount;
         }
 
         $discount = ($discount / 100);
 
-        $calculateDiscountAmount = $discount * $amount;
+        $calculateDiscountAmount = $discount * (double)$amount;
 
         $newAmount = ($amount - $calculateDiscountAmount);
 

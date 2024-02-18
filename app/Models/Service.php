@@ -26,6 +26,7 @@ class Service extends Model
         'quantity' => 'integer',
     ];
 
+
     protected static function booted(): void
     {
         static::addGlobalScope('active', function (Builder $builder) {
@@ -36,15 +37,6 @@ class Service extends Model
     public function serviceBenefit(): HasMany
     {
         return $this->hasMany(ServiceBenefit::class);
-    }
-
-    protected function amount(): Attribute
-    {
-        return Attribute::make(
-            get: fn (mixed $value, array $attributes) => (new ServiceAmount(
-                $attributes['amount'], $attributes['discount'], $attributes['has_discount']
-            ))->execute(),
-        );
     }
 
     public function subscription(): HasMany

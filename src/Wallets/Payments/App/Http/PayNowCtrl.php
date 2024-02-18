@@ -25,7 +25,6 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $request->validate([
             'total' => ['required'],
-            'cart'  =>  ['required', 'array'],
             'transaction_pin' => ['required'],
         ]);
 
@@ -40,10 +39,7 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $request->merge(['journal' => $source->journal]);
 
-        if($request->has('cart') && !is_null($request->cart)){
-            dd($request->all());
-        }
-
+      //loop through using cart
 
         //we need to create a subscription
 

@@ -24,9 +24,7 @@ describe('Payment Routes', function () {
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
         $this->service = Service::factory()->count(3)->create();
-        $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $this->service->first()->id,
-        ]);
+
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
         ]);
@@ -35,6 +33,7 @@ describe('Payment Routes', function () {
             'price' => 2000,
             'customer_id' => $this->customer->id,
             'service_id' => $this->service->first()->id,
+            'account_id' => $this->customer->ACCOUNTID,
         ]);
     });
 
@@ -116,11 +115,7 @@ describe('Payment Routes', function () {
     test('Merchant can pay for service', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total' => 10000,
-             'cart' => [],
-//            'cart' => [
-//                ['cart' => $this->cart->first()->id],
-//            ],
-            'transaction_pin' => '123456',
+            'transaction_pin' => '123456'
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

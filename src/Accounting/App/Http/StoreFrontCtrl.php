@@ -4,7 +4,6 @@ namespace Src\Accounting\App\Http;
 
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Business;
 use App\Models\StoreFront;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,9 +22,8 @@ class StoreFrontCtrl extends DomainBaseCtrl
 
     private array $updateRequestkeys = [
         'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
-        'zip_code', 'trx_ref', 'whatsapp_number','sector', 'facebook', 'instagram', 'twitter_x',
+        'zip_code', 'trx_ref', 'whatsapp_number', 'sector', 'facebook', 'instagram', 'twitter_x',
     ];
-
 
     public function __construct(BusinessRepositoryInterface $repository)
     {
@@ -69,7 +67,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $data);
     }
 
-    public function update($storefront,Request $request)
+    public function update($storefront, Request $request)
     {
         $request->merge([
             'storefront' => $storefront,

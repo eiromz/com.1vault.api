@@ -3,21 +3,47 @@
 namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Invoice;
 use App\Models\Journal;
-use App\Models\Service;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Src\Services\App\Http\Requests\ServiceRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class BusinessAnalyticsCtrl extends DomainBaseCtrl
 {
-    public function index(Request $request)
+    public function index(): JsonResponse
     {
-        //select * from journal and group them by label
+        $expenses = $this->expenses();
+        $invoices = $this->invoices();
 
-        Journal::query()->where('debit','=',true);
+        $collection = collect([
+            'expenses' => [
+                'sum' => $expenses?->sum('amount'),
+                'items' => $expenses?->groupBy('label')->all(),
+            ],
+            'invoices' => [
+                'total' => $invoices?->sum('total') ?? 0,
+                'paid' => $invoices?->sum('amount_received') ?? 0,
+            ],
+        ]);
 
+        return jsonResponse(Response::HTTP_OK, $collection);
+    }
+
+    private function expenses()
+    {
+        return Journal::query()
+            ->select(['amount', 'label', 'credit'])
+            ->without(['customer', 'service'])
+            ->where('customer_id', '=', auth()->user()->id)
+            ->where('debit', '=', true)->get();
+    }
+
+    private function invoices()
+    {
+        return Invoice::query()
+            ->select(['amount_received', 'total'])
+            ->without(['customer', 'service'])
+            ->where('customer_id', '=', auth()->user()->id)
+            ->get();
     }
 }

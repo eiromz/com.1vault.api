@@ -17,6 +17,7 @@ class StoreFront extends Model
     protected $casts = [
         'is_store_front' => 'boolean',
     ];
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

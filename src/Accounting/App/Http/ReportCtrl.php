@@ -88,7 +88,6 @@ class ReportCtrl extends DomainBaseCtrl
 
         $this->is_invoice($data, $request->type);
 
-
         return Pdf::view($getView, compact('data'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->setNodeBinary(config('app.which_node'))

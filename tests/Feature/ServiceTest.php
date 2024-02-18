@@ -150,4 +150,9 @@ describe('Service Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Merchant can view analytics for platform', function () {
+        $response = $this->actingAs($this->customer)->get('/api/v1/business-analytics');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });

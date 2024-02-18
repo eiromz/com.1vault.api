@@ -395,34 +395,34 @@ describe('Business Routes', function () {
     });
 
     /************* Report ******************/
-//    test('Business can Retrieve Report', function () {
-//        $response = $this->actingAs($this->customer)->post('/download/pdf', [
-//            'start_date' => '2024-01-01',
-//            'end_date' => '2024-02-10',
-//            'business' => $this->business->id,
-//            'type' => 'debtors',
-//        ]);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
-//
-//    test('Business can Download Pdf Receipt Report', function () {
-//        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
-//            'type' => 'receipt',
-//            'identifier' => $this->receipt->first()->id,
-//        ]);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
-//
-//    test('Business can Download Pdf Invoice Report', function () {
-//        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
-//            'type' => 'invoice',
-//            'identifier' => $this->invoice->first()->id,
-//        ]);
-//        $response->dump();
-//        expect($response->status())->toBe(200);
-//    });
+    //    test('Business can Retrieve Report', function () {
+    //        $response = $this->actingAs($this->customer)->post('/download/pdf', [
+    //            'start_date' => '2024-01-01',
+    //            'end_date' => '2024-02-10',
+    //            'business' => $this->business->id,
+    //            'type' => 'debtors',
+    //        ]);
+    //        $response->dump();
+    //        expect($response->status())->toBe(200);
+    //    });
+    //
+    //    test('Business can Download Pdf Receipt Report', function () {
+    //        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+    //            'type' => 'receipt',
+    //            'identifier' => $this->receipt->first()->id,
+    //        ]);
+    //        $response->dump();
+    //        expect($response->status())->toBe(200);
+    //    });
+    //
+    //    test('Business can Download Pdf Invoice Report', function () {
+    //        $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
+    //            'type' => 'invoice',
+    //            'identifier' => $this->invoice->first()->id,
+    //        ]);
+    //        $response->dump();
+    //        expect($response->status())->toBe(200);
+    //    });
 
     /************* StoreFront *************/
     test('Merchant can create a store front', function () {

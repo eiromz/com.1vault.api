@@ -15,6 +15,7 @@ class CartCtrl extends DomainBaseCtrl
     {
         $cart = Cart::query()
             ->where('customer_id', '=', auth()->user()->id)
+            ->where('account_id', '=', auth()->user()->ACCOUNTID)
             ->whereNull('order_number')
             ->get();
 
@@ -28,6 +29,7 @@ class CartCtrl extends DomainBaseCtrl
     {
         $request->merge([
             'customer_id' => auth()->user()->id,
+            'account_id' => auth()->user()->ACCOUNTID,
         ]);
 
         $request->validate([
@@ -36,7 +38,7 @@ class CartCtrl extends DomainBaseCtrl
             'price' => ['required'],
         ]);
 
-        $data = Cart::query()->create($request->only(['service_id', 'request_id', 'price', 'customer_id']));
+        $data = Cart::query()->create($request->only(['service_id', 'request_id', 'price', 'customer_id', 'account_id']));
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
