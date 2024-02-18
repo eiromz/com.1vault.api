@@ -47,6 +47,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('/inventory/{inventory}/business/{business}', [InventoryCtrl::class, 'view']);
     Route::post('/inventory/delete', [InventoryCtrl::class, 'destroy']);
 
+    Route::get('/store-front', [StoreFrontCtrl::class, 'index']);
     Route::post('/store-front', [StoreFrontCtrl::class, 'store']);
     Route::post('/store-front/edit/{storefront}', [StoreFrontCtrl::class, 'update']);
     Route::post('/store-front/inventory', [StoreFrontInventoryCtrl::class, 'store']);

@@ -36,7 +36,7 @@ describe('Service Routes', function () {
     /*************Report ******************/
     test('Merchant can view services by category', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service', [
-            'category' => $this->service->first()->category,
+            'category' => 'business_analytics',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);

@@ -15,7 +15,7 @@ class ServiceCtrl extends DomainBaseCtrl
     public function index(Request $request)
     {
         $request->validate([
-            'category' => ['required', 'in:business_registration,social_media,legal,pos,store_front'],
+            'category' => ['required'],
         ]);
 
         $service = Service::query()

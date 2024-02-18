@@ -31,6 +31,15 @@ class StoreFrontCtrl extends DomainBaseCtrl
         parent::__construct();
     }
 
+    public function index()
+    {
+        $storeFrontExists = StoreFront::query()
+            ->where('customer_id', '=', auth()->user()->id)
+            ->where('is_store_front', '=', true)->firstOrFail();
+
+        return jsonResponse(Response::HTTP_OK, $storeFrontExists);
+    }
+
     /**
      * @throws BaseException
      */
@@ -75,12 +84,12 @@ class StoreFrontCtrl extends DomainBaseCtrl
         ]);
 
         $request->validate([
-            'storefront' => ['required'],
+            'storefront' => ['required', 'exists:App\Models\Business,id'],
             'name' => ['nullable', 'min:2'],
             'phone_number' => ['nullable', 'min:11'],
             'email' => ['nullable', 'email', 'unique:App\Models\Business,email'],
             'address' => ['nullable', 'min:3'],
-            'state_id' => ['nullable', 'exists:App\Models\State,id'],
+            'state_id' => ['nullable'],
             'logo' => ['nullable', 'url'],
             'sector' => ['nullable', 'string'],
             'whatsapp_number' => ['nullable'],

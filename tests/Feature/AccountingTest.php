@@ -444,12 +444,24 @@ describe('Business Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Merchant can view store front', function () {
+        $store_front = Business::factory()->create([
+            'state_id' => $this->state->id,
+            'customer_id' => $this->customer->id,
+            'is_store_front' => true,
+        ]);
+
+        $response = $this->actingAs($this->customer)->get('/api/v1/store-front');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
     test('Merchant can update a store front', function () {
         $store_front = Business::factory()->create([
             'state_id' => $this->state->id,
             'customer_id' => $this->customer->id,
             'is_store_front' => true,
         ]);
+
         $response = $this->actingAs($this->customer)->post('/api/v1/store-front/edit/'.$store_front->id, [
             'name' => 'JupiterMan',
             'phone_number' => '08103797738',
