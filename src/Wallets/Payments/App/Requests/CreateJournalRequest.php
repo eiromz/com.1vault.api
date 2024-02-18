@@ -32,6 +32,13 @@ class CreateJournalRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'account_number.exists' => 'Invalid Account Number.'
+        ];
+    }
+
     /**
      * @throws \Exception
      */
