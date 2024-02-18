@@ -30,9 +30,6 @@ if (! function_exists('generateReferralCode')) {
 }
 
 if (! function_exists('generateAccountId')) {
-    /**
-     * Generate random auth code.
-     */
     function generateAccountId(): string
     {
         $code = generateCode(10000000, 99999999);
@@ -52,9 +49,6 @@ if (! function_exists('jsonResponse')) {
 }
 
 if (! function_exists('createNameForToken')) {
-    /**
-     * @return array|string|string[]
-     */
     function createNameForToken($email): array|string
     {
         $identifier = str_replace('@', '', $email);
@@ -65,7 +59,6 @@ if (! function_exists('createNameForToken')) {
 }
 
 if (! function_exists('logExceptionErrorMessage')) {
-
     function logExceptionErrorMessage(string $name, $exception, array $context = []): void
     {
         $context['class-identifier'] = $name;
@@ -108,9 +101,6 @@ if (! function_exists('generateTransactionReference')) {
 }
 
 if (! function_exists('calculateDiscount')) {
-    /**
-     * @throws BaseException
-     */
     function calculateDiscount($attributes): float|int
     {
         $amount = $attributes['amount'];
@@ -136,7 +126,6 @@ if (! function_exists('calculateDiscount')) {
 }
 
 if (! function_exists('determineExpirationDate')) {
-
     function determineExpirationDate(Carbon $currentDate, string $billing_cycle): Carbon
     {
         return match ($billing_cycle) {
@@ -144,5 +133,14 @@ if (! function_exists('determineExpirationDate')) {
             BillingCycle::QUARTERLY->value => $currentDate->addMonths(3),
             BillingCycle::YEARLY->value => $currentDate->addMonths(12)
         };
+    }
+}
+
+if (! function_exists('generateOrderNumber')) {
+    function generateOrderNumber(): string
+    {
+        $code = generateCode(1000000000, 99999999999);
+
+        return "ORID{$code}";
     }
 }

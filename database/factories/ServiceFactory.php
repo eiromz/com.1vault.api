@@ -25,7 +25,7 @@ class ServiceFactory extends Factory
             'description' => fake()->lastName,
             'amount' => fake()->numberBetween(1000, 100000),
             'commission' => fake()->numberBetween(1000, 100000),
-            'is_recurring' => fake()->boolean,
+            'is_recurring' => true,
             'billing_cycle' => 'monthly',
             'is_request' => fake()->boolean(50),
             'discount' => fake()->numberBetween(1000, 100000),

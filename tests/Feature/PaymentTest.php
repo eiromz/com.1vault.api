@@ -23,17 +23,18 @@ describe('Payment Routes', function () {
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
-        $this->service = Service::factory()->count(3)->create();
+        $this->service = Service::query()->where('is_recurring','=',true)->first();
 
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
         ]);
 
-        $this->cart = Cart::factory()->count(3)->create([
-            'price' => 2000,
+        $this->cart = Cart::factory()->count(1)->create([
+            'price' => $this->service->amount,
             'customer_id' => $this->customer->id,
-            'service_id' => $this->service->first()->id,
+            'service_id' => $this->service->id,
             'account_id' => $this->customer->ACCOUNTID,
+
         ]);
     });
 
@@ -117,7 +118,7 @@ describe('Payment Routes', function () {
             'total' => 10000,
             'transaction_pin' => '123456'
         ]);
-        $response->dump();
+        dd(Cart::all());
         expect($response->status())->toBe(200);
     });
 });

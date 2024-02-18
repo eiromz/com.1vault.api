@@ -31,3 +31,9 @@
 * Once a journal needs approval send the journal data to the approval table and debit the user's wallet for 1vault transactions and also do same for transactions going out.
 
 ### STORE FRONT TABLES
+
+### MIDDLEWARE 
+* Make sure there is a middleware that checks if the user has been approved for transactions before outward transfers can happen.
+* Make sure there is a middleware that checks if a user has stayed on the platform for a number of days before he can begin to make transactions
+* 1 million above transactions can not be made to go directly for both outward transfers.
+* 

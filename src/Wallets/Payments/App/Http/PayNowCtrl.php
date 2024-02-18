@@ -3,13 +3,17 @@
 namespace Src\Wallets\Payments\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Jobs\ProcessCartQueue;
 use App\Models\Cart;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
+use Src\Wallets\Payments\Domain\Actions\UpdateCartWithOrderNumber;
 use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
 use Src\Wallets\Payments\Domain\Services\ProcessCartTransaction;
+use Src\Wallets\Payments\Domain\Services\SubscriptionService;
 use Symfony\Component\HttpFoundation\Response;
 
 class PayNowCtrl extends DomainBaseCtrl
@@ -38,25 +42,19 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
-        $request->merge(['journal' => $source->journal]);
+        $request->merge([
+            'trx_ref' => $source->journal->trx_ref,
+            'order_number' => generateOrderNumber()
+        ]);
 
-        $cart = Cart::query()
+        $carts = Cart::query()
             ->where('customer_id', '=', auth()->user()->id)
             ->where('account_id', '=', auth()->user()->ACCOUNTID)
+            ->with('service')
             ->whereNull('order_number')
             ->get();
 
-        //dd($cart);
-
-      //loop through using cart
-
-        //we need to create a subscription
-
-        //$transaction = (new ProcessCartTransaction($source->request));
-
-        //$transaction->process();
-
-        //attach the tx_refercence to the user profile.
+        ProcessCartQueue::dispatch($carts,auth()->user(),$request->all());
 
         return jsonResponse(Response::HTTP_OK, $source->journal);
     }

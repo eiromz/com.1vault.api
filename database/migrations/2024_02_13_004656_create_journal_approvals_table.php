@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('journal_approvals', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
             $table->foreignUuid('customer_id');
-            $table->foreignUuid('admin_id');
+            $table->foreignUuid('admin_id')->nullable();
             $table->double('amount');
-            $table->timestamp('authorization_date');
+            $table->jsonb('source');
+            $table->jsonb('destination');
+            $table->string('actions')->nullable()->comment('authorize,reversal');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();
