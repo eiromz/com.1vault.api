@@ -106,6 +106,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Journal::factory()->count(10)->create(['customer_id' => $customer->id]);
+        Journal::factory()->create([
+            'customer_id' => $customer->id,
+            'credit'      => true,
+            'amount'    => 10000000,
+            'balance_before' => 0,
+            'balance_after' => 10000000,
+        ]);
 
         $this->customer2($state);
     }
