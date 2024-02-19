@@ -60,16 +60,10 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
         $this->repository->setUser(auth()->user());
 
         $request->validate([
-            'inventory' => ['required', 'array'],
+            'inventory' => ['required'],
         ]);
 
-        $delete = [];
-
-        foreach ($request->inventory as $inventory) {
-            $delete[] = $inventory['inventory'];
-        }
-
-        if (! $this->repository->deleteByIds($delete)) {
+        if (!$this->repository->delete($request->inventory)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Inventory',
             ]);

@@ -11,7 +11,6 @@ use Saloon\Exceptions\Request\RequestException;
 use Src\Wallets\Payments\App\Enum\ErrorMessages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipAccount;
-use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipBanks;
 use Symfony\Component\HttpFoundation\Response;
 
 class FetchBankAccountInformationCtrl extends DomainBaseCtrl

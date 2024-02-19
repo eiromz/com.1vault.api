@@ -501,11 +501,7 @@ describe('Business Routes', function () {
     test('Merchant can destroy a single inventory', function () {
         $link = '/api/v1/store-front/inventory/delete';
         $response = $this->actingAs($this->customer)->post($link, [
-            'inventory' => [
-                [
-                    'inventory' => $this->inventory->first()->id,
-                ],
-            ],
+            'inventory' => $this->inventory->first()->id
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
