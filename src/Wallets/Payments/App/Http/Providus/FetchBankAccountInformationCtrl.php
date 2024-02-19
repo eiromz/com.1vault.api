@@ -15,12 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FetchBankAccountInformationCtrl extends DomainBaseCtrl
 {
-    /**
-     * @throws FatalRequestException
-     * @throws RequestException
-     * @throws BaseException
-     * @throws \JsonException
-     */
     public function __invoke(Request $request): JsonResponse
     {
         try {
@@ -34,15 +28,14 @@ class FetchBankAccountInformationCtrl extends DomainBaseCtrl
                 'password' => config('providus-bank.rest_api_password'),
             ]);
 
-            $connector = new ProvidusRestApi();
-            $request = new GetNipAccount($request->all());
-            $response = $connector->send($request);
+            $connector  = new ProvidusRestApi();
+            $request    = new GetNipAccount($request->all());
+            $response   = $connector->send($request);
 
             $data = $response->json();
 
-            if($response->status() !== 200 && !isset($data['responseCode'])){
-                throw new BaseException(
-                    ErrorMessages::FETCH_ACCOUNT_DETAILS_FAILED->value,
+            if($response->status() !== 200 && !isset($data['responseCode'])) {
+                throw new BaseException(ErrorMessages::FETCH_ACCOUNT_DETAILS_FAILED->value,
                     Response::HTTP_BAD_REQUEST
                 );
             }

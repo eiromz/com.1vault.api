@@ -145,3 +145,13 @@ if (! function_exists('generateOrderNumber')) {
         return "ORID{$code}";
     }
 }
+
+if (! function_exists('generateProvidusTransactionRef')) {
+    function generateProvidusTransactionRef(): string
+    {
+        $year = now()->format('Y');
+        $code = generateCode(1000000000, 9999999999);
+
+        return "{$year}{$code}";
+    }
+}

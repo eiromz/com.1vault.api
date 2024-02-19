@@ -105,7 +105,7 @@ class DatabaseSeeder extends Seeder
             'expiration_date' => determineExpirationDate($now, $service->billing_cycle),
         ]);
 
-        Journal::factory()->count(3)->create(['customer_id' => $customer->id]);
+        Journal::factory()->count(10)->create(['customer_id' => $customer->id]);
 
         $this->customer2($state);
     }

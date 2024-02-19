@@ -6,6 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Invoice;
 use App\Models\Journal;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class BusinessAnalyticsCtrl extends DomainBaseCtrl
@@ -16,10 +17,7 @@ class BusinessAnalyticsCtrl extends DomainBaseCtrl
         $invoices = $this->invoices();
 
         $collection = collect([
-            'expenses' => [
-                'sum' => $expenses?->sum('amount'),
-                'items' => $expenses?->groupBy('label')->all(),
-            ],
+            'expenses' => $expenses->all(),
             'invoices' => [
                 'total' => $invoices?->sum('total') ?? 0,
                 'paid' => $invoices?->sum('amount_received') ?? 0,
@@ -31,11 +29,13 @@ class BusinessAnalyticsCtrl extends DomainBaseCtrl
 
     private function expenses()
     {
-        return Journal::query()
-            ->select(['amount', 'label', 'credit'])
-            ->without(['customer', 'service'])
+
+        return DB::table('journals')
+            ->select('label', DB::raw('SUM(amount) AS total'))
+            ->groupBy('label')
             ->where('customer_id', '=', auth()->user()->id)
-            ->where('debit', '=', true)->get();
+            ->where('debit', '=', true)
+            ->get();
     }
 
     private function invoices()

@@ -38,11 +38,14 @@ class GenerateAccountNumber
      */
     public function sendRequest(): mixed
     {
+        if(!$this->kyc->status){
+            return;
+        }
+
         $connector = new ProvidusConnector;
         $request = new ReserveAccountNumberRequest([
             'account_name' => $this->profile->lastname,
             'bvn' => $this->kyc->bvn,
-
         ]);
 
         $response = $connector->send($request);

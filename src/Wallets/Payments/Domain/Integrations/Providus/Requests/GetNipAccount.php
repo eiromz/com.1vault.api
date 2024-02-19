@@ -19,7 +19,6 @@ class GetNipAccount extends Request implements HasBody
     {
         return $this->payload;
     }
-
     /**
      * The endpoint for the request
      */

@@ -75,7 +75,7 @@ class BaseRepository implements BaseRepositoryInterface
         try {
             return $this->model->query()->delete($id);
         } catch (\Exception $e) {
-            logExceptionErrorMessage('BaseRepositoryCreate', $e);
+            logExceptionErrorMessage('BaseRepositoryCreate', $e,[], 'critical');
         }
     }
 
@@ -127,7 +127,7 @@ class BaseRepository implements BaseRepositoryInterface
                 Arr::set($details, 'collaborator_id', $this->collaborator);
             }
 
-            return $this->model->query()->where($details)->get();
+            return $this->model->query()->where($details)->latest()->get();
         } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
         }

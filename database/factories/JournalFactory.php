@@ -16,12 +16,13 @@ class JournalFactory extends Factory
      */
     public function definition(): array
     {
+        $amount = fake()->numberBetween(100, 10000);
         $payload = [
             'sessionId' => '0000042103011805345648005069266636442357859508',
             'accountNumber' => '9977581536',
             'tranRemarks' => 'FROM UBA/ CASAFINA CREDIT-EASY LOAN-NIP/SEYI OLUFEMI/CASAFINA CAP/0000042103015656180548005069266636',
-            'transactionAmount' => '10000000',
-            'settledAmount' => '10000000',
+            'transactionAmount' => $amount,
+            'settledAmount' => $amount,
             'feeAmount' => '0',
             'vatAmount' => '0',
             'currency' => 'NGN',
@@ -35,17 +36,24 @@ class JournalFactory extends Factory
         ];
 
         $random = fake()->randomNumber(6);
+        $label = fake()->randomElement(['Transfer','Airtime','Webhook']);
+
+        $debit = $label === 'Transfer' || $label === 'Airtime';
+
+        $credit = $label === 'Webhook';
+
+        $amount = ($credit) ? $payload['transactionAmount'] : $amount;
 
         return [
             'trx_ref' => '202210301006807600001432'.$random,
             'session_id' => '0000042103011805345648005069266636442357859508',
-            'amount' => $payload['transactionAmount'],
+            'amount' => $amount,
             'commission' => 0,
-            'debit' => false,
-            'credit' => true,
+            'debit' => $debit,
+            'credit' => $credit,
             'balance_before' => 0,
-            'balance_after' => $payload['transactionAmount'],
-            'label' => 'Transfer',
+            'balance_after' => $amount,
+            'label' => $label,
             'source' => $payload['sourceAccountName'],
             'payload' => json_encode($payload),
         ];

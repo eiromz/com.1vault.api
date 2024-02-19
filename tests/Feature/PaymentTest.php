@@ -136,4 +136,16 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
+    test('Merchant can transfer through nip', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/transfer',[
+            "beneficiaryAccountName" => "UGBO, CHARLES UMORE",
+            "transactionAmount" => "2000.45",
+            "currencyCode" => "NGN",
+            "narration" => "Testing",
+            "beneficiaryAccountNumber"=>"1700313889",
+            "beneficiaryBank" => "000013"
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });
