@@ -26,6 +26,7 @@
     },
     "require-dev": {
         "knuckleswtf/scribe": "^4.26",
+        "laradumps/laradumps": "^2.4",
         "larastan/larastan": "^2.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
