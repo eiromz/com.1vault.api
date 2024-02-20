@@ -68,32 +68,25 @@ class JournalCtrl extends DomainBaseCtrl
      */
     public function store(CreateJournalRequest $request)
     {
-        try{
-            $this->repository->setUser(auth()->user());
+        $this->repository->setUser(auth()->user());
 
-            $request->execute();
+        $request->execute();
 
-            $source = new JournalWalletDebitService(
-                GetAccountInstance::getActiveInstance(auth()->user()->profile),
-                $request
-            );
+        $source = new JournalWalletDebitService(
+            GetAccountInstance::getActiveInstance(auth()->user()->profile),
+            $request
+        );
 
-            $source->validateTransactionPin();
+        $source->validateTransactionPin();
 
-            $source->checkBalance()->debit()->notify()->updateBalanceQueue();
+        $source->checkBalance()->debit()->notify()->updateBalanceQueue();
 
-            $destination = new JournalWalletCreditService(
-                GetAccountInstance::getActiveInstance($request->profile), $request
-            );
+        $destination = new JournalWalletCreditService(
+            GetAccountInstance::getActiveInstance($request->profile), $request
+        );
 
-            $destination->credit()->notify()->updateBalanceQueue();
+        $destination->credit()->notify()->updateBalanceQueue();
 
-            return jsonResponse(Response::HTTP_OK, $source->journal);
-        } catch (Exception $e){
-            logExceptionErrorMessage('JournalCtrl',$e,[],'critical');
-            return jsonResponse(Response::HTTP_OK, [
-                'message' => 'Transaction failed'
-            ]);
-        }
+        return jsonResponse(Response::HTTP_OK, $source->journal);
     }
 }

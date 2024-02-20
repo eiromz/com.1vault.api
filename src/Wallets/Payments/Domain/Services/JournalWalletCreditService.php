@@ -34,7 +34,6 @@ class JournalWalletCreditService
 
     public function credit()
     {
-
         $this->request->merge([
             'balance_before' => $this->accountInstance->balance_after,
             'balance_after' => $this->calculateNewBalance(),
@@ -43,7 +42,7 @@ class JournalWalletCreditService
             'debit' => false,
             'credit' => true,
             'label' => 'Transfer',
-            'source' => auth()->user()->profile->fullname ?? 'Inward Transfer',
+            'source' => auth()->user()->profile->fullname,
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));

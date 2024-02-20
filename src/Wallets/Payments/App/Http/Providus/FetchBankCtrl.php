@@ -25,13 +25,21 @@ class FetchBankCtrl extends DomainBaseCtrl
         $request = new GetNipBanks();
         $response = $connector->send($request);
 
-        if($response->status() !== 200){
+        if ($response->status() !== 200) {
             throw new BaseException(
                 ErrorMessages::FETCH_BANK_LIST_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );
         }
 
-        return \jsonResponse($response->status(),$response->json());
+        $data = $response->json();
+
+        if ($data['responseCode'] !== "00") {
+            throw new BaseException(ErrorMessages::TRANSACTION_FAILED->value,
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return \jsonResponse($response->status(), $data);
     }
 }

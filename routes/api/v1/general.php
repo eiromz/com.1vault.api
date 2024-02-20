@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\UploadCtrl;
 use App\Models\Business;
+use App\Models\Invoice;
 use App\Models\PosRequest;
 use App\Models\Profile;
+use App\Models\Receipt;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,32 +43,47 @@ Route::get('/business/sectors', function () {
     return jsonResponse(Response::HTTP_OK, (new Business())->businessSector());
 });
 
-Route::post('download/pdf', [ReportCtrl::class, 'download']);
-//Route::post('/download/pdf', function (Request $request) {
-//    $model = \App\Models\Inventory::first();
-//    $request->validate([
-//        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-//        'identifier' => ['required'],
-//    ]);
-//
-//    $getView = match ($request->type) {
-//        'sales' => 'pdf-template.sales',
-//        'debtors' => 'pdf-template.debtors',
-//        'receipt' => 'pdf-template.receipt',
-//        'invoice' => 'pdf-template.invoice',
-//    };
-//
-//    $getModel = match ($request->type) {
-//        'sales','debtors','invoice' => App\Models\Invoice::query(),
-//        'receipt' => App\Models\Receipt::query(),
-//    };
-//
-//    $getModel->findOrFail($request->identifier);
-//
-//    $pdf = Pdf::loadView($getView, ['welcome']);
-//
-//    return $pdf->download('invoice.pdf');
-//});
+//Route::post('download/pdf', [ReportCtrl::class, 'download']);
+Route::post('/download/pdf', function (Request $request) {
+    $request->validate([
+        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
+        'identifier' => ['required'],
+        'start_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
+        'end_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
+    ]);
+
+    $getView = match ($request->type) {
+        'sales' => 'pdf-template.sales',
+        'debtors' => 'pdf-template.debtors',
+        'receipt' => 'pdf-template.receipt',
+        'invoice' => 'pdf-template.invoice',
+    };
+
+    $getView = match ($request->type) {
+        'sales' => 'pdf-template.sales',
+        'debtors' => 'pdf-template.debtors',
+        'receipt' => 'pdf-template.receipt',
+        'invoice' => 'pdf-template.invoice',
+        'pos' => 'pdf-template.pos',
+    };
+
+    $getModel = match ($request->type) {
+        'receipt'   => Receipt::query(),
+        'pos'       => PosRequest::query(),
+        'invoice' => Invoice::query(),
+        'sales','debtors' => Invoice::query()
+    };
+
+    $data = (in_array($request->type,['receipt','pos','invoice']))  ? $getModel->findOrFail($request->identifier) : $getModel->where(
+        'business_id','=');
+
+    dd($data);
+
+    $pdf = Pdf::loadView($getView, ['welcome']);
+
+    return $pdf->download('invoice.pdf');
+})->middleware('auth:sanctum');;
+
 
 Route::post('/testing', function (Request $request) {
 

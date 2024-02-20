@@ -105,16 +105,75 @@ class DatabaseSeeder extends Seeder
             'expiration_date' => determineExpirationDate($now, $service->billing_cycle),
         ]);
 
-        Journal::factory()->count(10)->create(['customer_id' => $customer->id]);
-        Journal::factory()->create([
-            'customer_id' => $customer->id,
-            'credit'      => true,
-            'amount'    => 10000000,
-            'balance_before' => 0,
-            'balance_after' => 10000000,
-        ]);
+        foreach ($this->journals($customer) as $journal) {
+
+            //calculate balance before, balance after
+            Journal::factory()->create($journal);
+        }
 
         $this->customer2($state);
+    }
+
+    private function journals($customer)
+    {
+        return [
+            [
+                'customer_id' => $customer->id,
+                'credit'      => true,
+                'amount'    => 10000000,
+                'balance_before' => 0,
+                'balance_after' => 10000000,
+                'label' => 'Transfer In'
+            ],
+            [
+                'customer_id' => $customer->id,
+                'credit'      => true,
+                'amount'    => 500000,
+                'balance_before' => 10000000,
+                'balance_after' => 9500000,
+                'label' => 'Transfer Out'
+            ],
+            [
+                'customer_id' => $customer->id,
+                'debit'      => true,
+                'amount'    => 200000,
+                'balance_before' => 9500000,
+                'balance_after' => 9300000,
+                'label' => 'Airtime'
+            ],
+            [
+                'customer_id' => $customer->id,
+                'debit'      => true,
+                'amount'    => 350000,
+                'balance_before' => 9300000,
+                'balance_after' => 8950000,
+                'label' => 'Electricity'
+            ],
+            [
+                'customer_id' => $customer->id,
+                'debit'      => true,
+                'amount'    => 150000,
+                'balance_before' => 8950000,
+                'balance_after' => 8800000,
+                'label' => 'Data'
+            ],
+            [
+                'customer_id'       => $customer->id,
+                'debit'             => true,
+                'amount'            => 150000,
+                'balance_before'    => 8800000,
+                'balance_after'     => 8650000,
+                'label'             => 'Cable Tv'
+            ],
+            [
+                'customer_id'       => $customer->id,
+                'debit'             => true,
+                'amount'            => 250000,
+                'balance_before'    => 8650000,
+                'balance_after'     => 8400000,
+                'label'             => 'Cable Tv'
+            ]
+        ];
     }
 
     private function business_name(): array

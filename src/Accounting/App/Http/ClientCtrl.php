@@ -3,17 +3,19 @@
 namespace Src\Accounting\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Accounting\App\Enum\Messages;
 use Src\Accounting\Domain\Repository\Interfaces\ClientRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ClientCtrl extends DomainBaseCtrl
 {
-    private $repository;
+    private ClientRepositoryInterface $repository;
 
-    public array $requestKeysFilter = ['fullname', 'phone_number', 'address', 'zip_code', 'business_id', 'state_id'];
+    public array $requestKeysFilter = [
+        'fullname', 'phone_number', 'address', 'zip_code', 'business_id', 'state_id'
+    ];
 
     public function __construct(ClientRepositoryInterface $repository)
     {
@@ -21,9 +23,6 @@ class ClientCtrl extends DomainBaseCtrl
         parent::__construct();
     }
 
-    /**
-     * @throws Exception
-     */
     public function store(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -57,7 +56,7 @@ class ClientCtrl extends DomainBaseCtrl
 
         if (is_null($customerExists)) {
             return jsonResponse(Response::HTTP_PRECONDITION_FAILED, [
-                'message' => 'We could not find what you were looking for.',
+                'message' => 'Customer ' . Messages::NOT_FOUND->value,
             ]);
         }
 
@@ -93,14 +92,14 @@ class ClientCtrl extends DomainBaseCtrl
             'client' => ['required', 'exists:App\Models\Client,id'],
         ]);
 
-        if (! $this->repository->update($id, $request->only($this->requestKeysFilter))) {
+        if (!$this->repository->update($id, $request->only($this->requestKeysFilter))) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Failed to update customer',
+                'message' => 'Customer ' . Messages::UPDATE_FAILED->value,
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Merchant updated',
+            'message' => 'Customer ' . Messages::UPDATED->value,
         ]);
     }
 
@@ -112,9 +111,9 @@ class ClientCtrl extends DomainBaseCtrl
             'customer' => ['required', 'exists:App\Models\Client,id'],
         ]);
 
-        if (! $this->repository->delete($request->business)) {
+        if (!$this->repository->delete($request->business)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Failed to Delete Merchant',
+                'message' => 'Customer ' . Messages::DELETED->value,
             ]);
         }
 
