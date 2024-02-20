@@ -31,12 +31,10 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
         ]);
 
-        $state = State::query()
-            ->where('name', '=', 'Lagos')
+        $state = State::query()->where('name', '=', 'Lagos')
             ->first();
 
-        //Create admin
-        $admin = Customer::factory()->create([
+        Customer::factory()->create([
             'password' => Hash::make('sampleTim@123'),
             'phone_number' => '0810379'.fake()->randomNumber(5, true),
             'otp_expires_at' => $now,
@@ -106,8 +104,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         foreach ($this->journals($customer) as $journal) {
-
-            //calculate balance before, balance after
             Journal::factory()->create($journal);
         }
 

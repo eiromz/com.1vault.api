@@ -36,6 +36,7 @@ class CustomerResource extends JsonResource
             'can_receive_notification' => $this->can_receive_notification,
             'can_receive_subscription_reminder' => $this->can_receive_subscription_reminder,
             'store_front' => (new StoreFrontResource($this->whenLoaded('storeFront'))),
+            'business' => (new BusinessResource($this->whenLoaded('business'))),
         ];
     }
 
@@ -51,11 +52,12 @@ class CustomerResource extends JsonResource
 
     public function kycComplete(): bool
     {
+        $boolean = false;
+
         $kyc = KnowYourCustomer::query()
             ->where('customer_id', '=', $this->id)
             ->where('status', '=', 1)
             ->first();
-        $boolean = false;
 
         if (! is_null($this->transaction_pin)) {
             $boolean = true;

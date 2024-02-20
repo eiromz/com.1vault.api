@@ -79,4 +79,9 @@ class Customer extends Authenticatable
         return $this->hasOne(StoreFront::class)
             ->where('is_store_front', '=', true);
     }
+    public function business(): HasOne
+    {
+        return $this->hasOne(Business::class)
+            ->where('is_store_front', '=', false)->latest();
+    }
 }

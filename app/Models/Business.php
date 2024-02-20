@@ -13,22 +13,19 @@ class Business extends Model
 
     protected $guarded = [];
 
-    protected $with = ['customer', 'state'];
+//    protected $with = ['customer', 'state'];
 
     protected $casts = [
         'is_store_front' => 'boolean',
     ];
-
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
-
     public function state()
     {
         return $this->belongsTo(State::class);
     }
-
     public function categories()
     {
         $collection = collect([
@@ -37,7 +34,6 @@ class Business extends Model
 
         return $collection->values();
     }
-
     public function businessSector()
     {
         $collection = collect([

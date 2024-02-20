@@ -32,7 +32,6 @@ describe('Service Routes', function () {
             'customer_id' => $this->customer->id,
         ]);
     });
-
     /*************Report ******************/
     test('Merchant can view services by category', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service', [

@@ -46,7 +46,6 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can fetch all journal transactions', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
             'filter_type' => 'default',
@@ -54,7 +53,6 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can fetch a single journal transaction', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view', [
             'trx_ref' => $this->journal->first()->trx_ref,
@@ -62,7 +60,6 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can perform transaction transfers', function () {
         $customer2 = Customer::factory()->create([
             'email' => 'crayolu2@gmail.com',
@@ -89,7 +86,6 @@ describe('Payment Routes', function () {
 
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can add to cart  with service_id', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart', [
             'service_id' => $this->service->first()->id,
@@ -98,13 +94,11 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can view all in cart', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/cart');
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can delete from cart', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart/delete', [
             'cart_id' => $this->cart->first()->id,
@@ -112,7 +106,6 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
     test('Merchant can pay for service', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total' => 10000,

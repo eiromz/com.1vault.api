@@ -140,36 +140,31 @@ describe('Business Routes', function () {
             'state_id' => $this->state->id,
             'zip_code' => '1001261',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can view a client', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client/view', [
-            'client_id' => 100,
+            'client_id' => $this->client->id,
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can view all client', function () {
-        $link = '/api/v1/client/' . $this->business->id . '/business';
+        $link = "/api/v1/client/{$this->business->id}/business";
         $response = $this->actingAs($this->customer)->get($link);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can edit a client', function () {
-        $link = '/api/v1/client/update/' . $this->client->id;
+        $link = "/api/v1/client/update/{$this->client->id}";
         $response = $this->actingAs($this->customer)->post($link, [
             'name' => 'Maxwell Camelo',
             'phone_number' => '0810379' . fake()->randomNumber(4, true),
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can delete a client', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client/delete', [
             'customer' => $this->client->id,
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
 
@@ -460,7 +455,7 @@ describe('Business Routes', function () {
             'is_store_front' => true,
         ]);
 
-        $response = $this->actingAs($this->customer)->post('/api/v1/store-front/edit/' . $store_front->id, [
+        $response = $this->actingAs($this->customer)->post("/api/v1/store-front/edit/{$store_front->id}", [
             'name' => 'JupiterMan',
             'phone_number' => '08103797738',
             'email' => 'crayolubiz@gmail.com',
@@ -487,39 +482,33 @@ describe('Business Routes', function () {
             'stock_status' => 1,
             'description' => 'This is a transaction for all things',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can view a single store front inventory', function () {
-        $link = '/api/v1/store-front/inventory/' . $this->inventory->first()->id . '/business/' . $this->business->id;
+        $link = "/api/v1/store-front/inventory/{$this->inventory->first()->id}/business/{$this->business->id}";
         $response = $this->actingAs($this->customer)->get($link);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can destroy a single inventory', function () {
-        $link = '/api/v1/store-front/inventory/delete';
-        $response = $this->actingAs($this->customer)->post($link, [
+        $response = $this->actingAs($this->customer)->post('/api/v1/store-front/inventory/delete', [
             'inventory' => $this->inventory->first()->id
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can update a single inventory', function () {
-        $link = '/api/v1/store-front/inventory/edit/' . $this->inventory->first()->id;
+        $link = "/api/v1/store-front/inventory/edit/$this->inventory->first()->id";
         $response = $this->actingAs($this->customer)->post($link, [
             'name' => 'wella health',
             'amount' => 10000,
             'stock_status' => 1,
             'description' => 'welcome to the land of the living',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can view all inventory', function () {
         $response = $this->actingAs($this->customer)->get(
-            '/api/v1/store-front/inventory/business/' . $this->business->id
+            "/api/v1/store-front/inventory/business/{$this->business->id}"
         );
-        $response->dump();
         expect($response->status())->toBe(200);
     });
 
