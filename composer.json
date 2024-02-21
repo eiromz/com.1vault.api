@@ -5,26 +5,44 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
+        "kreait/firebase-php": "^7.9",
         "laravel/breeze": "^1.26",
         "laravel/framework": "^10.10",
+        "laravel/horizon": "^5.22",
         "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "saloonphp/laravel-http-sender": "^2.0",
+        "saloonphp/laravel-plugin": "^3.0",
+        "saloonphp/saloon": "^3.0",
+        "spatie/browsershot": "^4.0",
+        "spatie/laravel-data": "^3.10",
+        "spatie/laravel-pdf": "^1.1",
+       "predis/predis" : "~1.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
+        "knuckleswtf/scribe": "^4.26",
+        "larastan/larastan": "^2.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "nunomaduro/phpinsights": "^2.10",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
+        "files": [
+            "app/Support/Helpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
+            "Src\\" : "src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
@@ -60,7 +78,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "stable",

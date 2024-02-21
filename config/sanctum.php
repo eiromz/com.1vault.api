@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => 15,
 
     /*
     |--------------------------------------------------------------------------
@@ -59,8 +59,8 @@ return [
     */
 
     'middleware' => [
-        'verify_csrf_token' => App\Http\Middleware\VerifyCsrfToken::class,
-        'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
+        'verify_csrf_token' => Src\Merchant\App\Http\Middleware\VerifyCsrfToken::class,
+        'encrypt_cookies' => Src\Merchant\App\Http\Middleware\EncryptCookies::class,
     ],
 
 ];

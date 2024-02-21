@@ -2,7 +2,15 @@
 
 namespace App\Exceptions;
 
+use ErrorException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,6 +33,56 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (MethodNotAllowedException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_METHOD_NOT_ALLOWED, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        });
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_NOT_FOUND, [
+                    'message' => 'Ooops! we could not find what you are looking for',
+                ]);
+            }
+        });
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_NOT_FOUND, [
+                    'message' => 'Oops! we could not find what you are looking for',
+                ]);
+            }
+        });
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_NETWORK_AUTHENTICATION_REQUIRED, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        });
+        $this->renderable(function (ErrorException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_PRECONDITION_FAILED, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        });
+        $this->renderable(function (ValidationException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        });
+        $this->renderable(function (UnprocessableEntityHttpException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
         });
     }
 }

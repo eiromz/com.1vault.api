@@ -170,6 +170,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -187,4 +188,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'firebase_service_file' => env('FIREBASE_SERVICE_FILE'),
+    'which_node' => env('WHICH_NODE', '/usr/bin/npm'),
+    'which_npm' => env('WHICH_NPM', '/usr/bin/node'),
 ];
