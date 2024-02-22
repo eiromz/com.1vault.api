@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Wallets\Payments\App\Enum\ErrorMessages;
+use Src\Wallets\Payments\App\Enum\Messages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipAccount;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +35,7 @@ class FetchBankAccountInformationCtrl extends DomainBaseCtrl
             $data = $response->json();
 
             if($response->status() !== 200 && !isset($data['responseCode'])) {
-                throw new BaseException(ErrorMessages::FETCH_ACCOUNT_DETAILS_FAILED->value,
+                throw new BaseException(Messages::FETCH_ACCOUNT_DETAILS_FAILED->value,
                     Response::HTTP_BAD_REQUEST
                 );
             }
@@ -45,7 +45,7 @@ class FetchBankAccountInformationCtrl extends DomainBaseCtrl
         catch (\Exception $e){
             logExceptionErrorMessage('FetchBankAccountInformationCtrl',$e,[],'critical');
             return jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => ErrorMessages::FETCH_ACCOUNT_DETAILS_FAILED->value
+                'message' => Messages::FETCH_ACCOUNT_DETAILS_FAILED->value
             ]);
         }
     }

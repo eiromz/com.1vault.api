@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Wallets\Payments\App\Enum\ErrorMessages;
+use Src\Wallets\Payments\App\Enum\Messages;
+use Src\Wallets\Payments\App\Requests\NipTransferRequest;
+use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\NipFundTransfer;
+use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
 use Symfony\Component\HttpFoundation\Response;
 
 class TransferCtrl extends DomainBaseCtrl
@@ -21,43 +24,44 @@ class TransferCtrl extends DomainBaseCtrl
      * @throws BaseException
      * @throws RequestException
      * @throws JsonException
+     * @throws \Exception
      */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(NipTransferRequest $request): JsonResponse
     {
-        $request->validate([
-            "narration" => ['nullable'],
-            "currencyCode" => ['required'],
-            "beneficiaryBank" => ['required'],
-            "transactionAmount" => ['required'],
-            "beneficiaryAccountName" => ['required'],
-            "beneficiaryAccountNumber" => ['required']
-        ]);
+       try {
+           $request->execute();
+           $connector = new ProvidusRestApi();
+           $nipRequest = new NipFundTransfer($request->all());
+           $response = $connector->send($nipRequest);
 
-        $request->merge([
-            'userName' => config('providus-bank.rest_api_username'),
-            'password' => config('providus-bank.rest_api_password'),
-            "sourceAccountName" => auth()->user()->profile->fullname,
-            "transactionReference" => generateProvidusTransactionRef()
-        ]);
+           $source = new JournalWalletDebitService(
+               GetAccountInstance::getActiveInstance(auth()->user()->profile),
+               $request
+           );
 
-        $connector = new ProvidusRestApi();
-        $request = new NipFundTransfer($request->all());
-        $response = $connector->send($request);
+           $source->validateTransactionPin();
 
-        $data = $response->json();
+           $source->checkBalance()->debit()->notify()->updateBalanceQueue();
+
+           $data = $response->json();
 
         if ($response->status() !== 200 && !isset($data['responseCode'])) {
-            throw new BaseException(ErrorMessages::TRANSACTION_FAILED->value,
+            throw new BaseException(Messages::TRANSACTION_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );
         }
 
         if ($data['responseCode'] !== "00") {
-            throw new BaseException(ErrorMessages::TRANSACTION_FAILED->value,
+            throw new BaseException(Messages::TRANSACTION_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );
         }
 
-        return jsonResponse($response->status(), $response->json());
+        return jsonResponse($response->status(), $data);
+       } catch(\Exception $e) {
+           return jsonResponse(Response::HTTP_BAD_REQUEST,[
+               'message' => 'We could not fulfil this transaction'
+           ]);
+       }
     }
 }

@@ -6,7 +6,7 @@ use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Wallets\Payments\App\Enum\ErrorMessages;
+use Src\Wallets\Payments\App\Enum\Messages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipBanks;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ class FetchBankCtrl extends DomainBaseCtrl
 
         if ($response->status() !== 200) {
             throw new BaseException(
-                ErrorMessages::FETCH_BANK_LIST_FAILED->value,
+                Messages::FETCH_BANK_LIST_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );
         }
@@ -35,7 +35,7 @@ class FetchBankCtrl extends DomainBaseCtrl
         $data = $response->json();
 
         if ($data['responseCode'] !== "00") {
-            throw new BaseException(ErrorMessages::TRANSACTION_FAILED->value,
+            throw new BaseException(Messages::TRANSACTION_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );
         }

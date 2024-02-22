@@ -136,8 +136,14 @@ describe('Payment Routes', function () {
             "currencyCode" => "NGN",
             "narration" => "Testing",
             "beneficiaryAccountNumber"=>"1700313889",
-            "beneficiaryBank" => "000013"
+            "beneficiaryBank" => "000013",
+            "transaction_pin"  => "123456"
         ]);
+
+        $journal = Journal::query()->where('debit','=',true)->latest()->first();
+        $account = \App\Models\Account::query()->where('customer_id','=',$this->customer->id)->first();
+        $this->assertModelExists($journal);
+        dd($account);
         $response->dump();
         expect($response->status())->toBe(200);
     });

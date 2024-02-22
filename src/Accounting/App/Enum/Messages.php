@@ -8,4 +8,5 @@ enum Messages: string
     case UPDATE_FAILED = "Update Failed";
     case DELETED = "Deleted ";
     case UPDATED = "Updated";
+    case UNAUTHORIZED = "You are not authorized to carry out this action";
 }

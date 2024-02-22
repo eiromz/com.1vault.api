@@ -1,5 +1,6 @@
 
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F7c4e2ab4-3b31-4579-9f11-fd67b867b67f%3Fdate%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com/servers/734550/sites/2161996)
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F86b3cbb9-e9ad-4883-bf46-bb15ac29c9be%3Fdate%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com/servers/762046/sites/2258929)
 
 ### PROJECT NAME :  1vault Api
 
@@ -36,4 +37,15 @@
 * Make sure there is a middleware that checks if the user has been approved for transactions before outward transfers can happen. Which means approval for kyc for out
 * Make sure there is a middleware that checks if a user has stayed on the platform for a number of days before he can begin to make transactions
 * 1 million above transactions can not be made to go directly for both outward transfers.
-* 
+
+### JOBS
+* Notify people of pending subscription charge.
+* Auto renewal.
+* Reversal of transactions.
+* Approval of transactions.
+* Verify transaction sent to an account
+* Transaction notification mail and firebase.
+* Airtime Purchase. 
+* Electricity Purchase.
+* Cable Tv Purchase.
+* Once a transfer reach

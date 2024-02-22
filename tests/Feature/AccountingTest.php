@@ -482,6 +482,7 @@ describe('Business Routes', function () {
             'stock_status' => 1,
             'description' => 'This is a transaction for all things',
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can view a single store front inventory', function () {

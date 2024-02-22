@@ -4,7 +4,7 @@ use App\Exceptions\BaseException;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Src\Services\App\Enum\BillingCycle;
-use Src\Services\App\Enum\ErrorMessages;
+use Src\Services\App\Enum\Messages;
 use Symfony\Component\HttpFoundation\Response;
 
 if (! function_exists('generateCode')) {
@@ -153,5 +153,14 @@ if (! function_exists('generateProvidusTransactionRef')) {
         $code = generateCode(1000000000, 9999999999);
 
         return "{$year}{$code}";
+    }
+}
+
+if(! function_exists('getInventorySizeLimit')){
+    function getInventorySizeLimit($model,$user): int
+    {
+        return $model->where('is_store_front','=',true)
+            ->where('customer_id','=',$user->id)->first()->inventory_limit
+            ?? config('1vault.store_front_size');
     }
 }
