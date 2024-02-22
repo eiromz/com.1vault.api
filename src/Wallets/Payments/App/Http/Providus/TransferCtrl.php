@@ -4,6 +4,7 @@ namespace Src\Wallets\Payments\App\Http\Providus;
 
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use JsonException;
@@ -24,14 +25,17 @@ class TransferCtrl extends DomainBaseCtrl
      * @throws BaseException
      * @throws RequestException
      * @throws JsonException
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(NipTransferRequest $request): JsonResponse
     {
        try {
            $request->execute();
            $connector = new ProvidusRestApi();
-           $nipRequest = new NipFundTransfer($request->all());
+           $nipRequest = new NipFundTransfer($request->only(['transactionAmount','beneficiaryAccountName','beneficiaryAccountNumber',
+               'beneficiaryBank','currencyCode', 'narration','userName','password','sourceAccountName','transactionReference'
+           ]));
+
            $response = $connector->send($nipRequest);
 
            $source = new JournalWalletDebitService(
@@ -45,22 +49,24 @@ class TransferCtrl extends DomainBaseCtrl
 
            $data = $response->json();
 
-        if ($response->status() !== 200 && !isset($data['responseCode'])) {
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
-        }
+            if ($response->status() !== 200 && !isset($data['responseCode'])) {
+                throw new BaseException(Messages::TRANSACTION_FAILED->value,
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
 
-        if ($data['responseCode'] !== "00") {
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
-        }
+            if ($data['responseCode'] !== "00") {
+                throw new BaseException(Messages::TRANSACTION_FAILED->value,
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
 
-        return jsonResponse($response->status(), $data);
-       } catch(\Exception $e) {
+            return jsonResponse($response->status(), $data);
+       }
+       catch(Exception $e) {
+           logExceptionErrorMessage('TransferCtrl',$e,[],'critical');
            return jsonResponse(Response::HTTP_BAD_REQUEST,[
-               'message' => 'We could not fulfil this transaction'
+               'message' => Messages::TRANSACTION_FAILED->value
            ]);
        }
     }

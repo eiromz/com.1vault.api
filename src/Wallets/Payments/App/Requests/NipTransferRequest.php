@@ -23,8 +23,7 @@ class NipTransferRequest extends FormRequest
     {
         return [
             'transaction_pin' => ['required'],
-            'remark' => ['nullable'],
-            "narration" => ['nullable'],
+            "narration" => ['required'],
             "currencyCode" => ['required'],
             "beneficiaryBank" => ['required'],
             "transactionAmount" => ['required'],
@@ -36,7 +35,7 @@ class NipTransferRequest extends FormRequest
     /**
      * @throws \Exception
      */
-    public function execute()
+    public function execute(): void
     {
         $this->verifyTransactionPin();
         $this->merge([
@@ -45,7 +44,7 @@ class NipTransferRequest extends FormRequest
             "sourceAccountName" => auth()->user()->profile->fullname ?? 'N/A',
             "transactionReference" => generateProvidusTransactionRef(),
             'amount'    => $this->transactionAmount,
-
+            'remark' => $this->narration
         ]);
         $this->validated();
     }

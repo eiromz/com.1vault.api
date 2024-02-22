@@ -16,7 +16,7 @@ class JournalWalletDebitService
     public object $accountInstance;
     public $request;
     public $journal;
-    public $creationKeys = [
+    public array $creationKeys = [
         'amount', 'trx_ref',
         'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
     ];
@@ -25,9 +25,6 @@ class JournalWalletDebitService
         $this->accountInstance = $accountInstance;
         $this->request = $request;
     }
-    /**
-     * @throws InsufficientBalance
-     */
     public function checkBalance()
     {
         if ($this->request->amount > $this->accountInstance->balance_after) {
@@ -53,9 +50,7 @@ class JournalWalletDebitService
             'source' => auth()->user()->profile->fullname,
         ]);
 
-        $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
-
-        if (! $this->journal) {
+        if (!Journal::query()->create($this->request->only($this->creationKeys))) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
