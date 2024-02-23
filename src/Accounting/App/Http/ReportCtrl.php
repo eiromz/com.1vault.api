@@ -17,14 +17,17 @@ use Symfony\Component\HttpFoundation\Response;
 class ReportCtrl extends DomainBaseCtrl
 {
     private $repository;
+
     public array $indexRequestFilterKeys = [
         'business_id', 'payment_status',
     ];
+
     public function __construct(InvoiceRepositoryInterface $repository)
     {
         $this->repository = $repository;
         parent::__construct();
     }
+
     /**
      * @throws Exception
      */
@@ -53,6 +56,7 @@ class ReportCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function download(Request $request)
     {
         $filename = generateTransactionReference();
@@ -90,6 +94,7 @@ class ReportCtrl extends DomainBaseCtrl
                     ->setNpmBinary(config('app.which_npm'));
             })->save($filename.'.pdf');
     }
+
     /**
      * @return void
      */
@@ -103,6 +108,7 @@ class ReportCtrl extends DomainBaseCtrl
             $data->qty = $collection->pluck('quantity')->sum();
         }
     }
+
     public function is_invoice($data, $type)
     {
         if ($type === 'invoice') {

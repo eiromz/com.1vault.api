@@ -34,7 +34,7 @@ class FetchBankCtrl extends DomainBaseCtrl
 
         $data = $response->json();
 
-        if ($data['responseCode'] !== "00") {
+        if ($data['responseCode'] !== '00') {
             throw new BaseException(Messages::TRANSACTION_FAILED->value,
                 Response::HTTP_BAD_REQUEST
             );

@@ -18,7 +18,7 @@ class ProcessCartQueue implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public $carts,public $user,public $request)
+    public function __construct(public $carts, public $user, public $request)
     {
         //
     }
@@ -28,11 +28,11 @@ class ProcessCartQueue implements ShouldQueue
      */
     public function handle(): void
     {
-        foreach($this->carts as $cart) {
+        foreach ($this->carts as $cart) {
             DB::beginTransaction();
-            $subscription = new SubscriptionService($cart,$this->user,$this->request);
+            $subscription = new SubscriptionService($cart, $this->user, $this->request);
             $subscription->execute();
-            $cart = new UpdateCartWithOrderNumber($cart,$this->request['order_number']);
+            $cart = new UpdateCartWithOrderNumber($cart, $this->request['order_number']);
             $cart->execute();
             logExceptionErrorMessage(
                 'ProcessCartQueue',

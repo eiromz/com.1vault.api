@@ -39,10 +39,10 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
 
         $current_inventory_size = $this->repository->totalInventory([]);
 
-        $inventory_limit = getInventorySizeLimit(StoreFront::query(),auth()->user());
+        $inventory_limit = getInventorySizeLimit(StoreFront::query(), auth()->user());
 
-        if($current_inventory_size >= $inventory_limit){
-            throw new BaseException('You have reached the inventory limit',Response::HTTP_BAD_REQUEST);
+        if ($current_inventory_size >= $inventory_limit) {
+            throw new BaseException('You have reached the inventory limit', Response::HTTP_BAD_REQUEST);
         }
 
         $request->execute();
@@ -51,6 +51,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function destroy(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -59,7 +60,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
             'inventory' => ['required'],
         ]);
 
-        if (!$this->repository->delete($request->inventory)) {
+        if (! $this->repository->delete($request->inventory)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Inventory',
             ]);
@@ -69,6 +70,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
             'message' => 'Inventory Deleted',
         ]);
     }
+
     public function index($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -86,6 +88,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data->all());
     }
+
     public function view($inventory, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -108,6 +111,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
+
     public function edit($id, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());

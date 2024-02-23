@@ -75,7 +75,7 @@ class BaseRepository implements BaseRepositoryInterface
         try {
             return $this->model->query()->delete($id);
         } catch (\Exception $e) {
-            logExceptionErrorMessage('BaseRepositoryCreate', $e,[], 'critical');
+            logExceptionErrorMessage('BaseRepositoryCreate', $e, [], 'critical');
         }
     }
 

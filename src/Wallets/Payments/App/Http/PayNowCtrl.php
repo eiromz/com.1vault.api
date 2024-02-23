@@ -8,12 +8,8 @@ use App\Models\Cart;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
-use Src\Wallets\Payments\Domain\Actions\UpdateCartWithOrderNumber;
 use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
-use Src\Wallets\Payments\Domain\Services\ProcessCartTransaction;
-use Src\Wallets\Payments\Domain\Services\SubscriptionService;
 use Symfony\Component\HttpFoundation\Response;
 
 class PayNowCtrl extends DomainBaseCtrl
@@ -44,7 +40,7 @@ class PayNowCtrl extends DomainBaseCtrl
 
         $request->merge([
             'trx_ref' => $source->journal->trx_ref,
-            'order_number' => generateOrderNumber()
+            'order_number' => generateOrderNumber(),
         ]);
 
         $carts = Cart::query()
@@ -54,7 +50,7 @@ class PayNowCtrl extends DomainBaseCtrl
             ->whereNull('order_number')
             ->get();
 
-        ProcessCartQueue::dispatch($carts,auth()->user(),$request->all());
+        ProcessCartQueue::dispatch($carts, auth()->user(), $request->all());
 
         return jsonResponse(Response::HTTP_OK, $source->journal);
     }

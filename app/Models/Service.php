@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Attributes\ServiceAmount;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +23,6 @@ class Service extends Model
         'has_discount' => 'boolean',
         'quantity' => 'integer',
     ];
-
 
     protected static function booted(): void
     {

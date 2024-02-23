@@ -42,5 +42,5 @@
 * Cable Tv Purchase.
 * Once a transfer reach
 
-#### 
-* 
+#### WHATS LEFT
+* REPOPRTS FOR GENERATION

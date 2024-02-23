@@ -50,8 +50,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
 
     public function deleteByIds(array $ids)
     {
-        try
-        {
+        try {
             return $this->model->query()->whereIn('id', $ids)->delete();
         } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
@@ -60,8 +59,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
 
     public function totalInventory(array $details)
     {
-        try
-        {
+        try {
             Arr::set($details, 'customer_id', $this->customer);
 
             if (! is_null($this->collaborator)) {
@@ -69,8 +67,7 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
             }
 
             return $this->model->query()->where($details)->count() ?? 0;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
         }
     }

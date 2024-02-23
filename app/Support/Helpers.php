@@ -4,7 +4,6 @@ use App\Exceptions\BaseException;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Src\Services\App\Enum\BillingCycle;
-use Src\Services\App\Enum\Messages;
 use Symfony\Component\HttpFoundation\Response;
 
 if (! function_exists('generateCode')) {
@@ -60,7 +59,7 @@ if (! function_exists('createNameForToken')) {
 }
 
 if (! function_exists('logExceptionErrorMessage')) {
-    function logExceptionErrorMessage(string $name, $exception, array $context = [],$level='error'): void
+    function logExceptionErrorMessage(string $name, $exception, array $context = [], $level = 'error'): void
     {
         $context['class-identifier'] = $name;
 
@@ -108,13 +107,13 @@ if (! function_exists('calculateDiscount')) {
         $has_discount = $attributes['has_discount'];
         $discount = $attributes['discount'];
 
-        if ($discount > 100 || !$has_discount ||$discount === 0) {
+        if ($discount > 100 || ! $has_discount || $discount === 0) {
             return $amount;
         }
 
         $discount = ($discount / 100);
 
-        $calculateDiscountAmount = $discount * (double)$amount;
+        $calculateDiscountAmount = $discount * (float) $amount;
 
         $newAmount = ($amount - $calculateDiscountAmount);
 
@@ -156,11 +155,11 @@ if (! function_exists('generateProvidusTransactionRef')) {
     }
 }
 
-if(! function_exists('getInventorySizeLimit')){
-    function getInventorySizeLimit($model,$user): int
+if (! function_exists('getInventorySizeLimit')) {
+    function getInventorySizeLimit($model, $user): int
     {
-        return $model->where('is_store_front','=',true)
-            ->where('customer_id','=',$user->id)->first()->inventory_limit
+        return $model->where('is_store_front', '=', true)
+            ->where('customer_id', '=', $user->id)->first()->inventory_limit
             ?? config('1vault.store_front_size');
     }
 }

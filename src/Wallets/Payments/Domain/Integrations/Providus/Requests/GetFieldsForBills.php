@@ -5,7 +5,7 @@ namespace Src\Wallets\Payments\Domain\Integrations\Providus\Requests;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
-class GetNipBanks extends Request
+class GetFieldsForBills extends Request
 {
     /**
      * The HTTP method of the request
@@ -17,12 +17,6 @@ class GetNipBanks extends Request
      */
     public function resolveEndpoint(): string
     {
-        return '/GetNIPBanks';
+        return '/categories';
     }
 }
-
-//nip/getbanks
-//nip/tr
-
-//providus/nip/getbanks
-//providus/nip/transfer

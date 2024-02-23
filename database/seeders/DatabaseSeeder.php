@@ -115,60 +115,60 @@ class DatabaseSeeder extends Seeder
         return [
             [
                 'customer_id' => $customer->id,
-                'credit'      => true,
-                'amount'    => 10000000,
+                'credit' => true,
+                'amount' => 10000000,
                 'balance_before' => 0,
                 'balance_after' => 10000000,
-                'label' => 'Transfer In'
+                'label' => 'Transfer In',
             ],
             [
                 'customer_id' => $customer->id,
-                'credit'      => true,
-                'amount'    => 500000,
+                'credit' => true,
+                'amount' => 500000,
                 'balance_before' => 10000000,
                 'balance_after' => 9500000,
-                'label' => 'Transfer Out'
+                'label' => 'Transfer Out',
             ],
             [
                 'customer_id' => $customer->id,
-                'debit'      => true,
-                'amount'    => 200000,
+                'debit' => true,
+                'amount' => 200000,
                 'balance_before' => 9500000,
                 'balance_after' => 9300000,
-                'label' => 'Airtime'
+                'label' => 'Airtime',
             ],
             [
                 'customer_id' => $customer->id,
-                'debit'      => true,
-                'amount'    => 350000,
+                'debit' => true,
+                'amount' => 350000,
                 'balance_before' => 9300000,
                 'balance_after' => 8950000,
-                'label' => 'Electricity'
+                'label' => 'Electricity',
             ],
             [
                 'customer_id' => $customer->id,
-                'debit'      => true,
-                'amount'    => 150000,
+                'debit' => true,
+                'amount' => 150000,
                 'balance_before' => 8950000,
                 'balance_after' => 8800000,
-                'label' => 'Data'
+                'label' => 'Data',
             ],
             [
-                'customer_id'       => $customer->id,
-                'debit'             => true,
-                'amount'            => 150000,
-                'balance_before'    => 8800000,
-                'balance_after'     => 8650000,
-                'label'             => 'Cable Tv'
+                'customer_id' => $customer->id,
+                'debit' => true,
+                'amount' => 150000,
+                'balance_before' => 8800000,
+                'balance_after' => 8650000,
+                'label' => 'Cable Tv',
             ],
             [
-                'customer_id'       => $customer->id,
-                'debit'             => true,
-                'amount'            => 250000,
-                'balance_before'    => 8650000,
-                'balance_after'     => 8400000,
-                'label'             => 'Cable Tv'
-            ]
+                'customer_id' => $customer->id,
+                'debit' => true,
+                'amount' => 250000,
+                'balance_before' => 8650000,
+                'balance_after' => 8400000,
+                'label' => 'Cable Tv',
+            ],
         ];
     }
 

@@ -38,7 +38,7 @@ class GenerateAccountNumber
      */
     public function sendRequest(): mixed
     {
-        if(!$this->kyc->status){
+        if (! $this->kyc->status) {
             return;
         }
 

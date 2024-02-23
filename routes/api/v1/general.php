@@ -68,22 +68,21 @@ Route::post('/download/pdf', function (Request $request) {
     };
 
     $getModel = match ($request->type) {
-        'receipt'   => Receipt::query(),
-        'pos'       => PosRequest::query(),
+        'receipt' => Receipt::query(),
+        'pos' => PosRequest::query(),
         'invoice' => Invoice::query(),
         'sales','debtors' => Invoice::query()
     };
 
-    $data = (in_array($request->type,['receipt','pos','invoice']))  ? $getModel->findOrFail($request->identifier) : $getModel->where(
-        'business_id','=');
+    $data = (in_array($request->type, ['receipt', 'pos', 'invoice'])) ? $getModel->findOrFail($request->identifier) : $getModel->where(
+        'business_id', '=');
 
     dd($data);
 
     $pdf = Pdf::loadView($getView, ['welcome']);
 
     return $pdf->download('invoice.pdf');
-})->middleware('auth:sanctum');;
-
+})->middleware('auth:sanctum');
 
 Route::post('/testing', function (Request $request) {
 

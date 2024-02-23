@@ -23,12 +23,12 @@ class NipTransferRequest extends FormRequest
     {
         return [
             'transaction_pin' => ['required'],
-            "narration" => ['required'],
-            "currencyCode" => ['required'],
-            "beneficiaryBank" => ['required'],
-            "transactionAmount" => ['required'],
-            "beneficiaryAccountName" => ['required'],
-            "beneficiaryAccountNumber" => ['required'],
+            'narration' => ['required'],
+            'currencyCode' => ['required'],
+            'beneficiaryBank' => ['required'],
+            'transactionAmount' => ['required'],
+            'beneficiaryAccountName' => ['required'],
+            'beneficiaryAccountNumber' => ['required'],
         ];
     }
 
@@ -41,10 +41,10 @@ class NipTransferRequest extends FormRequest
         $this->merge([
             'userName' => config('providus-bank.rest_api_username'),
             'password' => config('providus-bank.rest_api_password'),
-            "sourceAccountName" => auth()->user()->profile->fullname ?? 'N/A',
-            "transactionReference" => generateProvidusTransactionRef(),
-            'amount'    => $this->transactionAmount,
-            'remark' => $this->narration
+            'sourceAccountName' => auth()->user()->profile->fullname ?? 'N/A',
+            'transactionReference' => generateProvidusTransactionRef(),
+            'amount' => $this->transactionAmount,
+            'remark' => $this->narration,
         ]);
         $this->validated();
     }

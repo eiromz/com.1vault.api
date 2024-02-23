@@ -4,7 +4,6 @@ namespace Src\Accounting\App\Requests;
 
 use App\Exceptions\BaseException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 use Src\Accounting\App\Enum\Messages;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -35,13 +34,13 @@ class CreateStoreFrontInventoryRequest extends FormRequest
     public function execute(): void
     {
         $this->merge([
-            'is_published'      => false,
-            'product_name'      => $this->name,
-            'business_id'       => $this->business,
-            'is_store_front'    => true,
-            'quantity'          => 0,
-            'unit'              => 'pcs',
-            'selling_price'     => $this->amount,
+            'is_published' => false,
+            'product_name' => $this->name,
+            'business_id' => $this->business,
+            'is_store_front' => true,
+            'quantity' => 0,
+            'unit' => 'pcs',
+            'selling_price' => $this->amount,
         ]);
         $this->validated();
     }
@@ -51,8 +50,8 @@ class CreateStoreFrontInventoryRequest extends FormRequest
      */
     protected function failedAuthorization()
     {
-        logExceptionErrorMessage('CreateStoreFrontInventory',null,
-            ['type'=>'Authorization error from form request'],'critical'
+        logExceptionErrorMessage('CreateStoreFrontInventory', null,
+            ['type' => 'Authorization error from form request'], 'critical'
         );
         throw new BaseException(Messages::UNAUTHORIZED->value, ResponseAlias::HTTP_BAD_REQUEST);
     }

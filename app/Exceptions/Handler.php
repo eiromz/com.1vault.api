@@ -3,17 +3,15 @@
 namespace App\Exceptions;
 
 use ErrorException;
-use Illuminate\Auth\Access\AuthorizationException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use GuzzleHttp\Exception\ConnectException;
 use Throwable;
 
 class Handler extends ExceptionHandler

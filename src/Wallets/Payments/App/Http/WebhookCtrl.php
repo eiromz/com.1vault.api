@@ -15,7 +15,7 @@ use Src\Wallets\Payments\Domain\Actions\CreditJournalAction;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ProvidusWebhookCtrl extends DomainBaseCtrl
+class WebhookCtrl extends DomainBaseCtrl
 {
     public array $notification = [
         'title' => 'Credit Notification',
@@ -62,6 +62,8 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
 
         SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token ?? null, $this->notification);
 
+        //Send email notification of credit
+
         AccountBalanceUpdateQueue::dispatch(
             $newJournalBalance->balance_before, $newJournalBalance->balance_after, $account);
         //TODO send email notification for when account is credited.
@@ -75,11 +77,6 @@ class ProvidusWebhookCtrl extends DomainBaseCtrl
     }
 
     private function duplicateTransaction()
-    {
-
-    }
-
-    private function accountNumberDoesNotExists()
     {
 
     }

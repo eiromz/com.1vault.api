@@ -4,7 +4,6 @@ namespace Src\Wallets\Payments\App\Http;
 
 use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Journal;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

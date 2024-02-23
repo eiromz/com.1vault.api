@@ -6,8 +6,6 @@ use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
 use Src\Wallets\Payments\App\Enum\Messages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipAccount;
@@ -28,24 +26,24 @@ class FetchBankAccountInformationCtrl extends DomainBaseCtrl
                 'password' => config('providus-bank.rest_api_password'),
             ]);
 
-            $connector  = new ProvidusRestApi();
-            $request    = new GetNipAccount($request->all());
-            $response   = $connector->send($request);
+            $connector = new ProvidusRestApi();
+            $request = new GetNipAccount($request->all());
+            $response = $connector->send($request);
 
             $data = $response->json();
 
-            if($response->status() !== 200 && !isset($data['responseCode'])) {
+            if ($response->status() !== 200 && ! isset($data['responseCode'])) {
                 throw new BaseException(Messages::FETCH_ACCOUNT_DETAILS_FAILED->value,
                     Response::HTTP_BAD_REQUEST
                 );
             }
 
-            return jsonResponse($response->status(),$response->json());
-        }
-        catch (\Exception $e){
-            logExceptionErrorMessage('FetchBankAccountInformationCtrl',$e,[],'critical');
-            return jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => Messages::FETCH_ACCOUNT_DETAILS_FAILED->value
+            return jsonResponse($response->status(), $response->json());
+        } catch (\Exception $e) {
+            logExceptionErrorMessage('FetchBankAccountInformationCtrl', $e, [], 'critical');
+
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => Messages::FETCH_ACCOUNT_DETAILS_FAILED->value,
             ]);
         }
     }

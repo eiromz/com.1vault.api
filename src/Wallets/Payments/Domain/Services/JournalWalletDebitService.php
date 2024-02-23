@@ -7,24 +7,28 @@ use App\Exceptions\InsufficientBalance;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Journal;
-use Exception;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletDebitService
 {
     public object $accountInstance;
+
     public $request;
+
     public $journal;
+
     public array $creationKeys = [
         'amount', 'trx_ref',
         'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
     ];
+
     public function __construct($accountInstance, $request = null)
     {
         $this->accountInstance = $accountInstance;
         $this->request = $request;
     }
+
     public function checkBalance()
     {
         if ($this->request->amount > $this->accountInstance->balance_after) {
@@ -33,10 +37,12 @@ class JournalWalletDebitService
 
         return $this;
     }
+
     public function calculateNewBalance()
     {
         return $this->accountInstance->balance_after - $this->request->amount;
     }
+
     public function debit()
     {
         $this->request->merge([
@@ -45,17 +51,18 @@ class JournalWalletDebitService
             'customer_id' => auth()->user()->id,
             'debit' => true,
             'credit' => false,
-            'trx_ref' =>  $this->request->transactionReference ?? generateTransactionReference(),
+            'trx_ref' => $this->request->transactionReference ?? generateTransactionReference(),
             'label' => 'Transfer Out',
             'source' => auth()->user()->profile->fullname,
         ]);
 
-        if (!Journal::query()->create($this->request->only($this->creationKeys))) {
+        if (! Journal::query()->create($this->request->only($this->creationKeys))) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
         return $this;
     }
+
     public function notify()
     {
         $this->firebase();
@@ -63,6 +70,7 @@ class JournalWalletDebitService
 
         return $this;
     }
+
     private function firebase(): void
     {
         $notification = [
@@ -72,17 +80,20 @@ class JournalWalletDebitService
 
         SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
     }
+
     //TODO : write email for notifying a person about a transction on his/her account.
     private function email()
     {
     }
+
     public function updateBalanceQueue(): void
     {
         AccountBalanceUpdateQueue::dispatch(
             $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
     }
+
     /**
-     * @throws Exception
+     * @throws BaseException
      */
     public function validateTransactionPin(): void
     {

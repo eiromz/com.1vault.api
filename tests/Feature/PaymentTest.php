@@ -5,7 +5,6 @@ use App\Models\Customer;
 use App\Models\Journal;
 use App\Models\Profile;
 use App\Models\Service;
-use App\Models\ServiceBenefit;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,7 +22,7 @@ describe('Payment Routes', function () {
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
-        $this->service = Service::query()->where('is_recurring','=',true)->first();
+        $this->service = Service::query()->where('is_recurring', '=', true)->first();
 
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
@@ -109,42 +108,59 @@ describe('Payment Routes', function () {
     test('Merchant can pay for service', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/pay-now', [
             'total' => 10000,
-            'transaction_pin' => '123456'
+            'transaction_pin' => '123456',
         ]);
         expect($response->status())->toBe(200);
     });
 
     /************* NIP *************/
-    test('Merchant can fetch nip banks', function(){
+    test('Merchant can fetch nip banks', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/providus/nip/banks');
         expect($response->status())->toBe(200);
     });
-    test('Merchant can fetch nip account information', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/enquiry',[
-            'accountNumber' => "1018996198",
-            'beneficiaryBank' => "110000",
-            'userName' => "test",
-            'password' => "test",
+    test('Merchant can fetch nip account information', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/enquiry', [
+            'accountNumber' => '1018996198',
+            'beneficiaryBank' => '110000',
+            'userName' => 'test',
+            'password' => 'test',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can transfer through nip', function(){
-        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/transfer',[
-            "beneficiaryAccountName" => "UGBO, CHARLES UMORE",
-            "transactionAmount" => "2000.45",
-            "currencyCode" => "NGN",
-            "narration" => "Testing",
-            "beneficiaryAccountNumber"=>"1700313889",
-            "beneficiaryBank" => "000013",
-            "transaction_pin"  => "123456"
+    test('Merchant can transfer through nip', function () {
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/transfer', [
+            'beneficiaryAccountName' => 'UGBO, CHARLES UMORE',
+            'transactionAmount' => '2000.45',
+            'currencyCode' => 'NGN',
+            'narration' => 'Testing',
+            'beneficiaryAccountNumber' => '1700313889',
+            'beneficiaryBank' => '000013',
+            'transaction_pin' => '123456',
         ]);
 
-        $journal = Journal::query()->where('debit','=',true)->latest()->first();
-        $account = \App\Models\Account::query()->where('customer_id','=',$this->customer->id)->first();
+        $journal = Journal::query()->where('debit', '=', true)->latest()->first();
+        $account = \App\Models\Account::query()->where('customer_id', '=', $this->customer->id)->first();
         $this->assertModelExists($journal);
         dd($account);
         $response->dump();
         expect($response->status())->toBe(200);
     });
+
+    /************ BILLS ************/
+    test('Merchant can get bills categories', function(){
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    test('Merchant can view a single bills categories', function(){
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/4');
+        expect($response->status())->toBe(200);
+    });
+    test('Merchant can get bills details', function(){
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/15');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+
 });
