@@ -120,6 +120,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 0,
                 'balance_after' => 10000000,
                 'label' => 'Transfer In',
+                'remark' => 'I made this payment'
             ],
             [
                 'customer_id' => $customer->id,
@@ -128,6 +129,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 10000000,
                 'balance_after' => 9500000,
                 'label' => 'Transfer Out',
+                'remark' => 'I made this transfer out'
             ],
             [
                 'customer_id' => $customer->id,
@@ -136,6 +138,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 9500000,
                 'balance_after' => 9300000,
                 'label' => 'Airtime',
+                'remark' => 'I made this transfer out for the transaction'
             ],
             [
                 'customer_id' => $customer->id,
@@ -144,6 +147,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 9300000,
                 'balance_after' => 8950000,
                 'label' => 'Electricity',
+                'remark' => 'I made this transfer out for this one time'
             ],
             [
                 'customer_id' => $customer->id,
@@ -152,6 +156,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 8950000,
                 'balance_after' => 8800000,
                 'label' => 'Data',
+                'remark' => 'I made this transfer out for boel'
             ],
             [
                 'customer_id' => $customer->id,
@@ -160,6 +165,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 8800000,
                 'balance_after' => 8650000,
                 'label' => 'Cable Tv',
+                'remark' => 'I made this transfer out for cable tv'
             ],
             [
                 'customer_id' => $customer->id,
@@ -168,6 +174,7 @@ class DatabaseSeeder extends Seeder
                 'balance_before' => 8650000,
                 'balance_after' => 8400000,
                 'label' => 'Cable Tv',
+                'remark' => 'I made this transfer out for cable tv'
             ],
         ];
     }

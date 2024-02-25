@@ -17,6 +17,7 @@ class GetFieldsForBills extends Request
      */
     public function resolveEndpoint(): string
     {
-        return '/categories';
+        return "/field/byBillId/{$this->bill}";
     }
+    public function __construct(protected string $bill) {}
 }

@@ -3,6 +3,7 @@
 use Src\Wallets\Payments\App\Http\CartCtrl;
 use Src\Wallets\Payments\App\Http\JournalCtrl;
 use Src\Wallets\Payments\App\Http\PayNowCtrl;
+use Src\Wallets\Payments\App\Http\Providus\Bills\BillCtrl;
 use Src\Wallets\Payments\App\Http\Providus\Bills\CategoriesCtrl;
 use Src\Wallets\Payments\App\Http\Providus\FetchBankAccountInformationCtrl;
 use Src\Wallets\Payments\App\Http\Providus\FetchBankCtrl;

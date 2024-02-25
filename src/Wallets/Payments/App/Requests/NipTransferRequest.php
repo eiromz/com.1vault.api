@@ -13,7 +13,6 @@ class NipTransferRequest extends FormRequest
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,16 +21,16 @@ class NipTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transaction_pin' => ['required'],
-            'narration' => ['required'],
-            'currencyCode' => ['required'],
-            'beneficiaryBank' => ['required'],
-            'transactionAmount' => ['required'],
-            'beneficiaryAccountName' => ['required'],
-            'beneficiaryAccountNumber' => ['required'],
+            'transaction_pin'           => ['required'],
+            'narration'                 => ['required'],
+            'currencyCode'              => ['required'],
+            'beneficiaryBank'           => ['required'],
+            'transactionAmount'         => ['required'],
+            'beneficiaryAccountName'    => ['required'],
+            'beneficiaryAccountNumber'  => ['required'],
+            'saveBeneficiary'           => ['nullable','boolean'],
         ];
     }
-
     /**
      * @throws \Exception
      */
@@ -39,16 +38,16 @@ class NipTransferRequest extends FormRequest
     {
         $this->verifyTransactionPin();
         $this->merge([
-            'userName' => config('providus-bank.rest_api_username'),
-            'password' => config('providus-bank.rest_api_password'),
-            'sourceAccountName' => auth()->user()->profile->fullname ?? 'N/A',
-            'transactionReference' => generateProvidusTransactionRef(),
-            'amount' => $this->transactionAmount,
-            'remark' => $this->narration,
+            'userName'              => config('providus-bank.rest_api_username'),
+            'password'              => config('providus-bank.rest_api_password'),
+            'sourceAccountName'     => auth()->user()->profile->fullname ?? 'N/A',
+            'transactionReference'  => generateProvidusTransactionRef(),
+            'amount'                => $this->transactionAmount,
+            'remark'                => $this->narration,
+            'saveBeneficiary'       => $this->saveBeneficiary ?? 0
         ]);
         $this->validated();
     }
-
     /**
      * @throws BaseException
      */

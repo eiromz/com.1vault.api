@@ -7,40 +7,37 @@ use App\Http\Controllers\DomainBaseCtrl;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Wallets\Payments\App\Enum\Messages;
-use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetCatgories;
 use Illuminate\Http\JsonResponse;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusBills;
-use Symfony\Component\HttpFoundation\Response;
+use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetFieldsForBills;
 
 class BillCtrl extends DomainBaseCtrl
 {
-
     /**
      * @throws FatalRequestException
      * @throws BaseException
      * @throws RequestException
      * @throws JsonException
      */
-    public function index(): JsonResponse
+    public function index($bill): JsonResponse
     {
+
         $connector  = new ProvidusBills();
-        $request    = new GetCatgories();
-        $response = $connector->send($request);
+        $request    = new GetFieldsForBills($bill);
+        $response   = $connector->send($request);
 
-        if (!$response->ok()) {
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
+        dd($response->collect()->get('fields'));
+
+        if($response->collect()->pluck('type')){
+            //return
         }
 
-        if($response->collect()->isEmpty()){
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
-        }
+        //call the api here
+        //pass the collection data into the bill
+        //confirm if the bill is static or dynamic
+        //check if the validation is a yes or no
 
-        $data = $response->collect()->filter(fn($array) => !in_array($array['name'],$this->excludeBills));
+        dd($response->json());
 
         return jsonResponse($response->status(),$data);
     }

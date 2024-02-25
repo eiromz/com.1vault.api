@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('bank_name')->nullable();
             $table->string('bank_code')->nullable();
             $table->string('bank_account_number')->nullable();
+            $table->string('bank_account_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
             $table->softDeletesTz();

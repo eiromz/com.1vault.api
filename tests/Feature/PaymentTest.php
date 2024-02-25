@@ -16,8 +16,7 @@ describe('Payment Routes', function () {
     beforeEach(function () {
         $this->seed(DatabaseSeeder::class);
 
-        $this->state = State::query()
-            ->where('country_id', '=', 160)
+        $this->state = State::query()->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
         $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
@@ -137,12 +136,12 @@ describe('Payment Routes', function () {
             'beneficiaryAccountNumber' => '1700313889',
             'beneficiaryBank' => '000013',
             'transaction_pin' => '123456',
+            'saveBeneficiary' => 1
         ]);
 
         $journal = Journal::query()->where('debit', '=', true)->latest()->first();
         $account = \App\Models\Account::query()->where('customer_id', '=', $this->customer->id)->first();
         $this->assertModelExists($journal);
-        dd($account);
         $response->dump();
         expect($response->status())->toBe(200);
     });
@@ -154,13 +153,13 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('Merchant can view a single bills categories', function(){
-        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/4');
-        expect($response->status())->toBe(200);
-    });
-    test('Merchant can get bills details', function(){
-        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/15');
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/2');
         $response->dump();
         expect($response->status())->toBe(200);
     });
-
+    test('Merchant can get bills details', function(){
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/27');
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
 });
