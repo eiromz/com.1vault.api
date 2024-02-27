@@ -153,8 +153,8 @@ describe('Payment Routes', function () {
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/2');
         expect($response->status())->toBe(200);
     });
-    test('Merchant can get bills details', function() {
-        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/27');
+    test('Merchant can get bills fields', function() {
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
         expect($response->status())->toBe(200);
     });
 
@@ -168,10 +168,9 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('Merchant can view single beneficiaries', function(){
-        $beneficiary = Beneficiary::factory(1)->create([
+        $beneficiary = Beneficiary::factory()->create([
             'customer_id' => $this->customer->id
         ]);
-
         $response = $this->actingAs($this->customer)->get("/api/v1/beneficiary/view/{$beneficiary->id}");
         $response->dump();
         expect($response->status())->toBe(200);

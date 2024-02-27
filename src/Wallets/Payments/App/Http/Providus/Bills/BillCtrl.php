@@ -26,6 +26,8 @@ class BillCtrl extends DomainBaseCtrl
         $response   = $connector->send($request);
         $data = $response->json();
 
+        dd($response->json());
+
         return jsonResponse($response->status(),$data);
     }
 }

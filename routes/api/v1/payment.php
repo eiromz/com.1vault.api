@@ -32,8 +32,10 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('/cart', [CartCtrl::class, 'index']);
     Route::post('/pay-now', [PayNowCtrl::class, 'store']);
 
-    Route::get('/beneficiary', [BeneficiaryCtrl::class,'index']);
-    Route::get('/beneficiary/view/{$beneficiary}', [BeneficiaryCtrl::class,'view']);
+    Route::prefix('/beneficiary')->group(function(){
+        Route::get('/', [BeneficiaryCtrl::class,'index']);
+        Route::get('/view/{beneficiary}', [BeneficiaryCtrl::class,'view']);
+    });
 
     Route::prefix('/providus/nip')->group(function () {
         Route::get('/banks', FetchBankCtrl::class);
@@ -44,6 +46,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::prefix('/providus/bills')->group(function () {
         Route::get('/categories', [CategoriesCtrl::class,'index']);
         Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
-        Route::get('/{bill}', [BillCtrl::class,'index']);
+        Route::get('/fields/{bill}', [BillCtrl::class,'index']);
     });
 });

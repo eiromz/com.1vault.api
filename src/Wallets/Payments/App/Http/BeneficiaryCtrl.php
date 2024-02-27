@@ -13,18 +13,14 @@ class BeneficiaryCtrl extends DomainBaseCtrl
     {
         $beneficiaries = Beneficiary::query()
             ->where('customer_id', '=', auth()->user()->id)
-            ->limit(50)
+            ->limit(100)
             ->get();
 
         return jsonResponse(Response::HTTP_OK, $beneficiaries);
     }
 
-    public function view($beneficiary): JsonResponse
+    public function view(Beneficiary $beneficiary): JsonResponse
     {
-        $beneficiaries = Beneficiary::query()->findOrFail($beneficiary);
-
-        dd($beneficiaries);
-
-        return jsonResponse(Response::HTTP_OK, $beneficiaries);
+        return jsonResponse(Response::HTTP_OK, $beneficiary);
     }
 }
