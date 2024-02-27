@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Account;
+use App\Models\Beneficiary;
 use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Journal;
@@ -31,8 +33,7 @@ describe('Payment Routes', function () {
             'price' => $this->service->amount,
             'customer_id' => $this->customer->id,
             'service_id' => $this->service->id,
-            'account_id' => $this->customer->ACCOUNTID,
-
+            'account_id' => $this->customer->ACCOUNTID
         ]);
     });
 
@@ -62,28 +63,26 @@ describe('Payment Routes', function () {
         $customer2 = Customer::factory()->create([
             'email' => 'crayolu2@gmail.com',
         ]);
-
         Profile::factory()->create([
             'customer_id' => $customer2->id,
             'account_number' => '0417083628',
             'state_id' => $this->state->id,
         ]);
-
         Journal::factory()->create([
             'customer_id' => $customer2->id,
         ]);
-
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/transfer', [
             'account_number' => $customer2->profile->account_number,
             'amount' => 10000,
             'transaction_pin' => '123456',
             'remark' => 'this is good',
+            'saveBeneficiary' => 1
         ]);
 
-        $response->dump();
-
-        expect($response->status())->toBe(200);
+        expect($response->json('data'))->debit->toBeTrue();
     });
+
+    /********* CART ************************/
     test('Merchant can add to cart  with service_id', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart', [
             'service_id' => $this->service->first()->id,
@@ -129,36 +128,51 @@ describe('Payment Routes', function () {
     });
     test('Merchant can transfer through nip', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/transfer', [
-            'beneficiaryAccountName' => 'UGBO, CHARLES UMORE',
-            'transactionAmount' => '2000.45',
-            'currencyCode' => 'NGN',
-            'narration' => 'Testing',
-            'beneficiaryAccountNumber' => '1700313889',
-            'beneficiaryBank' => '000013',
-            'transaction_pin' => '123456',
-            'saveBeneficiary' => 1
+            'beneficiaryAccountName'    => 'UGBO, CHARLES UMORE',
+            'beneficiaryBankName'       => 'Access Bank',
+            'transactionAmount'         => '2000.45',
+            'currencyCode'              => 'NGN',
+            'narration'                 => 'Testing',
+            'beneficiaryAccountNumber'  => '1700313889',
+            'beneficiaryBank'           => '000013',
+            'transaction_pin'           => '123456',
+            'saveBeneficiary'           => 1
         ]);
 
-        $journal = Journal::query()->where('debit', '=', true)->latest()->first();
-        $account = \App\Models\Account::query()->where('customer_id', '=', $this->customer->id)->first();
-        $this->assertModelExists($journal);
-        $response->dump();
-        expect($response->status())->toBe(200);
+       Journal::query()->where('debit', '=', true)->latest()->first();
+
+       expect($response->status())->toBe(200);
     });
 
     /************ BILLS ************/
     test('Merchant can get bills categories', function(){
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories');
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can view a single bills categories', function(){
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/2');
+        expect($response->status())->toBe(200);
+    });
+    test('Merchant can get bills details', function() {
+        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/27');
+        expect($response->status())->toBe(200);
+    });
+
+    /************ BENEFICIARIES **************/
+    test('Merchant can get all beneficiaries', function(){
+        Beneficiary::factory(100)->create([
+            'customer_id' => $this->customer->id
+        ]);
+        $response = $this->actingAs($this->customer)->get('/api/v1/beneficiary');
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can get bills details', function(){
-        $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/27');
+    test('Merchant can view single beneficiaries', function(){
+        $beneficiary = Beneficiary::factory(1)->create([
+            'customer_id' => $this->customer->id
+        ]);
+
+        $response = $this->actingAs($this->customer)->get("/api/v1/beneficiary/view/{$beneficiary->id}");
         $response->dump();
         expect($response->status())->toBe(200);
     });

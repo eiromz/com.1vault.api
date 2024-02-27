@@ -62,6 +62,7 @@ class JournalCtrl extends DomainBaseCtrl
     }
 
     /**
+     * TODO : refactor the process into a service class
      * @throws InsufficientBalance
      * @throws Exception
      */
@@ -78,7 +79,7 @@ class JournalCtrl extends DomainBaseCtrl
 
         $source->validateTransactionPin();
 
-        $source->checkBalance()->debit()->notify()->updateBalanceQueue();
+        $source->checkBalance()->debit()->notify()->saveBeneficiary()->updateBalanceQueue();
 
         $destination = new JournalWalletCreditService(
             GetAccountInstance::getActiveInstance($request->profile), $request

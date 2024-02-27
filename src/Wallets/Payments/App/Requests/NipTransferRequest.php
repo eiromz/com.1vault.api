@@ -25,10 +25,11 @@ class NipTransferRequest extends FormRequest
             'narration'                 => ['required'],
             'currencyCode'              => ['required'],
             'beneficiaryBank'           => ['required'],
+            'beneficiaryBankName'       => ['required'],
             'transactionAmount'         => ['required'],
             'beneficiaryAccountName'    => ['required'],
             'beneficiaryAccountNumber'  => ['required'],
-            'saveBeneficiary'           => ['nullable','boolean'],
+            'saveBeneficiary'           => ['required','boolean']
         ];
     }
     /**
@@ -44,19 +45,26 @@ class NipTransferRequest extends FormRequest
             'transactionReference'  => generateProvidusTransactionRef(),
             'amount'                => $this->transactionAmount,
             'remark'                => $this->narration,
-            'saveBeneficiary'       => $this->saveBeneficiary ?? 0
+            'saveBeneficiary'       => $this->saveBeneficiary ?? 0,
+            'trx_type'              => 'nip'
         ]);
         $this->validated();
     }
     /**
      * @throws BaseException
      */
-    public function verifyTransactionPin()
+    public function verifyTransactionPin(): void
     {
         if (Hash::check($this->transaction_pin, auth()->user()->transaction_pin)) {
             return;
         }
 
         throw new BaseException('Invalid Transaction pin', Response::HTTP_BAD_REQUEST);
+    }
+    public function messages()
+    {
+        return [
+            'saveBeneficiary.required' => 'Save beneficiary is required for transaction',
+        ];
     }
 }

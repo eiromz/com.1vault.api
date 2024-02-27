@@ -40,7 +40,8 @@
 * Airtime Purchase. 
 * Electricity Purchase.
 * Cable Tv Purchase.
-* Once a transfer reach
 
 #### WHATS LEFT
-* REPOPRTS FOR GENERATION
+* REPORTS FOR GENERATION
+* Generate AUTH_SIG FOR LIVE CREDENTIALS
+* ASK ABOUT THE CHANGES TO THE LIVE BILLPAYMENT API.

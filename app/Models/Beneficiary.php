@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Beneficiaries extends Model
+class Beneficiary extends Model
 {
     use HasFactory,HasUuids,SoftDeletes;
+
+    protected $table = 'beneficiaries';
+
+    protected $guarded= [];
 }

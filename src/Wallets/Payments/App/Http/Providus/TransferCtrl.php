@@ -4,6 +4,8 @@ namespace Src\Wallets\Payments\App\Http\Providus;
 
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Jobs\GenerateAccountNumberQueue;
+use App\Jobs\SaveBeneficiaryQueue;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use JsonException;
@@ -30,8 +32,18 @@ class TransferCtrl extends DomainBaseCtrl
     public function __invoke(NipTransferRequest $request): JsonResponse
     {
         $request->execute();
+
+        $source = new JournalWalletDebitService(
+            GetAccountInstance::getActiveInstance(auth()->user()->profile),
+            $request
+        );
+
+        $source->validateTransactionPin();
+
+        $source->checkBalance()->debit()->notify()->saveBeneficiary()->updateBalanceQueue();
+
         $nip = (new NipTransferService($request))->callExtServer()->callExtServerFailed();
-        //threshold validation
-        return jsonResponse($nip->response->status(), $nip->data);
+
+        return jsonResponse(Response::HTTP_OK, $source->journal);
     }
 }

@@ -21,25 +21,11 @@ class BillCtrl extends DomainBaseCtrl
      */
     public function index($bill): JsonResponse
     {
-
         $connector  = new ProvidusBills();
         $request    = new GetFieldsForBills($bill);
         $response   = $connector->send($request);
-
-        dd($response->collect()->get('fields'));
-
-        if($response->collect()->pluck('type')){
-            //return
-        }
-
-        //call the api here
-        //pass the collection data into the bill
-        //confirm if the bill is static or dynamic
-        //check if the validation is a yes or no
-
-        dd($response->json());
+        $data = $response->json();
 
         return jsonResponse($response->status(),$data);
     }
-
 }

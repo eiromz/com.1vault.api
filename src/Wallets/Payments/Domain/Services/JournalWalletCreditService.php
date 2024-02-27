@@ -29,9 +29,12 @@ class JournalWalletCreditService
 
     public function calculateNewBalance()
     {
-        return $this->accountInstance->balance_after + $this->request->amount;
+        return ($this->accountInstance->balance_after + $this->request->amount);
     }
 
+    /**
+     * @throws BaseException
+     */
     public function credit()
     {
         $this->request->merge([
@@ -47,7 +50,7 @@ class JournalWalletCreditService
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (! $this->journal) {
+        if (!$this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
@@ -63,18 +66,14 @@ class JournalWalletCreditService
 
     private function firebase(): void
     {
-        $notification = [
-            'title' => 'Credit Notification',
-            'body' => "Your account has been credited the sum of {$this->request->amount}",
-        ];
+        if(!is_null($this->request?->profile?->firebase_token)){
+            $notification = [
+                'title' => 'Credit Notification',
+                'body' => "Your account has been credited the sum of {$this->request->amount}",
+            ];
 
-        SendFireBaseNotificationQueue::dispatch($this->profile()->firebase_token ?? null, $notification);
-    }
-
-    public function profile(): ?object
-    {
-        return Customer::query()->with('profile')
-            ->where('id', $this->accountInstance->customer_id)->first();
+            SendFireBaseNotificationQueue::dispatch($this->request->profile->firebase_token, $notification);
+        }
     }
 
     public function updateBalanceQueue(): void

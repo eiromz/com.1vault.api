@@ -5,7 +5,9 @@ namespace Src\Wallets\Payments\Domain\Services;
 use App\Exceptions\BaseException;
 use App\Exceptions\InsufficientBalance;
 use App\Jobs\AccountBalanceUpdateQueue;
+use App\Jobs\SaveBeneficiaryQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
+use App\Models\Beneficiaries;
 use App\Models\Journal;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +45,9 @@ class JournalWalletDebitService
         return $this->accountInstance->balance_after - $this->request->amount;
     }
 
+    /**
+     * @throws BaseException
+     */
     public function debit()
     {
         $this->request->merge([
@@ -56,7 +61,9 @@ class JournalWalletDebitService
             'source' => auth()->user()->profile->fullname,
         ]);
 
-        if (! Journal::query()->create($this->request->only($this->creationKeys))) {
+        $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
+
+        if (!$this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
@@ -73,12 +80,14 @@ class JournalWalletDebitService
 
     private function firebase(): void
     {
-        $notification = [
-            'title' => 'Debit Notification',
-            'body' => "Your account has been debited the sum of {$this->request->amount}",
-        ];
+        if(!is_null($this->request?->profile?->firebase_token)){
+            $notification = [
+                'title' => 'Debit Notification',
+                'body' => "Your account has been debited the sum of {$this->request->amount}",
+            ];
 
-        SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
+            SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
+        }
     }
 
     //TODO : write email for notifying a person about a transction on his/her account.
@@ -89,7 +98,10 @@ class JournalWalletDebitService
     public function updateBalanceQueue(): void
     {
         AccountBalanceUpdateQueue::dispatch(
-            $this->request->balance_before, $this->request->balance_after, $this->accountInstance);
+            $this->request->balance_before,
+            $this->request->balance_after,
+            $this->accountInstance
+        );
     }
 
     /**
@@ -100,5 +112,40 @@ class JournalWalletDebitService
         if (! Hash::check($this->request->transaction_pin, auth()->user()->transaction_pin)) {
             throw new BaseException('Invalid Transaction Pin', Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function saveBeneficiary()
+    {
+        $beneficiary = ($this->request->trx_type === '1vault') ? $this->providusBankBeneficiary() : $this->nipBankBeneficiary();
+
+        if($this->request->boolean('saveBeneficiary')) {
+            SaveBeneficiaryQueue::dispatch($beneficiary)->delay(now()->addMinute());
+        }
+
+        return $this;
+    }
+
+    private function providusBankBeneficiary() : array
+    {
+        return [
+            'type'                  => $this->request->trx_type,
+            'customer_id'           => auth()->user()->id,
+            'bank_code'             => Journal::BANK_CODE,
+            'bank_name'             => Journal::BANK_NAME,
+            'bank_account_number'   => $this->request->profile->account_number,
+            'bank_account_name'     => $this->request->profile->fullname,
+        ];
+    }
+
+    private function nipBankBeneficiary() : array
+    {
+        return [
+            'type'                  => $this->request->trx_type,
+            'customer_id'           => auth()->user()->id,
+            'bank_code'             => $this->request->beneficiaryBank,
+            'bank_name'             => $this->request->beneficiaryBankName,
+            'bank_account_number'   => $this->request->beneficiaryAccountNumber,
+            'bank_account_name'     => $this->request->beneficiaryAccountName,
+        ];
     }
 }

@@ -25,6 +25,7 @@
        "predis/predis" : "~1.0"
     },
     "require-dev": {
+        "defstudio/pest-plugin-laravel-expectations": "^2.1",
         "knuckleswtf/scribe": "^4.26",
         "laradumps/laradumps": "^2.4",
         "larastan/larastan": "^2.0",

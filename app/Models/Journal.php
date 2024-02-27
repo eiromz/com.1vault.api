@@ -20,6 +20,8 @@ class Journal extends Model
         'credit' => 'boolean',
         'payload' => 'array',
     ];
+    CONST BANK_CODE = '000023';
+    CONST BANK_NAME = 'PROVIDUS BANK';
 
     public function customer(): BelongsTo
     {

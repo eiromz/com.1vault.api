@@ -1,5 +1,6 @@
 <?php
 
+use Src\Wallets\Payments\App\Http\BeneficiaryCtrl;
 use Src\Wallets\Payments\App\Http\CartCtrl;
 use Src\Wallets\Payments\App\Http\JournalCtrl;
 use Src\Wallets\Payments\App\Http\PayNowCtrl;
@@ -31,10 +32,13 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('/cart', [CartCtrl::class, 'index']);
     Route::post('/pay-now', [PayNowCtrl::class, 'store']);
 
+    Route::get('/beneficiary', [BeneficiaryCtrl::class,'index']);
+    Route::get('/beneficiary/view/{$beneficiary}', [BeneficiaryCtrl::class,'view']);
+
     Route::prefix('/providus/nip')->group(function () {
         Route::get('/banks', FetchBankCtrl::class);
         Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
-        Route::post('/transfer', TransferCtrl::class);
+        Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');;
     });
 
     Route::prefix('/providus/bills')->group(function () {
@@ -42,5 +46,4 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
         Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
         Route::get('/{bill}', [BillCtrl::class,'index']);
     });
-
 });
