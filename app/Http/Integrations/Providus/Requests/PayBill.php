@@ -1,22 +1,22 @@
 <?php
 
-namespace Src\Wallets\Payments\Domain\Integrations\Providus\Requests;
+namespace App\Http\Integrations\Providus\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
-class GetNipBanks extends Request
+class PayBill extends Request
 {
     /**
      * The HTTP method of the request
      */
-    protected Method $method = Method::GET;
+    protected Method $method = Method::POST;
 
     /**
      * The endpoint for the request
      */
     public function resolveEndpoint(): string
     {
-        return '/GetNIPBanks';
+        return '/example';
     }
 }

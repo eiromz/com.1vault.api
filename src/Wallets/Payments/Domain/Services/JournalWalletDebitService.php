@@ -24,13 +24,11 @@ class JournalWalletDebitService
         'amount', 'trx_ref',
         'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
     ];
-
     public function __construct($accountInstance, $request = null)
     {
         $this->accountInstance = $accountInstance;
         $this->request = $request;
     }
-
     public function checkBalance()
     {
         if ($this->request->amount > $this->accountInstance->balance_after) {
@@ -39,12 +37,10 @@ class JournalWalletDebitService
 
         return $this;
     }
-
     public function calculateNewBalance()
     {
         return $this->accountInstance->balance_after - $this->request->amount;
     }
-
     /**
      * @throws BaseException
      */
@@ -69,7 +65,6 @@ class JournalWalletDebitService
 
         return $this;
     }
-
     public function notify()
     {
         $this->firebase();
@@ -77,7 +72,6 @@ class JournalWalletDebitService
 
         return $this;
     }
-
     private function firebase(): void
     {
         if(!is_null($this->request?->profile?->firebase_token)){
@@ -89,12 +83,10 @@ class JournalWalletDebitService
             SendFireBaseNotificationQueue::dispatch(auth()->user()->firebase_token ?? null, $notification);
         }
     }
-
-    //TODO : write email for notifying a person about a transction on his/her account.
+    //TODO : write email for notifying a person about a transaction on his/her account.
     private function email()
     {
     }
-
     public function updateBalanceQueue(): void
     {
         AccountBalanceUpdateQueue::dispatch(
@@ -103,7 +95,6 @@ class JournalWalletDebitService
             $this->accountInstance
         );
     }
-
     /**
      * @throws BaseException
      */
@@ -113,7 +104,6 @@ class JournalWalletDebitService
             throw new BaseException('Invalid Transaction Pin', Response::HTTP_BAD_REQUEST);
         }
     }
-
     public function saveBeneficiary()
     {
         $beneficiary = ($this->request->trx_type === '1vault') ? $this->providusBankBeneficiary() : $this->nipBankBeneficiary();
@@ -124,7 +114,6 @@ class JournalWalletDebitService
 
         return $this;
     }
-
     private function providusBankBeneficiary() : array
     {
         return [
@@ -136,7 +125,6 @@ class JournalWalletDebitService
             'bank_account_name'     => $this->request->profile->fullname,
         ];
     }
-
     private function nipBankBeneficiary() : array
     {
         return [

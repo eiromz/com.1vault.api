@@ -14,7 +14,7 @@ class Receipt extends Model
     protected $casts = [
         'transaction_date' => 'datetime',
         'items' => 'array',
-        'created_date' => 'date',
+        'created_date' => 'datetime',
     ];
 
     protected $guarded = [];
@@ -49,4 +49,12 @@ class Receipt extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    protected function balanceDue(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes['total'] - $attributes['amount_received']),
+        );
+    }
+
 }

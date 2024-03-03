@@ -28,15 +28,12 @@ class GenerateAccountNumberCommand extends Command
      */
     public function handle()
     {
-        //run a job to generate the account number for a user
         $customers = Customer::query()->whereHas('profile')->whereHas('knowYourCustomer')->get();
 
         foreach ($customers as $customer) {
-            if ($customer->knowYourCustomer->status !== KnowYourCustomer::ACTIVE) {
-                return;
+            if ($customer->knowYourCustomer->status === KnowYourCustomer::ACTIVE) {
+                GenerateAccountNumberQueue::dispatch($customer, $customer->profile, $customer->knowYourCustomer)->delay(now()->addMinute());
             }
-
-            GenerateAccountNumberQueue::dispatch($customer, $customer->profile, $customer->knowYourCustomer)->delay(now()->addMinute());
         }
     }
 }

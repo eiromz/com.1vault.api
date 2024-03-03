@@ -43,14 +43,14 @@ describe('Business Routes', function () {
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
+                    'amount' => 1000,
                     'unit' => 'Johnston',
                     'quantity' => 3,
                 ],
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
+                    'amount' => 2000,
                     'unit' => 'Johnston',
                     'quantity' => 3,
                 ],
@@ -65,14 +65,14 @@ describe('Business Routes', function () {
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
+                    'amount' => 1000,
                     'unit' => 'Johnston',
                     'quantity' => 3,
                 ],
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
+                    'amount' => 2000,
                     'unit' => 'Johnston',
                     'quantity' => 3,
                 ],
@@ -146,6 +146,7 @@ describe('Business Routes', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/client/view', [
             'client_id' => $this->client->id,
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can view all client', function () {
@@ -323,15 +324,15 @@ describe('Business Routes', function () {
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
+                    'amount' => 100,
+                    'unit' => 5,
                     'quantity' => 3,
                 ],
                 [
                     'inventory_id' => fake()->uuid,
                     'name' => 'Hackett',
-                    'amount' => 'Stark',
-                    'unit' => 'Johnston',
+                    'amount' => 100,
+                    'unit' => 3,
                     'quantity' => 3,
                 ],
             ],

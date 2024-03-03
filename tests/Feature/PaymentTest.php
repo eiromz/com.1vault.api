@@ -157,6 +157,19 @@ describe('Payment Routes', function () {
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
         expect($response->status())->toBe(200);
     });
+    test('Merchant can validate a bill before payment', function(){
+        $response =  $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/27',[
+            "inputs" => [
+                ["key" => "customer_id","value" => "4190013914"],
+                ["key" => "email","value" => "aquadri@providusbank.com"],
+                ["key" => "phone_no","value" => "08026276051"],
+                ["key" => "amount","value" => "1000"],
+            ]
+        ]);
+        $response->dump();
+        expect($response->status())->toBe(200);
+    });
+    //check if there is a validation
 
     /************ BENEFICIARIES **************/
     test('Merchant can get all beneficiaries', function(){

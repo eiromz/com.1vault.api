@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,14 +12,9 @@ class UploadCtrl extends DomainBaseCtrl
 {
     public $base_url = 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1';
 
-    /**
-     * TODO refactor this method using form request
-     */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(UploadRequest $request): JsonResponse
     {
-        $request->validate([
-            'file' => 'required|max:2048|mimetypes:application/pdf,image/jpg,image/jpeg,image/png',
-        ]);
+        $request->validated();
 
         $path = Storage::disk('do')->putFile('docs', $request->file('file'), 'public');
 

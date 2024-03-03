@@ -6,60 +6,17 @@ use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Invoice;
 use App\Models\PosRequest;
 use App\Models\Receipt;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Facades\Pdf;
+use Illuminate\Http\Request;
 use Src\Accounting\Domain\Repository\Interfaces\InvoiceRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReportCtrl extends DomainBaseCtrl
 {
-    private $repository;
-
-    public array $indexRequestFilterKeys = [
-        'business_id', 'payment_status',
-    ];
-
-    public function __construct(InvoiceRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-        parent::__construct();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function index(Request $request): JsonResponse
-    {
-        $request->validate([
-            'type' => ['required', 'in:sales,debtors'],
-            'start_date' => ['required', 'date_format:Y-m-d'],
-            'end_date' => ['required', 'date_format:Y-m-d'],
-            'business' => ['required', 'exists:App\Models\Business,id'],
-        ]);
-
-        $payment_status = ($request->type === 'debtors') ? 0 : 1;
-
-        $request->merge([
-            'business_id' => $request->business,
-            'payment_status' => $payment_status,
-        ]);
-
-        $this->repository->setUser(auth()->user());
-
-        $data = $this->repository->getSalesAndDebtorList(
-            $request->only($this->indexRequestFilterKeys),
-            $request->start_date, $request->end_date
-        );
-
-        return jsonResponse(Response::HTTP_OK, $data);
-    }
-
-    public function download(Request $request)
-    {
-        $filename = generateTransactionReference();
+    public function index(Request $request){
+        $fileName = $request->type.generateTransactionReference();
 
         $request->validate([
             'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
@@ -68,54 +25,47 @@ class ReportCtrl extends DomainBaseCtrl
             'end_date' => ['required_if:type,sales,debtors', 'date_format:Y-m-d'],
         ]);
 
+        $default_paper_size = Format::A3;
+
         $getView = match ($request->type) {
-            'sales' => 'pdf-template.sales',
-            'debtors' => 'pdf-template.debtors',
-            'receipt' => 'pdf-template.receipt',
-            'invoice' => 'pdf-template.invoice',
-            'pos' => 'pdf-template.pos',
+            'sales'     => 'pdf-template.sales',
+            'debtors'   => 'pdf-template.debtors',
+            'receipt'   => 'pdf-template.receipt',
+            'invoice'   => 'pdf-template.invoice',
+            'pos'       => 'pdf-template.pos',
         };
 
         $getModel = match ($request->type) {
             'receipt' => Receipt::query(),
             'pos' => PosRequest::query(),
-            'sales','debtors','invoice' => Invoice::query(),
+            'sales','debtors','invoice' => Invoice::query()
         };
 
-        $data = $getModel->findOrFail($request->identifier);
+        $data = (in_array($request->type, ['receipt', 'pos', 'invoice'])) ?
+            $getModel->findOrFail($request->identifier) : $getModel;
 
-        $this->is_receipt($data, $request->type);
+        if(in_array($request->type, ['sales','debtors'])) {
+            $business = Business::where('customer_id','=',auth()->user()->id)->latest()->firstOrFail();
+            $data = $getModel->where('business_id','=',$business->id)->firstOrFail();
+        }
 
-        $this->is_invoice($data, $request->type);
+        $this->modifyInventoryItems($request,$data);
 
         return Pdf::view($getView, compact('data'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->setNodeBinary(config('app.which_node'))
-                    ->setNpmBinary(config('app.which_npm'));
-            })->save($filename.'.pdf');
+                    ->setNpmBinary(config('app.which_npm'));})
+            ->format($default_paper_size)
+            ->save("{$fileName}.pdf");
     }
-
-    /**
-     * @return void
-     */
-    public function is_receipt($data, $type)
+    private function modifyInventoryItems($request,$data): void
     {
-        if ($type === 'receipt') {
-            $collection = collect($data->items);
-
-            $data->item = $collection->pluck('name')->all();
-
-            $data->qty = $collection->pluck('quantity')->sum();
-        }
-    }
-
-    public function is_invoice($data, $type)
-    {
-        if ($type === 'invoice') {
-            $collection = collect($data->items);
-            dd($collection->sum('quantity'));
-            //looop through the items and display
-            //calculate the total and show it in the view
+        if ($request->type === 'invoice' || $request->type === 'receipt')  {
+            $data->inventory = collect($data->items)->map(function ($item) {
+                $item['subtotal'] = ((double)$item['amount'] * (int)$item['quantity']);
+                return $item;
+            });
+            $data->subtotal = $data->inventory->sum('subtotal');
         }
     }
 }

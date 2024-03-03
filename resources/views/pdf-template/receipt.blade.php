@@ -3,143 +3,85 @@
 @section('title', 'Receipt')
 
 @section('content')
-    <div class="px-14 py-6">
-        <table class="w-full border-collapse border-spacing-0">
-            <tbody>
-            <tr>
-                <td class="w-full align-top">
-                    <div class="pb-5">
-                        <h1 class="font-weight-bolder font-40px pl-2">RECEIPT</h1>
-                        <p class="font-weight-bolder py-3 pl-2">{{$data->receiptNumber}}</p>
-                    </div>
-                </td>
-            </tr>
-            <tr class="py-6">
-                <td class="w-full align-top">
-                    <div>
-                        <img
-                            src="https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"
-                            class="h-12" />
-                    </div>
-                </td>
+    <div class="container bg-white p-5">
+        <div class="flex flex-wrap items-center justify-between gap-6 mb-5">
+            <div>
+                <h1 class="text-5xl font-normal font-bold pb-3">RECEIPT</h1>
+                <h6 class="text-base font-normal">{{$data->receiptNumber}}</h6>
+            </div>
+            <img src="{{ $data->logo ?? "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"}}" alt="">
+        </div>
+        <hr>
+        <div class="flex flex-wrap items-center justify-between gap-6 mt-4">
+            <div class="text-start">
+                <div class="pb-2">
+                    <h4 class="text-base font-bold">Issue Date:</h4>
+                    <p class="font-sm font-normal"> {{ $data->transaction_date->format('l jS F Y') }} </p>
+                </div>
+            </div>
+        </div>
 
-                <td class="w-full align-top">
-                    <div class="text-sm">
-                        <table class="border-collapse border-spacing-0">
-                            <tbody>
-                            <tr>
-                                <td class="border-r pr-4">
-                                    <div>
-                                        <p class="whitespace-nowrap text-black text-right">Issue Date</p>
-                                        <p class="whitespace-nowrap font-bold text-main text-right">{{ $data->created_at->format('l jS F Y') }}</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
+        <div class="flex flex-wrap items-center justify-between gap-6 mt-4">
+            <div class="text-start">
+                <h4 class="text-base font-bold">Billed To</h4>
+                <p class="font-sm font-normal">{{ $data->client->fullname ?? 'N/A'}}</p>
+                <p class="font-sm font-normal text-truncate">{{ $data->client->address ?? 'N/A'}}</p>
+                <p class="font-sm font-normal">{{ $data->client->phone_number ?? 'N/A'}}</p>
+            </div>
+            <div class="text-end">
+                <h4 class="text-base font-bold">From</h4>
+                <p class="font-sm font-normal">{{ $data->business->fullname ?? 'N/A'}}</p>
+                <p class="font-sm font-normal text-truncate">{{ $data->business->address ?? 'N/A'}}</p>
+                <p class="font-sm font-normal">{{ $data->business->email ?? 'N/A'}}</p>
+            </div>
+        </div>
 
-            </tr>
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="border-collapse table-auto w-full text-sm mt-14 whitespace-pre">
+                <thead>
+                <tr class="border-b border-gray-900">
+                    <th class="p5 text-lg text-start">Item</th>
+                    <th class="p5 text-lg">Qty</th>
+                    <th class="p5 text-lg">Rate</th>
+                    <th class="p5 text-lg text-end">Amount</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white">
+                @foreach($data->inventory as $item)
+                    <tr>
+                        <td class="text-start">{{ $item['name'] }}</td>
+                        <td class="text-center">{{ $item['quantity'] }}</td>
+                        <td class="text-center">{{ $item['amount'] }}</td>
+                        <td class="text-end">{{ $item['subtotal'] }}</td>
+                    </tr>
+                @endforeach
+                <tr class="border-b border-top border-gray-900">
+                    <td colspan="5" class="text-base font-normal text-end">
+                        <span class="pe-10 font-bold">Total Amount</span> &#8358 {{ $data->total }}
+                    </td>
+                </tr>
+                <tr class="border-b">
+                    <td colspan="5" class="text-base font-normal text-end">
+                        <span class="pe-10 font-bold">Amount Received</span> &#8358 {{ $data->amount_received }}
+                    </td>
+                </tr>
+                <tr class="border-b">
+                    <td colspan="5" class="text-base font-normal text-end">
+                        <span class="pe-10 font-bold">Balance Due</span> &#8358 {{ $data->balance_due }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
+            <p class="text-sm pt-2">Thanks for shopping with us </p>
+        </div>
+
+        <div class="flex flex-wrap justify-between p-2">
+            <img src="https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png" alt="" class="border-gray-300" width="150px">
+        </div>
     </div>
 
-    <div class="bg-slate-100 px-14 py-6 pt-5 text-sm">
-        <table class="w-full border-collapse border-spacing-0">
-            <tbody>
-            <tr>
-                <td class="w-1/2 align-top">
-                    <div class="text-sm text-neutral-600">
-                        <p class="font-bold">Billed to</p>
-                        <p>{{ $data->client->fullname ?? 'N/A'}}</p>
-                        <p>{{ $data->client->address ?? 'N/A'}}</p>
-                        <p>{{ $data->client->phone_number ?? 'N/A'}}</p>
-                    </div>
-                </td>
-                <td class="w-1/2 align-top text-right">
-                    <div class="text-sm text-neutral-600">
-                        <p class="font-bold">From</p>
-                        <p>{{ $data->business->fullname ?? 'N/A'}}</p>
-                        <p>{{ $data->business->address ?? 'N/A'}}</p>
-                        <p>{{ $data->business->email ?? 'N/A'}}</p>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="px-14 py-10 text-sm text-neutral-700">
-        <table class="w-full border-collapse border-spacing-0">
-            <thead>
-            <tr>
-                <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">#</td>
-                <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Item</td>
-                <td class="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">Qty.</td>
-                <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Rate</td>
-                <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Amount</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="border-b py-3 pl-3">1.</td>
-                <td class="border-b py-3 pl-2">{{ implode(',',$data->item) }}</td>
-                <td class="border-b py-3 pl-2 text-center">1</td>
-                <td class="border-b py-3 pl-2 text-right">{{ $data->qty }}</td>
-                <td class="border-b py-3 pl-2 pr-3 text-right">{{ $data->total }}</td>
-            </tr>
-            <tr>
-                <td colspan="7">
-                    <table class="w-full border-collapse border-spacing-0">
-                        <tbody>
-                        <tr>
-                            <td class="w-full"></td>
-                            <td>
-                                <table class="w-full border-collapse border-spacing-0">
-                                    <tbody>
-                                    <tr>
-                                        <td class="bg-main p-3">
-                                            <div class="whitespace-nowrap font-bold text-white">Total amount:</div>
-                                        </td>
-                                        <td class="bg-main p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-white">
-                                                {{ $data->total  }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-b p-3">
-                                            <div class="whitespace-nowrap text-slate-400">Amount received:</div>
-                                        </td>
-                                        <td class="border-b p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-main">{{ $data->amount_received }}</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-b p-3">
-                                            <div class="whitespace-nowrap text-slate-400">Balance Due:</div>
-                                        </td>
-                                        <td class="border-b p-3 text-right">
-                                            <div class="whitespace-nowrap font-bold text-main">
-                                                {{ ($data->total - $data->amount_received) }}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="px-14 text-sm text-neutral-700">
-        <p class="text-main font-bold">Thanks For Shopping</p>
-    </div>
 
 @endsection

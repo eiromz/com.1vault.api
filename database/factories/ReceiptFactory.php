@@ -19,10 +19,18 @@ class ReceiptFactory extends Factory
         return [
             'items' => [
                 [
-                    'name' => fake()->uuid,
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'HackettLao',
+                    'amount' => 100,
+                    'unit' => 5,
+                    'quantity' => 3,
                 ],
                 [
-                    'name' => fake()->uuid,
+                    'inventory_id' => fake()->uuid,
+                    'name' => 'Hackett',
+                    'amount' => 100,
+                    'unit' => 3,
+                    'quantity' => 3,
                 ],
             ],
             'description' => 'welcome',

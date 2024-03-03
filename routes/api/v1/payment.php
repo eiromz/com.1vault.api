@@ -9,6 +9,7 @@ use Src\Wallets\Payments\App\Http\Providus\Bills\CategoriesCtrl;
 use Src\Wallets\Payments\App\Http\Providus\FetchBankAccountInformationCtrl;
 use Src\Wallets\Payments\App\Http\Providus\FetchBankCtrl;
 use Src\Wallets\Payments\App\Http\Providus\TransferCtrl;
+use Src\Wallets\Payments\App\Http\ValidateBillCtrl;
 use Src\Wallets\Payments\App\Http\WebhookCtrl;
 use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
 
@@ -25,8 +26,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::post('/wallets/name-search', [WalletAccountSearchCtrl::class, 'index']);
     Route::post('/wallets/journal', [JournalCtrl::class, 'index']);
     Route::post('/wallets/journal/view', [JournalCtrl::class, 'view']);
-    Route::post('/wallets/journal/transfer', [JournalCtrl::class, 'store'])
-        ->middleware('invalid.accountNumber');
+    Route::post('/wallets/journal/transfer', [JournalCtrl::class, 'store'])->middleware('invalid.accountNumber');
     Route::post('/cart', [CartCtrl::class, 'store']);
     Route::post('/cart/delete', [CartCtrl::class, 'destroy']);
     Route::get('/cart', [CartCtrl::class, 'index']);
@@ -47,5 +47,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
         Route::get('/categories', [CategoriesCtrl::class,'index']);
         Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
         Route::get('/fields/{bill}', [BillCtrl::class,'index']);
+        Route::post('/fields/validate/{bill}',ValidateBillCtrl::class);
     });
 });

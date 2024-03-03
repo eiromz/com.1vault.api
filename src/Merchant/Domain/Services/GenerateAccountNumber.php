@@ -12,7 +12,6 @@ use Src\Merchant\Domain\Integrations\Providus\Requests\ReserveAccountNumberReque
 class GenerateAccountNumber
 {
     public array $payload;
-
     /**
      * @throws FatalRequestException
      * @throws JsonException
@@ -22,13 +21,11 @@ class GenerateAccountNumber
     {
         $this->payload = $this->sendRequest();
     }
-
     public function save(): void
     {
         $this->profile->account_number = $this->payload['account_number'];
         $this->profile->save();
     }
-
     /**
      * @return mixed|mixed[]
      *
@@ -38,31 +35,24 @@ class GenerateAccountNumber
      */
     public function sendRequest(): mixed
     {
-        if (! $this->kyc->status) {
-            return;
-        }
-
-        $connector = new ProvidusConnector;
-        $request = new ReserveAccountNumberRequest([
-            'account_name' => $this->profile->lastname,
-            'bvn' => $this->kyc->bvn,
-        ]);
-
-        $response = $connector->send($request);
-
-        if ($response->failed()) {
-            logExceptionErrorMessage('GenerateAccountNumberService', null, [
-                'message' => 'Failed to generate account number for user',
+        if ($this->kyc->status) {
+            $connector = new ProvidusConnector;
+            $request = new ReserveAccountNumberRequest([
+                'account_name' => $this->profile->lastname,
+                'bvn' => $this->kyc->bvn,
             ]);
+
+            $response = $connector->send($request);
+
+            $notification = [
+                'title' => 'Account Number Generation',
+                'body' => 'Your account number has been generated',
+            ];
+
+            SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $notification)->delay(now()->addMinute());
+
+            return $response->json();
         }
-
-        $notification = [
-            'title' => 'Account Number Generation',
-            'body' => 'Your account number has been generated',
-        ];
-
-        SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $notification)->delay(now()->addMinute());
-
-        return $response->json();
+        return;
     }
 }

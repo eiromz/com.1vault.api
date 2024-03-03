@@ -350,7 +350,7 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-    private function business_analytics_monthly()
+    private function business_analytics_monthly(): array
     {
         return [
             'title' => 'Business Analytics',
@@ -376,7 +376,7 @@ class DatabaseSeeder extends Seeder
         ];
     }
 
-    private function business_analytics_yearly()
+    private function business_analytics_yearly(): array
     {
         return [
             'title' => 'Business Analytics',
