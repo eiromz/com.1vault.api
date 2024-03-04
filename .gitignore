@@ -17,4 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+app/.DS_Store
+storage/.DS_Store
+.DS_Store
+/.scribe
 .credentials
