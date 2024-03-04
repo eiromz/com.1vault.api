@@ -1,139 +1,65 @@
 @extends('pdf-template.layout')
 
-@section('title', 'Sales')
+@section('title', '1VAULT')
 
 @section('content')
-    <div class="py-4">
-        <div class="px-14 py-6">
-            <table class="w-full border-collapse border-spacing-0">
-                <tbody>
-                <tr class="border-b">
-                    <td class="w-full align-top pb-3">
-                        <div>
-                            <h1 class="font-weight-bolder font-40px pl-2">SALES REPORT</h1>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="w-full align-top py-3">
-                        <div>
-                            <img
-                                src="https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"
-                                class="h-12" />
-                        </div>
-                    </td>
-
-                    <td class="w-full align-top py-3">
-                        <div class="text-sm">
-                            <table class="border-collapse border-spacing-0">
-                                <tbody>
-                                <tr>
-                                    <td class="pr-4 py-3">
-                                        <div>
-                                            <p class="whitespace-nowrap text-black text-right">Name of company</p>
-                                            <p class="whitespace-nowrap font-bold text-main text-right">Email address of company</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="container bg-white p-5">
+        <div class="flex flex-wrap items-center justify-between gap-6 mb-5">
+            <div class="text-start">
+                <h1 class="text-5xl font-normal font-bold pb-3">DEBTORS REPORT</h1>
+            </div>
+            <div class="text-end">
+                <h4 class="text-base font-bold">From</h4>
+                <p class="font-sm font-normal">{{ $request->business->fullname ?? 'N/A'}}</p>
+                <p class="font-sm font-normal">{{ $request->business->email ?? 'N/A'}}</p>
+            </div>
         </div>
 
 
-        <div class="px-14 py-10 text-sm text-neutral-700">
-            <table class="w-full border-collapse border-spacing-0">
-                <thead>
-                <tr>
-                    <td class="border-b-2 border-main pb-3 pl-3 font-bold text-main">#</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 font-bold text-main">Date</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Item Description</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">Revenue</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 text-center font-bold text-main">VAT</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 text-right font-bold text-main">Subtotal</td>
-                    <td class="border-b-2 border-main pb-3 pl-2 pr-3 text-right font-bold text-main">Subtotal + VAT</td>
+        <div class="overflow-x-auto">
+            <table class="border-collapse table-auto w-full text-sm mt-14 whitespace-pre">
+                <thead class="tbl_header_color text-white p-5">
+                <tr class="border-b border-gray-900">
+                    <th class="p-5 text-lg text-start">Customer Name</th>
+                    <th class="p-5 text-lg">Invoice No.</th>
+                    <th class="p-5 text-lg">Invoice Date</th>
+                    <th class="p-5 text-lg">Invoice Amount</th>
+                    <th class="p-5 text-lg">Balance Due</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td class="border-b py-3 pl-3">1.</td>
-                    <td class="border-b py-3 pl-2">Montly accountinc services</td>
-                    <td class="border-b py-3 pl-2 text-right">$150.00</td>
-                    <td class="border-b py-3 pl-2 text-center">1</td>
-                    <td class="border-b py-3 pl-2 text-center">20%</td>
-                    <td class="border-b py-3 pl-2 text-right">$150.00</td>
-                    <td class="border-b py-3 pl-2 pr-3 text-right">$180.00</td>
-                </tr>
-                <tr>
-                    <td class="border-b py-3 pl-3">2.</td>
-                    <td class="border-b py-3 pl-2">Taxation consulting (hour)</td>
-                    <td class="border-b py-3 pl-2 text-right">$60.00</td>
-                    <td class="border-b py-3 pl-2 text-center">2</td>
-                    <td class="border-b py-3 pl-2 text-center">20%</td>
-                    <td class="border-b py-3 pl-2 text-right">$120.00</td>
-                    <td class="border-b py-3 pl-2 pr-3 text-right">$144.00</td>
-                </tr>
-                <tr>
-                    <td class="border-b py-3 pl-3">3.</td>
-                    <td class="border-b py-3 pl-2">Bookkeeping services</td>
-                    <td class="border-b py-3 pl-2 text-right">$50.00</td>
-                    <td class="border-b py-3 pl-2 text-center">1</td>
-                    <td class="border-b py-3 pl-2 text-center">20%</td>
-                    <td class="border-b py-3 pl-2 text-right">$50.00</td>
-                    <td class="border-b py-3 pl-2 pr-3 text-right">$60.00</td>
-                </tr>
-                <tr>
-                    <td colspan="7">
-                        <table class="w-full border-collapse border-spacing-0">
-                            <tbody>
-                            <tr>
-                                <td class="w-full"></td>
-                                <td>
-                                    <table class="w-full border-collapse border-spacing-0">
-                                        <tbody>
-                                        <tr>
-                                            <td class="border-b p-3">
-                                                <div class="whitespace-nowrap text-slate-400">Net total:</div>
-                                            </td>
-                                            <td class="border-b p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">$320.00</div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-3">
-                                                <div class="whitespace-nowrap text-slate-400">VAT total:</div>
-                                            </td>
-                                            <td class="p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-main">$64.00</div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="bg-main p-3">
-                                                <div class="whitespace-nowrap font-bold text-white">Total:</div>
-                                            </td>
-                                            <td class="bg-main p-3 text-right">
-                                                <div class="whitespace-nowrap font-bold text-white">$384.00</div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <tbody class="bg-white">
+                @foreach($data as $item)
+                    <tr>
+                        <td class="p-5 text-start">{{ $item->client->fullname ?? 'N/A' }}</td>
+                        <td class="p-5 text-center">{{ $item->invoiceNumber }}</td>
+                        <td class="p-5 text-center">{{ $item->due_date }}</td>
+                        <td class="p-5 text-center">&#8358 {{ $item->total }}</td>
+                        <td class="p-5 text-end">&#8358 {{ $item->balance_due }}</td>
+                    </tr>
+                @endforeach
+                <tr class="border-b border-t border-gray-900">
+                    <td  class="p-4 text-base font-normal text-start"></td>
+                    <td class="p-4 text-base font-normal text-center"></td>
+                    <td class="p-4 text-base font-normal text-center">
+                        <span class="pe-10 font-bold">Total </span>
+                    </td>
+                    <td class="p-4 text-base font-normal text-center">
+                         &#8358 {{ $data->sum('total') }}
+                    </td>
+                    <td  class="p-4 text-base font-normal text-end">
+                        &#8358 {{ $data->sum('balance_due') }}
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="px-14 text-sm text-neutral-700">
-            <p class="text-main font-bold">DATE GENERATED</p>
-            <p>Payment Reference: BRA-00335</p>
+        <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
+            <p class="text-sm pt-2">Date Generated <br> {{ now()->diffForHumans() }}</p>
+        </div>
+
+        <div class="flex flex-wrap justify-between p-2">
+            <img src="https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png" alt="" class="border-gray-300" width="150px">
         </div>
     </div>
 @endsection

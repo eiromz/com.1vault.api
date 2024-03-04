@@ -2,7 +2,9 @@
 
 namespace Src\Accounting\App\Http;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Business;
 use App\Models\Invoice;
 use App\Models\PosRequest;
 use App\Models\Receipt;
@@ -15,6 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReportCtrl extends DomainBaseCtrl
 {
+    private $data;
+    private string $getView;
+    private $getModel;
     public function index(Request $request){
         $fileName = $request->type.generateTransactionReference();
 
@@ -27,7 +32,7 @@ class ReportCtrl extends DomainBaseCtrl
 
         $default_paper_size = Format::A3;
 
-        $getView = match ($request->type) {
+        $this->getView = match ($request->type) {
             'sales'     => 'pdf-template.sales',
             'debtors'   => 'pdf-template.debtors',
             'receipt'   => 'pdf-template.receipt',
@@ -35,37 +40,60 @@ class ReportCtrl extends DomainBaseCtrl
             'pos'       => 'pdf-template.pos',
         };
 
-        $getModel = match ($request->type) {
+        $this->getModel = match ($request->type) {
             'receipt' => Receipt::query(),
             'pos' => PosRequest::query(),
             'sales','debtors','invoice' => Invoice::query()
         };
 
-        $data = (in_array($request->type, ['receipt', 'pos', 'invoice'])) ?
-            $getModel->findOrFail($request->identifier) : $getModel;
+        $this->data = (in_array($request->type, ['receipt', 'pos', 'invoice'])) ?
+            $this->getModel->findOrFail($request->identifier) : $this->getModel;
 
-        if(in_array($request->type, ['sales','debtors'])) {
-            $business = Business::where('customer_id','=',auth()->user()->id)->latest()->firstOrFail();
-            $data = $getModel->where('business_id','=',$business->id)->firstOrFail();
-        }
+        $business = Business::where('customer_id','=',auth()->user()->id)->latest()->first();
 
-        $this->modifyInventoryItems($request,$data);
+        $request->merge([
+            'business' => $business
+        ]);
 
-        return Pdf::view($getView, compact('data'))
+        $this->handleSalesDebtors($request);
+
+        $this->modifyInventoryItems($request);
+
+        $data = $this->data;
+
+        return Pdf::view($this->getView, compact('data','request'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->setNodeBinary(config('app.which_node'))
                     ->setNpmBinary(config('app.which_npm'));})
             ->format($default_paper_size)
             ->save("{$fileName}.pdf");
     }
-    private function modifyInventoryItems($request,$data): void
+    private function modifyInventoryItems($request): void
     {
         if ($request->type === 'invoice' || $request->type === 'receipt')  {
-            $data->inventory = collect($data->items)->map(function ($item) {
+            $this->data->inventory = collect($this->data->items)->map(function ($item) {
                 $item['subtotal'] = ((double)$item['amount'] * (int)$item['quantity']);
                 return $item;
             });
-            $data->subtotal = $data->inventory->sum('subtotal');
+            $this->data->subtotal = $this->data->inventory->sum('subtotal');
+        }
+
+//        if($request->type === 'sales'){
+//            $this->data->inventory_name = collect($this->data->items)->map(fn($item) => "{$item['name']},");
+//        }
+    }
+
+    private function handleSalesDebtors($request): void
+    {
+        if(in_array($request->type,['sales','debtors'])){
+
+            $this->data = match($request->type){
+                'debtors' => $this->getModel->where('business_id','=',$request->business->id)
+                    ->whereBetween('due_date',[$request->start_date,$request->end_date])->where('payment_status','=',false)->get(),
+                'sales' => $this->getModel->where('business_id','=',$request->business->id)
+                    ->whereBetween('due_date',[$request->start_date,$request->end_date])->get(),
+                default => null
+            };
         }
     }
 }

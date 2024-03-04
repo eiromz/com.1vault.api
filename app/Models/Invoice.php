@@ -16,7 +16,8 @@ class Invoice extends Model
         'invoice_date' => 'datetime',
         'due_date' => 'datetime',
         'items' => 'array',
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
+        'payment_status' => 'boolean'
     ];
     protected $with = ['client'];
     protected $guarded = [];

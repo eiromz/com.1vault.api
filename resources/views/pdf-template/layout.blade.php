@@ -16,6 +16,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Style css -->
     <link href="{{ asset('style.min.css') }}" rel="stylesheet" type="text/css">
+
+    <style>
+        .tbl_header_color {background-color: #2652A2;}
+    </style>
 </head>
 <body>
 @yield('content')

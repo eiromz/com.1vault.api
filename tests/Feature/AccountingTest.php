@@ -396,7 +396,7 @@ describe('Business Routes', function () {
             'start_date' => '2024-01-01',
             'end_date' => '2024-02-10',
             'identifier' => $this->business->id,
-            'type' => 'debtors',
+            'type' => 'sales',
         ]);
         $response->dump();
         expect($response->status())->toBe(200);
