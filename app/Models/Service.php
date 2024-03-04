@@ -31,10 +31,6 @@ class Service extends Model
         });
     }
 
-    public function serviceBenefit(): HasMany
-    {
-        return $this->hasMany(ServiceBenefit::class);
-    }
 
     public function subscription(): HasMany
     {

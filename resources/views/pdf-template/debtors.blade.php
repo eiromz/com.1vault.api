@@ -9,7 +9,6 @@
                 <h1 class="text-5xl font-normal font-bold pb-3">DEBTORS REPORT</h1>
             </div>
             <div class="text-end">
-                <h4 class="text-base font-bold">From</h4>
                 <p class="font-sm font-normal">{{ $request->business->fullname ?? 'N/A'}}</p>
                 <p class="font-sm font-normal">{{ $request->business->email ?? 'N/A'}}</p>
             </div>
@@ -46,7 +45,7 @@
                     <td class="p-4 text-base font-normal text-center">
                          &#8358 {{ $data->sum('total') }}
                     </td>
-                    <td  class="p-4 text-base font-normal text-end">
+                    <td  class="p-4 text-base font-normal text-end ">
                         &#8358 {{ $data->sum('balance_due') }}
                     </td>
                 </tr>

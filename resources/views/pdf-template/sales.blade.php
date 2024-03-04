@@ -9,7 +9,6 @@
                 <h1 class="text-5xl font-normal font-bold pb-3">SALES REPORT</h1>
             </div>
             <div class="text-end">
-                <h4 class="text-base font-bold">From</h4>
                 <p class="font-sm font-normal">{{ $request->business->fullname ?? 'N/A'}}</p>
                 <p class="font-sm font-normal">{{ $request->business->email ?? 'N/A'}}</p>
             </div>
@@ -32,10 +31,10 @@
                         <td class="p-5 text-end">{{ $item->total }}</td>
                     </tr>
                 @endforeach
-                <tr class="border-b border-t border-gray-900">
+                <tr class="">
                     <td  class="p-4 text-base font-normal text-start"></td>
                     <td class="p-4 text-base font-normal text-center"></td>
-                    <td class="p-4 text-base font-normal text-end">
+                    <td class="p-4 text-base font-normal text-end border-b border-t border-gray-900">
                         <span class="font-bold">Total Revenue </span>  &#8358 {{ $data->sum('total') }}
                     </td>
                 </tr>

@@ -77,10 +77,6 @@ class ReportCtrl extends DomainBaseCtrl
             });
             $this->data->subtotal = $this->data->inventory->sum('subtotal');
         }
-
-//        if($request->type === 'sales'){
-//            $this->data->inventory_name = collect($this->data->items)->map(fn($item) => "{$item['name']},");
-//        }
     }
 
     private function handleSalesDebtors($request): void

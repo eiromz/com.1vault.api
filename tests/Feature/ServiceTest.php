@@ -3,7 +3,6 @@
 use App\Models\Customer;
 use App\Models\Journal;
 use App\Models\Service;
-use App\Models\ServiceBenefit;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,9 +24,7 @@ describe('Service Routes', function () {
             'amount' => 100000,
             'has_discount' => 1,
         ]);
-        $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $this->service->first()->id,
-        ]);
+
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
         ]);
