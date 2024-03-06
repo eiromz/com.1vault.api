@@ -9,7 +9,7 @@
                 <h1 class="text-5xl font-normal font-bold pb-3">RECEIPT</h1>
                 <h6 class="text-base font-normal">{{$data->receiptNumber}}</h6>
             </div>
-            <img src="{{ $data->logo ?? "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"}}" alt="">
+            <img src="{{ $data->business->logo ?? "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"}}" alt="">
         </div>
         <hr>
         <div class="flex flex-wrap items-center justify-between gap-6 mt-4">

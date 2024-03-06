@@ -21,7 +21,7 @@ describe('Business Routes', function () {
             ->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
 
-        $this->customer = Customer::where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
+        $this->customer = Customer::where('email','=','crayolu@gmail.com')->with('profile')->first();
 
         $this->business = Business::factory()->create([
             'state_id' => $this->state->id,
@@ -386,7 +386,6 @@ describe('Business Routes', function () {
     test('Business can view Receipt', function () {
         $link = '/api/v1/receipt/'.$this->receipt->first()->id.'/business/'.$this->business->id;
         $response = $this->actingAs($this->customer)->get($link);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
 
@@ -398,7 +397,6 @@ describe('Business Routes', function () {
             'identifier' => $this->business->id,
             'type' => 'sales',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can Download Pdf Receipt Report', function () {
@@ -406,7 +404,6 @@ describe('Business Routes', function () {
             'type' => 'receipt',
             'identifier' => $this->receipt->first()->id,
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Business can Download Pdf Invoice Report', function () {
@@ -414,7 +411,6 @@ describe('Business Routes', function () {
             'type' => 'invoice',
             'identifier' => $this->invoice->first()->id,
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
 
@@ -513,6 +509,4 @@ describe('Business Routes', function () {
         );
         expect($response->status())->toBe(200);
     });
-
-    /*********** Staff ****************/
 });

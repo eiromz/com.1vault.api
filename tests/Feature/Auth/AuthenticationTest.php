@@ -23,6 +23,7 @@ describe('Auth Routes', function () {
             'phone_number' => $this->phone_number,
             'otp_expires_at' => now()->addMinutes(15),
             'email' => 'crayoluauth@gmail.com',
+            'email_verified_at' => null
         ]);
 
         $this->profile = Profile::factory()->create([
@@ -74,6 +75,8 @@ describe('Auth Routes', function () {
             'email' => $this->customer->email,
             'password' => 'sampleTim@123',
         ]);
+
+        $response->dump();
 
         expect($response->status())->toBe(200);
     });
@@ -127,8 +130,10 @@ describe('Auth Routes', function () {
     test('Customers can request a opt for new account', function () {
 
         $response = $this->post('/api/v1/auth/register', [
-            'email' => 'seun@mailinator.com',
+            'email' => 'crayoluauth@gmail.com',
         ]);
+
+        $response->dump();
 
         expect($response->status())->toBe(200);
     });

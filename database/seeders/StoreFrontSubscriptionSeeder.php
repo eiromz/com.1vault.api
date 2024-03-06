@@ -54,7 +54,7 @@ class StoreFrontSubscriptionSeeder extends Seeder
     {
         return [
             [
-                'title' => 'Basic Plan',
+                'title' => 'Basic',
                 'type' => 'service.store_front',
                 'provider' => '1vault',
                 'description' => 'N/A',

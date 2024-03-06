@@ -30,7 +30,6 @@ class InvoiceCtrl extends DomainBaseCtrl
     public function __construct(InvoiceRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->repository->setUser(auth()->user());
         parent::__construct();
     }
     /**
@@ -38,6 +37,8 @@ class InvoiceCtrl extends DomainBaseCtrl
      */
     public function store(CreateInvoiceRequest $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
+
         $request->merge([
             'client_id'         => $request->client,
             'business_id'       => $request->business,
@@ -56,6 +57,7 @@ class InvoiceCtrl extends DomainBaseCtrl
     }
     public function destroy(Request $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
         $request->validate([
             'invoice' => ['required', 'exists:App\Models\Invoice,id'],
         ]);
@@ -72,6 +74,7 @@ class InvoiceCtrl extends DomainBaseCtrl
     }
     public function update($id, UpdateInvoiceRequest $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
         $request->validated();
 
         if (! $this->repository->update($id, $request->only($this->updateRequestFilterKeys))) {
@@ -86,6 +89,7 @@ class InvoiceCtrl extends DomainBaseCtrl
     }
     public function view($invoice, $business, Request $request): JsonResponse
     {
+        $this->repository->setUser(auth()->user());
         $request->merge([
             'invoice' => $invoice,
             'business' => $business,
@@ -105,6 +109,7 @@ class InvoiceCtrl extends DomainBaseCtrl
     }
     public function index($business, Request $request)
     {
+        $this->repository->setUser(auth()->user());
         $request->merge(['business' => $business]);
 
         $request->validate([
