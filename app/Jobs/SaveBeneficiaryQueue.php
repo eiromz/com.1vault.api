@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Beneficiaries;
+use App\Models\Beneficiary;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +23,7 @@ class SaveBeneficiaryQueue implements ShouldQueue
     public function handle(): void
     {
         try{
-            Beneficiaries::query()->create($this->beneficiary);
+            Beneficiary::query()->create($this->beneficiary);
         }catch (Exception $e) {
             logExceptionErrorMessage('SaveBeneficiaryQueue',$e,[],'error');
         }

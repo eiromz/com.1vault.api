@@ -14,7 +14,6 @@
             </div>
         </div>
 
-
         <div class="overflow-x-auto">
             <table class="border-collapse table-auto w-full text-sm mt-14 whitespace-pre">
                 <thead class="tbl_header_color text-white p-5">
@@ -33,7 +32,7 @@
                         <td class="p-5 text-center">{{ $item->invoiceNumber }}</td>
                         <td class="p-5 text-center">{{ $item->due_date }}</td>
                         <td class="p-5 text-center">&#8358 {{ $item->total }}</td>
-                        <td class="p-5 text-end">&#8358 {{ $item->balance_due }}</td>
+                        <td class="p-5 text-end text-red-600">&#8358 {{ $item->balance_due }}</td>
                     </tr>
                 @endforeach
                 <tr class="border-b border-t border-gray-900">
@@ -54,7 +53,7 @@
         </div>
 
         <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
-            <p class="text-sm pt-2">Date Generated <br> {{ now()->diffForHumans() }}</p>
+            <p class="text-sm pt-2">Date Generated <br>{{ now()->isoFormat('LLLL') }}</p>
         </div>
 
         <div class="flex flex-wrap justify-between p-2">

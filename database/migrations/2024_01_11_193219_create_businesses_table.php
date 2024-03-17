@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone_number')->comment('phone number for the client');
             $table->string('email')->unique()->comment('email address of the business');
             $table->string('address')->comment('The business physical address')->nullable();
-            $table->string('logo')->comment('logo in string for the business')->nullable();
+            $table->string('image')->comment('image in string for the business')->nullable();
             $table->string('sector')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('zip_code')->nullable();

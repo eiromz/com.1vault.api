@@ -7,7 +7,7 @@ use App\Exceptions\InsufficientBalance;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SaveBeneficiaryQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
-use App\Models\Beneficiaries;
+use App\Models\Beneficiary;
 use App\Models\Journal;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;

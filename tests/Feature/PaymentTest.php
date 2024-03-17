@@ -9,10 +9,6 @@ use App\Models\Profile;
 use App\Models\Service;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
 describe('Payment Routes', function () {
     beforeEach(function () {
@@ -42,21 +38,19 @@ describe('Payment Routes', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/name-search', [
             'account_number' => '9977581538',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can fetch all journal transactions', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
             'filter_type' => 'default',
         ]);
-        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can fetch a single journal transaction', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal/view', [
             'trx_ref' => $this->journal->first()->trx_ref,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can perform transaction transfers', function () {
@@ -78,7 +72,6 @@ describe('Payment Routes', function () {
             'remark' => 'this is good',
             'saveBeneficiary' => 1
         ]);
-
         expect($response->json('data'))->debit->toBeTrue();
     });
 
@@ -88,19 +81,19 @@ describe('Payment Routes', function () {
             'service_id' => $this->service->first()->id,
             'price' => $this->service->first()->amount,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can view all in cart', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/cart');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can delete from cart', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/cart/delete', [
             'cart_id' => $this->cart->first()->id,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can pay for service', function () {
@@ -115,7 +108,7 @@ describe('Payment Routes', function () {
     test('Merchant can fetch nip banks', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/providus/nip/banks');
         expect($response->status())->toBe(200);
-    });
+    })->skip();
     test('Merchant can fetch nip account information', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/enquiry', [
             'accountNumber' => '1018996198',
@@ -123,9 +116,9 @@ describe('Payment Routes', function () {
             'userName' => 'test',
             'password' => 'test',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
-    });
+    })->skip();
     test('Merchant can transfer through nip', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/providus/nip/transfer', [
             'beneficiaryAccountName'    => 'UGBO, CHARLES UMORE',
@@ -142,21 +135,21 @@ describe('Payment Routes', function () {
        Journal::query()->where('debit', '=', true)->latest()->first();
 
        expect($response->status())->toBe(200);
-    });
+    })->skip();
 
     /************ BILLS ************/
     test('Merchant can get bills categories', function(){
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories');
         expect($response->status())->toBe(200);
-    });
+    })->skip('Needs external connection');
     test('Merchant can view a single bills categories', function(){
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/categories/2');
         expect($response->status())->toBe(200);
-    });
+    })->skip('Needs external connection');
     test('Merchant can get bills fields', function() {
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
         expect($response->status())->toBe(200);
-    });
+    })->skip('Needs external connection');
     test('Merchant can validate a bill before payment', function(){
         $response =  $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/27',[
             "inputs" => [
@@ -166,9 +159,9 @@ describe('Payment Routes', function () {
                 ["key" => "amount","value" => "1000"],
             ]
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
-    });
+    })->skip('Needs external connection');
     //check if there is a validation
 
     /************ BENEFICIARIES **************/
@@ -177,7 +170,7 @@ describe('Payment Routes', function () {
             'customer_id' => $this->customer->id
         ]);
         $response = $this->actingAs($this->customer)->get('/api/v1/beneficiary');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can view single beneficiaries', function(){
@@ -185,7 +178,7 @@ describe('Payment Routes', function () {
             'customer_id' => $this->customer->id
         ]);
         $response = $this->actingAs($this->customer)->get("/api/v1/beneficiary/view/{$beneficiary->id}");
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
 });

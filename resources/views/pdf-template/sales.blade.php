@@ -43,7 +43,7 @@
         </div>
 
         <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
-            <p class="text-sm pt-2">Date Generated <br> {{ now()->diffForHumans() }}</p>
+            <p class="text-sm pt-2">Date Generated <br>{{ now()->isoFormat('LLLL') }}</p>
         </div>
 
         <div class="flex flex-wrap justify-between p-2">

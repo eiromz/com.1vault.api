@@ -83,7 +83,7 @@ class ReportCtrl extends DomainBaseCtrl
     {
         if(in_array($request->type,['sales','debtors'])){
 
-            $this->data = match($request->type){
+            $this->data = match($request->type) {
                 'debtors' => $this->getModel->where('business_id','=',$request->business->id)
                     ->whereBetween('due_date',[$request->start_date,$request->end_date])->where('payment_status','=',false)->get(),
                 'sales' => $this->getModel->where('business_id','=',$request->business->id)

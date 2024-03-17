@@ -13,10 +13,7 @@ use Src\Wallets\Payments\App\Http\ValidateBillCtrl;
 use Src\Wallets\Payments\App\Http\WebhookCtrl;
 use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
 
-//add header to this request via the middleware
 Route::post('/providus/webhook', WebhookCtrl::class);
-
-//
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
     //search for a user
@@ -37,16 +34,17 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
         Route::get('/view/{beneficiary}', [BeneficiaryCtrl::class,'view']);
     });
 
-    Route::prefix('/providus/nip')->group(function () {
-        Route::get('/banks', FetchBankCtrl::class);
-        Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
-        Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');;
-    });
-
-    Route::prefix('/providus/bills')->group(function () {
-        Route::get('/categories', [CategoriesCtrl::class,'index']);
-        Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
-        Route::get('/fields/{bill}', [BillCtrl::class,'index']);
-        Route::post('/fields/validate/{bill}',ValidateBillCtrl::class);
+    Route::prefix('/providus')->group(function(){
+        Route::prefix('/nip')->group(function(){
+            Route::get('/banks', FetchBankCtrl::class);
+            Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
+            Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');
+        });
+        Route::prefix('/bills')->group(function () {
+            Route::get('/categories', [CategoriesCtrl::class,'index']);
+            Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
+            Route::get('/fields/{bill}', [BillCtrl::class,'index']);
+            Route::post('/fields/validate/{bill}',ValidateBillCtrl::class);
+        });
     });
 });

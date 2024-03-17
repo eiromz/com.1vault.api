@@ -21,7 +21,7 @@ class BusinessFactory extends Factory
             'phone_number' => fake()->phoneNumber,
             'email' => fake()->email,
             'address' => fake()->address,
-            'logo' => fake()->imageUrl,
+            'image' => fake()->imageUrl,
             'zip_code' => fake()->postcode,
         ];
     }

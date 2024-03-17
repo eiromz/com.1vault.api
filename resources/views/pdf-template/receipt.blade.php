@@ -9,7 +9,7 @@
                 <h1 class="text-5xl font-normal font-bold pb-3">RECEIPT</h1>
                 <h6 class="text-base font-normal">{{$data->receiptNumber}}</h6>
             </div>
-            <img src="{{ $data->business->logo ?? "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"}}" alt="">
+            <img src="{{ $request->business->logo ?? "https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/logo.png"}}" alt="">
         </div>
         <hr>
         <div class="flex flex-wrap items-center justify-between gap-6 mt-4">
@@ -60,13 +60,13 @@
                         <span class="pe-10 font-bold">Total Amount</span> &#8358 {{ $data->total }}
                     </td>
                 </tr>
-                <tr class="border-b">
-                    <td colspan="5" class="text-base font-normal text-end">
+                <tr>
+                    <td colspan="5" class="text-base font-normal text-end border-b">
                         <span class="pe-10 font-bold">Amount Received</span> &#8358 {{ $data->amount_received }}
                     </td>
                 </tr>
-                <tr class="border-b">
-                    <td colspan="5" class="text-base font-normal text-end">
+                <tr>
+                    <td colspan="5" class="text-base font-normal text-end border-b">
                         <span class="pe-10 font-bold">Balance Due</span> &#8358 {{ $data->balance_due }}
                     </td>
                 </tr>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
-            <p class="text-sm pt-2">Thanks for shopping with us </p>
+            <p class="text-sm pt-2"> Powered by 1vault </p>
         </div>
 
         <div class="flex flex-wrap justify-between p-2">

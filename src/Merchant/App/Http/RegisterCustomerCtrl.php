@@ -40,7 +40,8 @@ class RegisterCustomerCtrl extends DomainBaseCtrl
 
     private function customerExistsAndIsNotVerified($email): Model|Builder|null
     {
-        return Merchant::query()->where('email','=',$email)
+        return Merchant::query()
+            ->where('email','=',$email)
             ->first();
     }
 }

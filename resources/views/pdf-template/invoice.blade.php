@@ -104,7 +104,7 @@
         </div>
 
         <div class="flex flex-wrap justify-between gap-6 border-b border-gray-400 p-2">
-            <p class="text-sm pt-2">Thanks for shopping with us </p>
+            <p class="text-sm pt-2">{{ $data->note ?? "Thanks for shopping with us" }} </p>
         </div>
 
         <div class="flex flex-wrap justify-between p-2">

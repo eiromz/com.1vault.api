@@ -41,17 +41,17 @@ describe('Business Routes', function () {
             'password' => 'sampleTim@123',
             'password_confirmation' => 'sampleTim@123',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can list all staffs', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/staff');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can delete staff', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/staff/delete/'.$this->staff->id);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can update staff', function () {
@@ -60,7 +60,7 @@ describe('Business Routes', function () {
             'lastname' => 'BajadMan',
             'email' => 'crayolubiz@gmail.com',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
 });

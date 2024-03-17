@@ -21,7 +21,7 @@ describe('ProvidusBank Routes', function () {
     });
 
     test('Customers can receive settlement to their bank account', function () {
-        $response = $this->post('/api/v1/pr/webhook/notify', [
+        $response = $this->post('/api/v1/providus/webhook', [
             'sessionId' => '0000042103011805345648005069266636442357859508',
             'accountNumber' => '9977581536',
             'tranRemarks' => 'FROM UBA/ CASAFINA CREDIT-EASY LOAN-NIP/SEYI OLUFEMI/CASAFINA CAP/0000042103015656180548005069266636',
@@ -38,8 +38,6 @@ describe('ProvidusBank Routes', function () {
             'channelId' => '1',
             'tranDateTime' => '2021-03-01 18:06:20.000',
         ]);
-
-        $response->dump();
 
         expect($response->status())->toBe(200);
     });

@@ -37,12 +37,12 @@ describe('Profile Routes', function () {
             'selfie' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
             'utility_bill' => 'https://1vault-staging-1.fra1.cdn.digitaloceanspaces.com/1vault-staging-1/docs/BmUjTlOlLW8dKpTaTGg5UV97yci2UetoPKqA7iYn.jpg',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can fetch doc types', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/doc-types');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can forgot their pin', function () {
@@ -52,7 +52,7 @@ describe('Profile Routes', function () {
             'pin' => '123455',
             'pin_confirmation' => '123455',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can create a transaction pin', function () {
@@ -62,7 +62,7 @@ describe('Profile Routes', function () {
             'pin_confirmation' => '123455',
         ]);
 
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can change their transaction pin', function () {
@@ -72,7 +72,7 @@ describe('Profile Routes', function () {
             'pin' => '123455',
             'pin_confirmation' => '123455',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can change their password when logged in', function () {
@@ -81,7 +81,7 @@ describe('Profile Routes', function () {
             'password' => 'sampleTim@1234',
             'password_confirmation' => 'sampleTim@1234',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can update their profile', function () {
@@ -98,12 +98,12 @@ describe('Profile Routes', function () {
             'can_receive_notification' => 1,
             'can_receive_subscription_reminder' => 1,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can view their profile', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/profile');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Customers can delete account', function () {

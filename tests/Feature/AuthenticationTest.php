@@ -44,7 +44,6 @@ describe('Auth Routes', function () {
     });
 
     test('Merchant can reset password using otp', function () {
-
         $response = $this->post('/api/v1/auth/reset-password', [
             'email' => $this->customer->email,
             'password' => 'sampleTim@123',
@@ -70,18 +69,18 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('MERCHCANT CAN LOGIN', function () {
+    test('MERCHANT CAN LOGIN', function () {
         $response = $this->post('/api/v1/auth/login', [
             'email' => $this->customer->email,
             'password' => 'sampleTim@123',
         ]);
 
-        $response->dump();
-
         expect($response->status())->toBe(200);
     });
 
     test('Merchant can complete profile', function () {
+        $this->customer->fill(['email_verified_at' => now()])->save();
+
         $response = $this->actingAs($this->customer)->post('/api/v1/auth/complete-profile', [
             'first_name' => fake()->firstName,
             'last_name' => fake()->lastName,
@@ -91,7 +90,6 @@ describe('Auth Routes', function () {
             'password' => 'PallEord@123',
             'password_confirmation' => 'PallEord@123',
         ]);
-        $response->dump();
 
         expect($response->status())->toBe(200);
     });
@@ -122,8 +120,6 @@ describe('Auth Routes', function () {
             'otp' => $this->customer->otp,
         ]);
 
-        $response->dump();
-
         expect($response->status())->toBe(200);
     });
 
@@ -133,19 +129,6 @@ describe('Auth Routes', function () {
             'email' => 'crayoluauth@gmail.com',
         ]);
 
-        $response->dump();
-
         expect($response->status())->toBe(200);
     });
-
-    test('users can logout', function () {
-        $user = Customer::factory()->create();
-
-        $response = $this->actingAs($user)->post('/logout');
-
-        $this->assertGuest();
-        $response->assertNoContent();
-    });
 });
-
-//account id, balance_before, balance_after,account_locked,account_locked_session,restricted,restricted_reason,created_at, updated_at

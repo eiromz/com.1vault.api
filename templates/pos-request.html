@@ -1,0 +1,104 @@
+<!-- resources/views/layouts/app.blade.php -->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@yield('title')</title>
+    <title>1VAULT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- favicon -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Style css -->
+    <link href="css/style.min.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .tbl_header_color {background-color: #2652A2;}
+    </style>
+</head>
+<body class="w-2/3 bg-gray-100 m-auto">
+
+<div class="border rounded-3xl bg-white p-12">
+
+    <div class="flex flex-wrap items-center justify-between gap-6 mb-5">
+        <div>
+            <h2 class="text-lg font-normal"><span class="font-bold">Invoice No:</span> #sm75692</h2>
+            <h5 class="text-base font-normal"><span class="font-bold">Date:</span>05.01.2022</h5>
+        </div>
+        <img src="image/logo-dark.png" alt="">
+    </div>
+    <hr>
+    <div class="flex flex-wrap items-center justify-between gap-6 mt-4">
+        <div>
+            <h4 class="text-base font-bold">Passenger Info:</h4>
+            <p class="font-sm font-normal">
+                Jennifer Richards <br>
+                365 Bloor Street East, Toronto, <br>Ontario, M4W 3L4, <br>
+                Canada
+            </p>
+        </div>
+        <div class="text-end">
+            <h4 class="text-base font-bold">Bus Line Enterprise</h4>
+            <p class="font-sm font-normal">
+                237 Roanoke Road, North York,<br>
+                Ontario, Canada<br>
+                demo@email.com
+            </p>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="border-collapse table-auto w-full text-sm mt-14 whitespace-pre">
+            <thead>
+            <tr class="border-b border-gray-900">
+                <th class="p5 font-normal text-lg">D1</th>
+                <th class="p5 font-normal text-lg">D2</th>
+                <th class="p5 font-normal text-lg">D3</th>
+                <th class="p5 font-normal text-lg">D4</th>
+                <th class="p5 font-normal text-lg">D5</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+            <tr class="border-b border-gray-900">
+                <td class="p-4 text-center">Bus Line</td>
+                <td class="p-4 text-center">1</td>
+                <td class="p-4 text-center">$560</td>
+                <td class="p-4 text-center">0</td>
+                <td class="p-4 text-center">$560</td>
+            </tr>
+            <tr class="border-b">
+                <td colspan="5" class="p-1 text-base font-normal text-end">
+                    <span class="pe-10 font-bold">Total Amount</span> $1020
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" class="p-1 text-base font-normal text-end">
+                    <span class="pe-10 font-bold">Total Amount</span> $1020
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="flex flex-wrap justify-between gap-6 border-b p-2">
+        <div>
+            <span class="text-lg font-bold">Payment Info:</span>
+            <p class="text-sm font-medium pt-2">Account No: <span class="font-bold">123456789102</span>
+            </p>
+            <p class="text-sm font-medium">Name: <span class="font-bold">Lorem Ipsum</span></p>
+            <p class="text-sm font-medium">Bank Account: <span class="font-bold">0123 456 7890</span>
+            </p>
+        </div>
+    </div>
+    <div class="flex flex-wrap justify-between gap-6 p-2">
+        <div>
+            <span class="text-lg font-bold">Payment Info:</span>
+            <p class="text-sm font-medium pt-2">Account No: <span class="font-bold">123456789102</span>
+            </p>
+            <p class="text-sm font-medium">Name: <span class="font-bold">Lorem Ipsum</span></p>
+            <p class="text-sm font-medium">Bank Account: <span class="font-bold">0123 456 7890</span>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -24,10 +24,10 @@ class CreateStaffRequest extends FormRequest
         $this->setDefault();
 
         return [
-            'email' => ['required', 'unique:App\Models\Customer,email', 'email'],
-            'firstname' => ['required'],
-            'lastname' => ['required'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->uncompromised()->symbols()],
+            'email' => ['bail','required', 'unique:App\Models\Customer,email', 'email'],
+            'firstname' => ['bail','required'],
+            'lastname' => ['bail','required'],
+            'password' => ['bail','required', 'confirmed', Password::min(8)->mixedCase()->numbers()->uncompromised()->symbols()],
             'password_confirmation' => ['required'],
         ];
     }

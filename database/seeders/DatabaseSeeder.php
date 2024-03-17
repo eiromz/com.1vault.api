@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Account;
+use App\Models\Beneficiary;
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\Customer;
@@ -101,6 +102,10 @@ class DatabaseSeeder extends Seeder
         foreach ($this->journals($customer) as $journal) {
             Journal::factory()->create($journal);
         }
+
+        Beneficiary::factory()->count(30)->create([
+            'customer_id' => $customer->id
+        ]);
 
         $this->customer2($state);
     }

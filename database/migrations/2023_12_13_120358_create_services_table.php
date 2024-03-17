@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('type')->comment('this can be utility,airtime,data,internet,electricity,social_media_subscription,legal,service.buiness_registration');
             $table->string('provider')->comment('This refers to the name of the single entity offering this service, mtn,dstv');
             $table->string('description')->comment('Give a brief overview xof the service and the benefits');
-            $table->string('logo')->nullable();
+            $table->string('image')->nullable();
             $table->double('amount')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('category')->comment('social_media,business_registration,legal,pos,store_front');

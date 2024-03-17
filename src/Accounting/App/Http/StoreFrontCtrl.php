@@ -15,13 +15,13 @@ class StoreFrontCtrl extends DomainBaseCtrl
     private $repository;
 
     private array $createRequestkeys = [
-        'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
+        'email', 'fullname', 'image', 'phone_number', 'address', 'state_id',
         'zip_code', 'is_store_front', 'customer_id', 'whatsapp_number',
         'sector', 'facebook', 'instagram', 'twitter_x',
     ];
 
     private array $updateRequestkeys = [
-        'email', 'fullname', 'logo', 'phone_number', 'address', 'state_id',
+        'email', 'fullname', 'image', 'phone_number', 'address', 'state_id',
         'zip_code', 'whatsapp_number', 'sector', 'facebook', 'instagram', 'twitter_x',
     ];
 
@@ -57,7 +57,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'email' => ['required', 'email', 'unique:App\Models\Business,email'],
             'address' => ['required', 'min:3'],
             'state_id' => ['required', 'exists:App\Models\State,id'],
-            'logo' => ['required', 'url'],
+            'image' => ['required', 'url'],
             'sector' => ['required', 'string'],
             'whatsapp_number' => ['required'],
             'facebook' => ['nullable'],
@@ -76,7 +76,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $storeFrontExists);
     }
 
-    public function update($storefront, Request $request)
+    public function update($storefront, Request $request): JsonResponse
     {
         $request->merge([
             'storefront' => $storefront,
@@ -90,7 +90,7 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'email' => ['nullable', 'email', 'unique:App\Models\Business,email'],
             'address' => ['nullable', 'min:3'],
             'state_id' => ['nullable'],
-            'logo' => ['nullable', 'url'],
+            'image' => ['nullable', 'url'],
             'sector' => ['nullable', 'string'],
             'whatsapp_number' => ['nullable'],
             'facebook' => ['nullable'],
@@ -98,7 +98,8 @@ class StoreFrontCtrl extends DomainBaseCtrl
             'twitter_x' => ['nullable'],
         ]);
 
-        $data = StoreFront::query()->firstOrFail($storefront);
+        $data = StoreFront::query()->findOrFail($storefront);
+
         $data->fill($request->only($this->updateRequestkeys))->save();
 
         return jsonResponse(Response::HTTP_OK, $data);
