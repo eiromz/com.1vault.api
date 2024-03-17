@@ -45,7 +45,7 @@ class JournalWalletCreditService
             'debit' => false,
             'credit' => true,
             'label' => 'Transfer',
-            'source' => auth()->user()->profile->fullname,
+            'source' => auth()->user()->profile->fullname
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));

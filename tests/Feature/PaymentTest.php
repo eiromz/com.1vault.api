@@ -12,7 +12,6 @@ use Database\Seeders\DatabaseSeeder;
 
 describe('Payment Routes', function () {
     beforeEach(function () {
-        $this->seed(DatabaseSeeder::class);
 
         $this->state = State::query()->where('country_id', '=', 160)
             ->where('name', '=', 'Lagos')->first();
@@ -44,6 +43,7 @@ describe('Payment Routes', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/wallets/journal', [
             'filter_type' => 'default',
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can fetch a single journal transaction', function () {
@@ -72,6 +72,7 @@ describe('Payment Routes', function () {
             'remark' => 'this is good',
             'saveBeneficiary' => 1
         ]);
+        $response->dump();
         expect($response->json('data'))->debit->toBeTrue();
     });
 

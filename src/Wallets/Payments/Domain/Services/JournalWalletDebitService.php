@@ -22,7 +22,7 @@ class JournalWalletDebitService
 
     public array $creationKeys = [
         'amount', 'trx_ref',
-        'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id',
+        'debit', 'credit', 'label', 'source', 'balance_before', 'balance_after', 'customer_id','remark'
     ];
     public function __construct($accountInstance, $request = null)
     {
@@ -54,7 +54,7 @@ class JournalWalletDebitService
             'credit' => false,
             'trx_ref' => $this->request->transactionReference ?? generateTransactionReference(),
             'label' => 'Transfer Out',
-            'source' => auth()->user()->profile->fullname,
+            'source' => auth()->user()->profile->fullname
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
@@ -106,9 +106,12 @@ class JournalWalletDebitService
     }
     public function saveBeneficiary()
     {
+
         $beneficiary = ($this->request->trx_type === '1vault') ? $this->providusBankBeneficiary() : $this->nipBankBeneficiary();
 
-        if($this->request->boolean('saveBeneficiary')) {
+        $beneficiaryExist = Beneficiary::query()->where($beneficiary)->exists();
+
+        if(!$beneficiaryExist && $this->request->boolean('saveBeneficiary')) {
             SaveBeneficiaryQueue::dispatch($beneficiary)->delay(now()->addMinute());
         }
 

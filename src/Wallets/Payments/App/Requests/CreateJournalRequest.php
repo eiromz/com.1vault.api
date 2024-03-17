@@ -56,6 +56,15 @@ class CreateJournalRequest extends FormRequest
         $this->verifyTransactionPin();
         $this->validated();
         $this->getAccountNumberInformation();
+        $this->handleNullRemark();
+    }
+
+    private function handleNullRemark(): void
+    {
+        $remark =  "Transfer to {$this->profile->fullname}";
+        if(is_null($this->remark)){
+            $this->remark = $remark;
+        }
     }
 
     public function getAccountNumberInformation(): void
