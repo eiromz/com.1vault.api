@@ -35,7 +35,6 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
     Route::get('profile', [ProfileCtrl::class, 'index']);
     Route::post('profile/delete-account', [ProfileCtrl::class, 'destroy']);
     Route::post('profile', [ProfileCtrl::class, 'update']);
-    //update transaction pin
 
     Route::post('profile/kyc', KnowYourCustomerCtrl::class);
 

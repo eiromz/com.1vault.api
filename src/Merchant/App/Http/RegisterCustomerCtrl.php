@@ -5,6 +5,8 @@ namespace Src\Merchant\App\Http;
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Src\Merchant\App\Http\Data\RegisterCustomerData;
@@ -36,7 +38,7 @@ class RegisterCustomerCtrl extends DomainBaseCtrl
         return jsonResponse(Response::HTTP_OK, $request->customer);
     }
 
-    private function customerExistsAndIsNotVerified($email): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder|null
+    private function customerExistsAndIsNotVerified($email): Model|Builder|null
     {
         return Merchant::query()->where('email','=',$email)
             ->first();

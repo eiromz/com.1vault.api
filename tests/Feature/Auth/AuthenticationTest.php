@@ -54,7 +54,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Mercha forgot password', function () {
+    test('Merchant forgot password', function () {
 
         $response = $this->post('/api/v1/auth/forgot-password', [
             'email' => $this->customer->email,
@@ -63,7 +63,7 @@ describe('Auth Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Customers can logout', function () {
+    test('MERCHANT CAN LOGOUT', function () {
 
         $response = $this->actingAs($this->customer)->post('/api/v1/auth/logout');
 
