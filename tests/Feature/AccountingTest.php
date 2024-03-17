@@ -14,82 +14,48 @@ use App\Models\State;
 uses()->group('accounting');
 
 uses()->beforeEach(function () {
-    $this->seed(DatabaseSeeder::class);
 
     $this->state = State::query()
         ->where('country_id', '=', 160)
         ->where('name', '=', 'Lagos')->first();
 
-    $this->customer = Customer::where('email','=','crayolu@gmail.com')->with('profile')->first();
+    $this->customer = Customer::query()->where('email','=','crayolu@gmail.com')->with('profile')->first();
 
-    $this->business = Business::factory()->create([
-        'state_id' => $this->state->id,
-        'customer_id' => $this->customer->id,
-        'is_store_front' => false,
-    ]);
+    $this->business = Business::query()
+        ->where('customer_id','=',$this->customer->id)
+        ->where('is_store_front','=',false)
+        ->first();
 
-    $this->client = Client::factory()->create([
+    $this->client = Client::query()->where([
         'business_id' => $this->business->id,
         'customer_id' => $this->customer->id,
         'fullname' => 'Apostle Atokolos',
-    ]);
+    ])->first();
 
-    $this->invoice = Invoice::factory()->count(3)->create([
+    $this->invoice = Invoice::query()->where([
         'business_id' => $this->business->id,
         'customer_id' => $this->customer->id,
         'client_id' => $this->client->id,
-        'items' => [
-            [
-                'inventory_id' => fake()->uuid,
-                'name' => 'Hackett',
-                'amount' => 1000,
-                'unit' => 'Johnston',
-                'quantity' => 3,
-            ],
-            [
-                'inventory_id' => fake()->uuid,
-                'name' => 'Hackett',
-                'amount' => 2000,
-                'unit' => 'Johnston',
-                'quantity' => 3,
-            ],
-        ],
-    ]);
+    ])->first();
 
-    $this->receipt = Receipt::factory()->count(3)->create([
+    $this->receipt = Receipt::query()->where([
         'business_id' => $this->business->id,
         'customer_id' => $this->customer->id,
         'client_id' => $this->client->id,
-        'items' => [
-            [
-                'inventory_id' => fake()->uuid,
-                'name' => 'Hackett',
-                'amount' => 1000,
-                'unit' => 'Johnston',
-                'quantity' => 3,
-            ],
-            [
-                'inventory_id' => fake()->uuid,
-                'name' => 'Hackett',
-                'amount' => 2000,
-                'unit' => 'Johnston',
-                'quantity' => 3,
-            ],
-        ],
-    ]);
+    ])->first();
 
-    $this->inventory = Inventory::factory()->count(3)->create([
+    $this->inventory = Inventory::query()->where([
         'business_id' => $this->business->id,
         'customer_id' => $this->customer->id,
-    ]);
+    ])->first();
 
-    $this->pos = PosRequest::factory()->create([
+    $this->pos = PosRequest::query()->where([
         'state_id' => $this->state->id,
         'customer_id' => $this->customer->id,
-    ]);
+    ])->first();
 
     $this->journal = Journal::latest()->first();
-})->group('accounting');
+});
 
 describe('Business Routes', function () {
 
