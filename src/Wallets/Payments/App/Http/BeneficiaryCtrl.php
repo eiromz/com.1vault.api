@@ -12,6 +12,7 @@ class BeneficiaryCtrl extends DomainBaseCtrl
     public function index(): JsonResponse
     {
         $beneficiaries = Beneficiary::query()
+            ->select(['bank_account_name','bank_account_number','bank_code','bank_name','created_at'])
             ->where('customer_id', '=', auth()->user()->id)
             ->limit(100)
             ->get();
