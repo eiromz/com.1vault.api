@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "alymosul/exponent-server-sdk-php": "^1.3",
+        "alymosul/laravel-exponent-push-notifications": "^4.0",
         "barryvdh/laravel-dompdf": "^2.0",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",

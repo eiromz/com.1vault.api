@@ -72,7 +72,6 @@ describe('Payment Routes', function () {
             'remark' => 'this is good',
             'saveBeneficiary' => 1
         ]);
-        $response->dump();
         expect($response->json('data'))->debit->toBeTrue();
     });
 

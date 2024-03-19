@@ -42,7 +42,7 @@ class TransferCtrl extends DomainBaseCtrl
 
         $source->checkBalance()->debit()->notify()->saveBeneficiary()->updateBalanceQueue();
 
-        $nip = (new NipTransferService($request))->callExtServer()->callExtServerFailed();
+        (new NipTransferService($request))->callExtServer()->callExtServerFailed();
 
         return jsonResponse(Response::HTTP_OK, $source->journal);
     }

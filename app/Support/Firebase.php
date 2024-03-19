@@ -8,6 +8,7 @@ use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+use ExponentPhpSDK\Expo;
 
 class Firebase
 {
@@ -20,6 +21,8 @@ class Firebase
     public $token;
 
     private string $filePath;
+
+    private string $channelName = 'default';
 
     public function __construct($token)
     {
@@ -36,6 +39,12 @@ class Firebase
             if (is_null($this->token)) {
                 return;
             }
+
+            $expo = Expo::normalSetup();
+
+            $expo->subscribe($this->channelName, $this->token);
+
+            $expo->notify([$this->channelName], $notification);
 
             $message = CloudMessage::withTarget('token', $this->token)
                 ->withNotification($this->notification($notification))

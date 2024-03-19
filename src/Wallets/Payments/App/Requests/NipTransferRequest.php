@@ -21,8 +21,8 @@ class NipTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transaction_pin'           => ['required'],
-            'narration'                 => ['required'],
+            'transaction_pin'           => ['bail','required'],
+            'narration'                 => ['nullable'],
             'currencyCode'              => ['required'],
             'beneficiaryBank'           => ['required'],
             'beneficiaryBankName'       => ['required'],
@@ -60,6 +60,15 @@ class NipTransferRequest extends FormRequest
         }
 
         throw new BaseException('Invalid Transaction pin', Response::HTTP_BAD_REQUEST);
+    }
+
+    private function handleNullRemark(): void
+    {
+        $fullname =  auth()->user()->profile->fullname;
+
+        if(is_null($this->remark)){
+            $this->remark = "Transfer from {$fullname}";
+        }
     }
     public function messages()
     {
