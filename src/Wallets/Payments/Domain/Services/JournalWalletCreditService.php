@@ -40,14 +40,14 @@ class JournalWalletCreditService
         $fullname = auth()->user()->profile->fullname;
 
         $this->request->merge([
-            'balance_before' => $this->accountInstance->balance_after,
-            'balance_after' => $this->calculateNewBalance(),
-            'customer_id' => $this->accountInstance->customer_id,
-            'trx_ref' => generateTransactionReference(),
-            'debit' => false,
-            'credit' => true,
-            'label' => 'Transfer',
-            'source' => $fullname,
+            'balance_before'    => $this->accountInstance->balance_after,
+            'balance_after'     => $this->calculateNewBalance(),
+            'customer_id'       => $this->accountInstance->customer_id,
+            'trx_ref'           => generateTransactionReference(),
+            'debit'             => false,
+            'credit'            => true,
+            'label'             => 'Transfer',
+            'source'        => $fullname,
             'remark' => "Transfer from {$fullname}"
         ]);
 
