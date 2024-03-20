@@ -38,3 +38,5 @@ class BillCtrl extends DomainBaseCtrl
        }
     }
 }
+
+//provider is a list of services and their categories
