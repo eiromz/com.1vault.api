@@ -2,9 +2,12 @@
 
 namespace Src\Accounting\App\Http;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\StoreFront;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Accounting\App\Requests\CreateStoreFrontInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,28 +30,22 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
         parent::__construct();
     }
 
-    public function store(Request $request): JsonResponse
+    /**
+     * @throws BaseException
+     */
+    public function store(CreateStoreFrontInventoryRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
 
-        $request->merge([
-            'is_published' => false,
-            'product_name' => $request->name,
-            'business_id' => $request->business,
-            'is_store_front' => true,
-            'quantity' => 0,
-            'unit' => 'pcs',
-            'selling_price' => $request->amount,
-        ]);
+        $current_inventory_size = $this->repository->totalInventory([]);
 
-        $request->validate([
-            'name' => ['required', 'min:2'],
-            'amount' => ['required'],
-            'business' => ['required'],
-            'image' => ['required', 'url'],
-            'stock_status' => ['required', 'boolean'],
-            'description' => ['required'],
-        ]);
+        $inventory_limit = getInventorySizeLimit(StoreFront::query(), auth()->user());
+
+        if ($current_inventory_size >= $inventory_limit) {
+            throw new BaseException('You have reached the inventory limit', Response::HTTP_BAD_REQUEST);
+        }
+
+        $request->execute();
 
         $data = $this->repository->create($request->only($this->requestKeysFilterCreate));
 
@@ -63,7 +60,7 @@ class StoreFrontInventoryCtrl extends DomainBaseCtrl
             'inventory' => ['required'],
         ]);
 
-        if (!$this->repository->delete($request->inventory)) {
+        if (! $this->repository->delete($request->inventory)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
                 'message' => 'Failed to Delete Inventory',
             ]);

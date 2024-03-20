@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone_number')->comment('phone number for the client');
             $table->string('email')->unique()->comment('email address of the business');
             $table->string('address')->comment('The business physical address')->nullable();
-            $table->string('logo')->comment('logo in string for the business')->nullable();
+            $table->string('image')->comment('image in string for the business')->nullable();
             $table->string('sector')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('zip_code')->nullable();
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('twitter_x')->nullable();
             $table->string('url')->nullable();
+            $table->integer('inventory_limit')->default(50);
             $table->boolean('is_active')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

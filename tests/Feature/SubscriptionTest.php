@@ -25,17 +25,16 @@ describe('Subscription Routes', function () {
     });
     test('Merchant can view all subscriptions', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/subscriptions/default');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can view a subscriptions', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/subscriptions/view/'.$this->subscription->id);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can identify active subscriptions', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/subscriptions/active');
-        $response->dump();
         expect($response->status())->toBe(200);
     });
 });

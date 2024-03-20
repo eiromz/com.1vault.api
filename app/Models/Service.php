@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Attributes\ServiceAmount;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +24,6 @@ class Service extends Model
         'quantity' => 'integer',
     ];
 
-
     protected static function booted(): void
     {
         static::addGlobalScope('active', function (Builder $builder) {
@@ -34,10 +31,6 @@ class Service extends Model
         });
     }
 
-    public function serviceBenefit(): HasMany
-    {
-        return $this->hasMany(ServiceBenefit::class);
-    }
 
     public function subscription(): HasMany
     {

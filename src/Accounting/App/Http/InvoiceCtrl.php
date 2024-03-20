@@ -32,7 +32,6 @@ class InvoiceCtrl extends DomainBaseCtrl
         $this->repository = $repository;
         parent::__construct();
     }
-
     /**
      * @throws Exception
      */
@@ -41,25 +40,24 @@ class InvoiceCtrl extends DomainBaseCtrl
         $this->repository->setUser(auth()->user());
 
         $request->merge([
-            'client_id' => $request->client,
-            'business_id' => $request->business,
+            'client_id'         => $request->client,
+            'business_id'       => $request->business,
+            'payment_status'    => 0
         ]);
 
-        if ($request->amount_received === $request->total) {
+        $request->validated();
+
+        if ($request->amount_received >= $request->total) {
             $request->merge(['payment_status' => 1]);
         }
-
-        $request->validated();
 
         $data = $this->repository->create($request->only($this->storeRequestFilterKeys));
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
     public function destroy(Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
-
         $request->validate([
             'invoice' => ['required', 'exists:App\Models\Invoice,id'],
         ]);
@@ -74,7 +72,6 @@ class InvoiceCtrl extends DomainBaseCtrl
             'message' => 'Invoice Deleted',
         ]);
     }
-
     public function update($id, UpdateInvoiceRequest $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
@@ -90,11 +87,9 @@ class InvoiceCtrl extends DomainBaseCtrl
             'message' => 'Invoice Updated',
         ]);
     }
-
     public function view($invoice, $business, Request $request): JsonResponse
     {
         $this->repository->setUser(auth()->user());
-
         $request->merge([
             'invoice' => $invoice,
             'business' => $business,
@@ -112,11 +107,9 @@ class InvoiceCtrl extends DomainBaseCtrl
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
-
     public function index($business, Request $request)
     {
         $this->repository->setUser(auth()->user());
-
         $request->merge(['business' => $business]);
 
         $request->validate([

@@ -21,6 +21,8 @@ class GenerateAccountNumberQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 5;
+
     public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
     {
     }
@@ -40,7 +42,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
 
             $generateAccountService->save();
         } catch (Exception|JsonException|FatalRequestException|RequestException $e) {
-            logExceptionErrorMessage('GenerateAccountNumberQueue', $e);
+            logExceptionErrorMessage('GenerateAccountNumberQueue', $e,[],'critical');
         }
     }
 }

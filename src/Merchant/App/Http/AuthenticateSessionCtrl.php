@@ -17,7 +17,7 @@ class AuthenticateSessionCtrl extends DomainBaseCtrl
         ]);
     }
 
-    public function destroy(Request $request): JsonResponse
+    public function destroy(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 

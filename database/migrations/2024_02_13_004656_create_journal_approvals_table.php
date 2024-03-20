@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignUuid('customer_id');
             $table->foreignUuid('admin_id')->nullable();
             $table->double('amount');
-            $table->jsonb('source');
-            $table->jsonb('destination');
+            $table->jsonb('source')->comment('the origin of the transaction');
+            $table->jsonb('destination')->comment('where the money is supposed to go');
             $table->string('actions')->nullable()->comment('authorize,reversal');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();

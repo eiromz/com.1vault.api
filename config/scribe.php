@@ -338,15 +338,15 @@ INTRO
     ],
 
     /*
-     * Custom logo path. This will be used as the value of the src attribute for the <img> tag,
-     * so make sure it points to an accessible URL or path. Set to false to not use a logo.
+     * Custom image path. This will be used as the value of the src attribute for the <img> tag,
+     * so make sure it points to an accessible URL or path. Set to false to not use a image.
      *
-     * For example, if your logo is in public/img:
-     * - 'logo' => '../img/logo.png' // for `static` type (output folder is public/docs)
-     * - 'logo' => 'img/logo.png' // for `laravel` type
+     * For example, if your image is in public/img:
+     * - 'image' => '../img/image.png' // for `static` type (output folder is public/docs)
+     * - 'image' => 'img/image.png' // for `laravel` type
      *
      */
-    'logo' => false,
+    'image' => false,
 
     /**
      * Customize the "Last updated" value displayed in the docs by specifying tokens and formats.

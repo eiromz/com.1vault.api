@@ -25,7 +25,7 @@ class CreateBusinessInformationRequest extends FormRequest
             'address' => ['required', 'min:3'],
             'state_id' => ['required', 'exists:App\Models\State,id'],
             'zip_code' => ['required', 'string'],
-            'logo' => ['required', 'url'],
+            'image' => ['required', 'url'],
         ];
     }
 }

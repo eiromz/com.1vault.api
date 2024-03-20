@@ -30,7 +30,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $customer = Customer::query()
             ->where('ACCOUNTID', '=', $user->ACCOUNTID)
-            ->whereIsOwner(1)
+            ->where('is_owner','=',1)
             ->firstOrFail();
 
         $this->customer = $customer->id;
@@ -75,7 +75,7 @@ class BaseRepository implements BaseRepositoryInterface
         try {
             return $this->model->query()->delete($id);
         } catch (\Exception $e) {
-            logExceptionErrorMessage('BaseRepositoryCreate', $e,[], 'critical');
+            logExceptionErrorMessage('BaseRepositoryCreate', $e, [], 'critical');
         }
     }
 

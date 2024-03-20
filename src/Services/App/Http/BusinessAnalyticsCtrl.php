@@ -4,7 +4,6 @@ namespace Src\Services\App\Http;
 
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Invoice;
-use App\Models\Journal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;

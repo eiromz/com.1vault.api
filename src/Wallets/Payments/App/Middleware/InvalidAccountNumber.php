@@ -19,6 +19,10 @@ class InvalidAccountNumber
             abort(400, "You can't perform this transaction");
         }
 
+        if ($request->user()->profile->account_number === $request->beneficiaryAccountNumber) {
+            abort(400, "You can't perform this transaction");
+        }
+
         return $next($request);
     }
 }

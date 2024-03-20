@@ -16,7 +16,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
 {
     private $repository;
 
-    private array $filterRequestKeys = ['email', 'fullname', 'logo', 'phone_number', 'address', 'state_id', 'zip_code'];
+    private array $filterRequestKeys = ['email', 'fullname', 'image', 'phone_number', 'address', 'state_id', 'zip_code'];
 
     public function __construct(BusinessRepositoryInterface $repository)
     {
@@ -88,7 +88,7 @@ class BusinessInformationCtrl extends DomainBaseCtrl
             'address' => ['nullable', 'min:3'],
             'state_id' => ['nullable', 'exists:App\Models\State,id'],
             'zip_code' => ['nullable', 'string'],
-            'logo' => ['nullable', 'url'],
+            'image' => ['nullable', 'url'],
             'business' => ['required', 'exists:App\Models\Business,id'],
         ]);
 

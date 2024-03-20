@@ -4,6 +4,8 @@ namespace Src\Wallets\Payments\App\Requests;
 
 use App\Exceptions\BaseException;
 use App\Models\Profile;
+use Exception;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,37 +22,49 @@ class CreateJournalRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'account_number' => ['required', 'exists:App\Models\Profile,account_number'],
-            'amount' => ['required'],
-            'transaction_pin' => ['required'],
-            'remark' => ['nullable'],
+            'account_number'    => ['required', 'exists:App\Models\Profile,account_number'],
+            'amount'            => ['required'],
+            'transaction_pin'   => ['required'],
+            'remark'            => ['nullable'],
+            'saveBeneficiary'   => ['required','boolean']
         ];
     }
 
     public function messages()
     {
         return [
-            'account_number.exists' => 'Invalid Account Number.'
+            'account_number.exists' => 'Invalid Account Number.',
         ];
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
         $this->merge([
-            'trx_ref' => generateTransactionReference(),
+            'trx_ref'           => generateTransactionReference(),
+            'saveBeneficiary'   => $this->saveBeneficiary ?? 0,
+            'trx_type'          => '1vault'
         ]);
 
         $this->verifyTransactionPin();
         $this->validated();
         $this->getAccountNumberInformation();
+        $this->handleNullRemark();
+    }
+
+    private function handleNullRemark(): void
+    {
+        $remark =  "Transfer to {$this->profile->fullname}";
+        if(is_null($this->remark)){
+            $this->remark = $remark;
+        }
     }
 
     public function getAccountNumberInformation(): void
@@ -64,7 +78,7 @@ class CreateJournalRequest extends FormRequest
     /**
      * @throws BaseException
      */
-    public function verifyTransactionPin()
+    public function verifyTransactionPin(): void
     {
         if (Hash::check($this->transaction_pin, auth()->user()->transaction_pin)) {
             return;

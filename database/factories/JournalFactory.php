@@ -36,7 +36,7 @@ class JournalFactory extends Factory
         ];
 
         $random = fake()->randomNumber(6);
-        $label = fake()->randomElement(['Transfer','Airtime','Webhook']);
+        $label = fake()->randomElement(['Transfer', 'Airtime', 'Webhook']);
 
         $debit = $label === 'Transfer' || $label === 'Airtime';
 

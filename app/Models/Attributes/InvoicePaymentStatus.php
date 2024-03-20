@@ -23,6 +23,7 @@ class InvoicePaymentStatus
         if ($this->payment_status) {
             $value = 'Paid';
         }
+
         if (! $this->payment_status && Carbon::parse($this->due_date)->isPast()) {
             $value = 'Overdue';
         }

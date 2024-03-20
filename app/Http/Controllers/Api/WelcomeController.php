@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
  * @OA\Info(
  *      version="1.0.0",
  *      x={
- *          "logo": {
+ *          "image": {
  *              "url": "https://via.placeholder.com/190x90.png?text=1vault"
  *          }
  *      },

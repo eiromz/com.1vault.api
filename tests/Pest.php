@@ -1,7 +1,17 @@
 <?php
 
+use App\Models\PosRequest;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Business;
+use App\Models\Client;
+use App\Models\Customer;
+use App\Models\Inventory;
+use App\Models\Invoice;
+use App\Models\Journal;
+use App\Models\Receipt;
+use App\Models\State;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +24,80 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class, RefreshDatabase::class)->beforeEach(function () {
+    $this->seed(DatabaseSeeder::class);
+
+    $state = State::query()->where('country_id', '=', 160)
+        ->where('name', '=', 'Lagos')->first();
+
+    $customer = Customer::where('email','=','crayolu@gmail.com')->with('profile')->first();
+
+    $business = Business::factory()->create([
+        'state_id' => $state->id,
+        'customer_id' => $customer->id,
+        'is_store_front' => false,
+    ]);
+
+    $client = Client::factory()->create([
+        'business_id' => $business->id,
+        'customer_id' => $customer->id,
+        'fullname' => 'Apostle Atokolos',
+    ]);
+
+    Invoice::factory()->count(3)->create([
+        'business_id' => $business->id,
+        'customer_id' => $customer->id,
+        'client_id' => $client->id,
+        'items' => [
+            [
+                'inventory_id' => fake()->uuid,
+                'name' => 'Hackett',
+                'amount' => 1000,
+                'unit' => 'Johnston',
+                'quantity' => 3,
+            ],
+            [
+                'inventory_id' => fake()->uuid,
+                'name' => 'Hackett',
+                'amount' => 2000,
+                'unit' => 'Johnston',
+                'quantity' => 3,
+            ],
+        ],
+    ]);
+
+    Receipt::factory()->count(3)->create([
+        'business_id' => $business->id,
+        'customer_id' => $customer->id,
+        'client_id' => $client->id,
+        'items' => [
+            [
+                'inventory_id' => fake()->uuid,
+                'name' => 'Hackett',
+                'amount' => 1000,
+                'unit' => 'Johnston',
+                'quantity' => 3,
+            ],
+            [
+                'inventory_id' => fake()->uuid,
+                'name' => 'Hackett',
+                'amount' => 2000,
+                'unit' => 'Johnston',
+                'quantity' => 3,
+            ],
+        ],
+    ]);
+
+    Inventory::factory()->count(3)->create([
+        'business_id' => $business->id,
+        'customer_id' => $customer->id,
+    ]);
+
+   PosRequest::factory()->create([
+        'state_id' => $state->id,
+        'customer_id' => $customer->id,
+    ]);
+})->group('accounting')->in('Feature');
 
 /*
 |--------------------------------------------------------------------------

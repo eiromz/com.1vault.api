@@ -14,7 +14,7 @@ class ClientCtrl extends DomainBaseCtrl
     private ClientRepositoryInterface $repository;
 
     public array $requestKeysFilter = [
-        'fullname', 'phone_number', 'address', 'zip_code', 'business_id', 'state_id'
+        'fullname', 'phone_number', 'address', 'zip_code', 'business_id', 'state_id',
     ];
 
     public function __construct(ClientRepositoryInterface $repository)
@@ -56,7 +56,7 @@ class ClientCtrl extends DomainBaseCtrl
 
         if (is_null($customerExists)) {
             return jsonResponse(Response::HTTP_PRECONDITION_FAILED, [
-                'message' => 'Customer ' . Messages::NOT_FOUND->value,
+                'message' => 'Customer '.Messages::NOT_FOUND->value,
             ]);
         }
 
@@ -92,14 +92,14 @@ class ClientCtrl extends DomainBaseCtrl
             'client' => ['required', 'exists:App\Models\Client,id'],
         ]);
 
-        if (!$this->repository->update($id, $request->only($this->requestKeysFilter))) {
+        if (! $this->repository->update($id, $request->only($this->requestKeysFilter))) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Customer ' . Messages::UPDATE_FAILED->value,
+                'message' => 'Customer '.Messages::UPDATE_FAILED->value,
             ]);
         }
 
         return jsonResponse(Response::HTTP_OK, [
-            'message' => 'Customer ' . Messages::UPDATED->value,
+            'message' => 'Customer '.Messages::UPDATED->value,
         ]);
     }
 
@@ -111,9 +111,9 @@ class ClientCtrl extends DomainBaseCtrl
             'customer' => ['required', 'exists:App\Models\Client,id'],
         ]);
 
-        if (!$this->repository->delete($request->business)) {
+        if (! $this->repository->delete($request->business)) {
             return jsonResponse(Response::HTTP_BAD_REQUEST, [
-                'message' => 'Customer ' . Messages::DELETED->value,
+                'message' => 'Customer '.Messages::DELETED->value,
             ]);
         }
 

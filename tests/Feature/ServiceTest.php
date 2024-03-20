@@ -3,7 +3,6 @@
 use App\Models\Customer;
 use App\Models\Journal;
 use App\Models\Service;
-use App\Models\ServiceBenefit;
 use App\Models\State;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,9 +24,7 @@ describe('Service Routes', function () {
             'amount' => 100000,
             'has_discount' => 1,
         ]);
-        $this->service_benefit = ServiceBenefit::factory()->count(3)->create([
-            'service_id' => $this->service->first()->id,
-        ]);
+
         $this->journal = Journal::factory()->count(3)->create([
             'customer_id' => $this->customer->id,
         ]);
@@ -37,7 +34,7 @@ describe('Service Routes', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/service', [
             'category' => 'business_analytics',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can fill service request for business_name', function () {
@@ -61,7 +58,7 @@ describe('Service Routes', function () {
             'utility_bill_pdf' => fake()->url,
             'comments' => fake()->phoneNumber,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can fill service request for business llc', function () {
@@ -81,7 +78,7 @@ describe('Service Routes', function () {
             'passport_photograph_of_directors_pdf' => fake()->url,
             'comments' => fake()->phoneNumber,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can fill service request for pos', function () {
@@ -138,7 +135,7 @@ describe('Service Routes', function () {
             'signature_pdf_link' => fake()->url,
             'designation' => fake()->lastName,
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can fill service request for legal', function () {
@@ -146,12 +143,12 @@ describe('Service Routes', function () {
             'type' => 'legal',
             'description' => 'Welcome to the land of the living',
         ]);
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
     test('Merchant can view analytics for platform', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/business-analytics');
-        $response->dump();
+
         expect($response->status())->toBe(200);
     });
 });

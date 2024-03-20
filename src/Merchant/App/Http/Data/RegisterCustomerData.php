@@ -16,7 +16,6 @@ use Src\Merchant\App\Enum\Role;
 class RegisterCustomerData extends Data
 {
     #[Email]
-    #[Unique('customers', 'email')]
     #[Required]
     public string $email;
 

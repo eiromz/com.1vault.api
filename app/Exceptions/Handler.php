@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use ErrorException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -71,6 +72,13 @@ class Handler extends ExceptionHandler
             }
         });
         $this->renderable(function (ValidationException $e, $request) {
+            if ($request->is('api/*')) {
+                return jsonResponse(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY, [
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        });
+        $this->renderable(function (ConnectException $e, $request) {
             if ($request->is('api/*')) {
                 return jsonResponse(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY, [
                     'message' => $e->getMessage(),

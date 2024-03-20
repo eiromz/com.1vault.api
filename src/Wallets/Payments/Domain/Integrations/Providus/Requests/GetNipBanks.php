@@ -20,10 +20,3 @@ class GetNipBanks extends Request
         return '/GetNIPBanks';
     }
 }
-
-
-//nip/getbanks
-//nip/tr
-
-//providus/nip/getbanks
-//providus/nip/transfer

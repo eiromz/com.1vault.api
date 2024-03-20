@@ -56,4 +56,19 @@ class InventoryRepository extends BaseRepository implements InventoryRepositoryI
             logExceptionErrorMessage('BaseRepositoryCreate', $e);
         }
     }
+
+    public function totalInventory(array $details)
+    {
+        try {
+            Arr::set($details, 'customer_id', $this->customer);
+
+            if (! is_null($this->collaborator)) {
+                Arr::set($details, 'collaborator_id', $this->collaborator);
+            }
+
+            return $this->model->query()->where($details)->count() ?? 0;
+        } catch (\Exception $e) {
+            logExceptionErrorMessage('BaseRepositoryCreate', $e);
+        }
+    }
 }
