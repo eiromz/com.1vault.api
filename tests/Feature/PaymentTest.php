@@ -148,8 +148,9 @@ describe('Payment Routes', function () {
     })->skip('Needs external connection');
     test('Merchant can get bills fields', function() {
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
+        $response->dump();
         expect($response->status())->toBe(200);
-    })->skip('Needs external connection');
+    });
     test('Merchant can validate a bill before payment', function(){
         $response =  $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/27',[
             "inputs" => [
