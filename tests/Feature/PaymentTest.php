@@ -2,13 +2,18 @@
 
 use App\Models\Account;
 use App\Models\Beneficiary;
+use App\Models\Business;
 use App\Models\Cart;
+use App\Models\Client;
 use App\Models\Customer;
+use App\Models\Inventory;
+use App\Models\Invoice;
 use App\Models\Journal;
+use App\Models\PosRequest;
 use App\Models\Profile;
+use App\Models\Receipt;
 use App\Models\Service;
 use App\Models\State;
-use Database\Seeders\DatabaseSeeder;
 
 describe('Payment Routes', function () {
     beforeEach(function () {

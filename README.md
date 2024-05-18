@@ -49,3 +49,8 @@
 
 ### GENERATE SHA1 READ ME 
 * THIS IS FOR VERIFYING TRANSACTIONS.
+
+
+DEPLOYMENT
+* RUN THE COMMAND  `composer install` this will install laravel app dependencies
+* RUN THE COMMAND `npm install` this will install all node packages for the app
