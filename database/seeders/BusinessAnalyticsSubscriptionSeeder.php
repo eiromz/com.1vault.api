@@ -59,7 +59,7 @@ class BusinessAnalyticsSubscriptionSeeder extends Seeder
                 'type' => 'business_analytics',
                 'provider' => '1vault',
                 'description' => 'Make informed data-driven decisions for your business',
-                'amount' => 20000,
+                'amount' => 216000,
                 'commission' => 0,
                 'is_recurring' => 1,
                 'billing_cycle' => BillingCycle::YEARLY->value,

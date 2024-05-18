@@ -2,13 +2,18 @@
 
 use App\Models\Account;
 use App\Models\Beneficiary;
+use App\Models\Business;
 use App\Models\Cart;
+use App\Models\Client;
 use App\Models\Customer;
+use App\Models\Inventory;
+use App\Models\Invoice;
 use App\Models\Journal;
+use App\Models\PosRequest;
 use App\Models\Profile;
+use App\Models\Receipt;
 use App\Models\Service;
 use App\Models\State;
-use Database\Seeders\DatabaseSeeder;
 
 describe('Payment Routes', function () {
     beforeEach(function () {
@@ -148,8 +153,9 @@ describe('Payment Routes', function () {
     })->skip('Needs external connection');
     test('Merchant can get bills fields', function() {
         $response =  $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
+        $response->dump();
         expect($response->status())->toBe(200);
-    })->skip('Needs external connection');
+    });
     test('Merchant can validate a bill before payment', function(){
         $response =  $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/27',[
             "inputs" => [

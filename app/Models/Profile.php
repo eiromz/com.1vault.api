@@ -14,7 +14,7 @@ class Profile extends Model
 
     protected $guarded = [];
 
-    const DOC_TYPES = ['drivers_license', 'international_passport', 'voters_card'];
+    const DOC_TYPES = ['drivers_license', 'international_passport', 'voters_card/NIN'];
 
     protected $with = ['state'];
 
