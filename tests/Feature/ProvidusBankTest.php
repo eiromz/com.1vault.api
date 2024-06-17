@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\KnowYourCustomer;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -9,10 +11,7 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
 describe('ProvidusBank Routes', function () {
     beforeEach(function () {
-        $this->seed(DatabaseSeeder::class);
-
-        $this->customer = Customer::query()->where('email', '=', 'crayolu@gmail.com')->first();
-
+        $this->customer = Customer::query()->where('email', '=', 'crayolu@gmail.com')->with(['profile','knowYourCustomer'])->first();
     });
 
     test('Customers can reserve a bank account', function () {
@@ -40,5 +39,15 @@ describe('ProvidusBank Routes', function () {
         ]);
 
         expect($response->status())->toBe(200);
+    });
+
+    test("Service class can check if a customer has a valid bvn account", function(){
+        $customers = Customer::query()->where('email','crayolu@gmail.com')
+            ->whereHas('profile')
+            ->whereHas('knowYourCustomer',function(Builder $query){
+                $query->where('status', '=', 1);
+            })->first();
+
+        dd($customers?->knowYourCustomer);
     });
 });

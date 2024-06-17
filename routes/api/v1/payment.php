@@ -40,7 +40,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
             Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');
         });
-        Route::prefix('/bills')->group(function () {
+        Route::prefix('/bills')->group( function () {
             Route::get('/categories', [CategoriesCtrl::class,'index']);
             Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
             Route::get('/fields/{bill}', [BillCtrl::class,'index']);

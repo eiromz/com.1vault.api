@@ -32,7 +32,7 @@ class Business extends Model
 
         return $collection->values();
     }
-    public function businessSector()
+    public function businessSector(): \Illuminate\Support\Collection
     {
         $collection = collect([
             'fashion', 'gadgets', 'election', 'home/decoration/garden', 'Sports & Outdoors', 'Baby & Kids',

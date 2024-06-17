@@ -20,9 +20,8 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class GenerateAccountNumberQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $tries = 5;
-
+    public $tries = 1;
+    const DEFAULT_SERVICE_FAILURE = 'We could not generate an account number';
     public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
     {
     }
@@ -36,11 +35,15 @@ class GenerateAccountNumberQueue implements ShouldQueue
             $generateAccountService = new GenerateAccountNumber($this->customer, $this->profile, $this->kyc);
 
             if (! $generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] === '00') {
+                $generateAccountService->notify(self::DEFAULT_SERVICE_FAILURE);
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            $generateAccountService->save();
+            if($generateAccountService->save()){
+                $generateAccountService->notify();
+            }
+
         } catch (Exception|JsonException|FatalRequestException|RequestException $e) {
             logExceptionErrorMessage('GenerateAccountNumberQueue', $e,[],'critical');
         }
