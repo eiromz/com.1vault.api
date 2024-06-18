@@ -11,7 +11,7 @@ use App\Models\Journal;
 use App\Models\Receipt;
 use App\Models\State;
 
-uses()->group('accounting');
+//uses()->group('accounting');
 
 uses()->beforeEach(function () {
     $this->state = State::query()->where('country_id', '=', 160)
@@ -102,11 +102,11 @@ uses()->beforeEach(function () {
         'client_id' => $this->client->id,
     ])->first();
 
-    $this->receipt = Receipt::query()->where([
-        'business_id' => $this->business->id,
-        'customer_id' => $this->customer->id,
-        'client_id' => $this->client->id,
-    ])->first();
+//    $this->receipt = Receipt::query()->where([
+//        'business_id' => $this->business->id,
+//        'customer_id' => $this->customer->id,
+//        'client_id' => $this->client->id,
+//    ])->first();
 
     $this->pos = PosRequest::query()->where([
         'state_id' => $this->state->id,
@@ -422,7 +422,7 @@ describe('Business Routes', function () {
             'start_date' => '2024-01-01',
             'end_date' => '2024-02-10',
             'identifier' => $this->business->id,
-            'type' => 'sales',
+            'type' => 'debtors',
         ]);
         expect($response->status())->toBe(200);
     });

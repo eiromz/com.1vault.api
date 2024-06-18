@@ -8,10 +8,17 @@ use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
 use Src\Merchant\Domain\Integrations\Providus\ProvidusConnector;
 use Src\Merchant\Domain\Integrations\Providus\Requests\ReserveAccountNumberRequest;
+use function Pest\Laravel\json;
 
 class GenerateAccountNumber
 {
     public array $payload;
+    public array $notification = [
+        'title' => 'Account Number Generation',
+        'body' => 'Your account number has been generated',
+    ];
+    public $connector;
+
     /**
      * @throws FatalRequestException
      * @throws JsonException
@@ -19,40 +26,33 @@ class GenerateAccountNumber
      */
     public function __construct(public $customer, public $profile, public $kyc)
     {
-        $this->payload = $this->sendRequest();
+        $this->payload = $this->sendRequest($connector = new ProvidusConnector);
     }
-    public function save(): void
+    public function save()
     {
         $this->profile->account_number = $this->payload['account_number'];
-        $this->profile->save();
+        return $this->profile->save();
     }
     /**
-     * @return mixed|mixed[]
-     *
-     * @throws FatalRequestException
-     * @throws JsonException
-     * @throws RequestException
+     * @param $connector
+     * @return mixed
      */
-    public function sendRequest(): mixed
+    public function sendRequest($connector): mixed
     {
-        if ($this->kyc->status) {
-            $connector = new ProvidusConnector;
-            $request = new ReserveAccountNumberRequest([
-                'account_name' => $this->profile->lastname,
-                'bvn' => $this->kyc->bvn,
-            ]);
+        $request = new ReserveAccountNumberRequest([
+            'account_name' => $this->profile->lastname,
+            'bvn' => $this->kyc->bvn,
+        ]);
 
-            $response = $connector->send($request);
+        $response = $connector->send($request);
 
-            $notification = [
-                'title' => 'Account Number Generation',
-                'body' => 'Your account number has been generated',
-            ];
-
-            SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $notification)->delay(now()->addMinute());
-
-            return $response->json();
+        return $response->json();
+    }
+    public function notify($defaultMessage=null): void
+    {
+        if(!is_null($defaultMessage)){
+            $this->notification['body'] = $defaultMessage;
         }
-        return;
+        SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $this->notification)->delay(now()->addMinute());
     }
 }

@@ -16,10 +16,6 @@ use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
 Route::post('/providus/webhook', WebhookCtrl::class);
 
 Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () {
-    //search for a user
-    //insufficient balance
-    //pin validation
-    //add owner check to this route
     Route::post('/wallets/name-search', [WalletAccountSearchCtrl::class, 'index']);
     Route::post('/wallets/journal', [JournalCtrl::class, 'index']);
     Route::post('/wallets/journal/view', [JournalCtrl::class, 'view']);
@@ -40,7 +36,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
             Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');
         });
-        Route::prefix('/bills')->group(function () {
+        Route::prefix('/bills')->group( function () {
             Route::get('/categories', [CategoriesCtrl::class,'index']);
             Route::get('/categories/{category}', [CategoriesCtrl::class,'view']);
             Route::get('/fields/{bill}', [BillCtrl::class,'index']);
