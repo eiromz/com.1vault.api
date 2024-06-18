@@ -2,7 +2,6 @@
 
 use App\Models\Business;
 use App\Models\PosRequest;
-use Database\Seeders\DatabaseSeeder;
 use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Inventory;
@@ -10,8 +9,6 @@ use App\Models\Invoice;
 use App\Models\Journal;
 use App\Models\Receipt;
 use App\Models\State;
-
-//uses()->group('accounting');
 
 uses()->beforeEach(function () {
     $this->state = State::query()->where('country_id', '=', 160)
@@ -80,7 +77,7 @@ uses()->beforeEach(function () {
         'customer_id' => $this->customer->id,
     ]);
 
-    PosRequest::factory()->create([
+    $this->pos = PosRequest::factory()->create([
         'state_id' => $this->state->id,
         'customer_id' => $this->customer->id,
     ]);
@@ -107,12 +104,6 @@ uses()->beforeEach(function () {
 //        'customer_id' => $this->customer->id,
 //        'client_id' => $this->client->id,
 //    ])->first();
-
-    $this->pos = PosRequest::query()->where([
-        'state_id' => $this->state->id,
-        'customer_id' => $this->customer->id,
-    ])->first();
-
     $this->journal = Journal::latest()->first();
 });
 
