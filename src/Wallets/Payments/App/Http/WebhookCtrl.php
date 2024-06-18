@@ -62,8 +62,6 @@ class WebhookCtrl extends DomainBaseCtrl
 
         SendFireBaseNotificationQueue::dispatch($profile->customer->firebase_token ?? null, $this->notification);
 
-        //Send email notification of credit
-
         AccountBalanceUpdateQueue::dispatch(
             $newJournalBalance->balance_before, $newJournalBalance->balance_after, $account);
         //TODO send email notification for when account is credited.
@@ -75,17 +73,4 @@ class WebhookCtrl extends DomainBaseCtrl
             'responseCode' => '00',
         ], ResponseAlias::HTTP_OK);
     }
-
-    private function duplicateTransaction()
-    {
-
-    }
-
-    //Airtime::purchase();
-    //Debit::journal();
-    //Subscribe::service()
-    //Order::service()
-    //ProcessService::save();
-    //PosRequest::save();
-    //
 }

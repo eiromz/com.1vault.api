@@ -58,9 +58,5 @@ describe('ProvidusBank Routes', function () {
             $generateAccountService->notify("You cannot generate an account number");
         }
 
-
-//        if($generateAccountService->save()){
-//            $generateAccountService->notify();
-//        }
     });
 });
