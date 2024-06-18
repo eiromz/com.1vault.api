@@ -17,7 +17,7 @@ class GenerateAccountNumber
         'title' => 'Account Number Generation',
         'body' => 'Your account number has been generated',
     ];
-    private $connector;
+    public $connector;
 
     /**
      * @throws FatalRequestException
@@ -26,8 +26,7 @@ class GenerateAccountNumber
      */
     public function __construct(public $customer, public $profile, public $kyc)
     {
-        $this->payload = $this->sendRequest();
-        $this->connector = new ProvidusConnector;
+        $this->payload = $this->sendRequest($connector = new ProvidusConnector);
     }
     public function save()
     {
@@ -35,20 +34,17 @@ class GenerateAccountNumber
         return $this->profile->save();
     }
     /**
-     * @return mixed|mixed[]
-     *
-     * @throws FatalRequestException
-     * @throws JsonException
-     * @throws RequestException
+     * @param $connector
+     * @return mixed
      */
-    public function sendRequest(): mixed
+    public function sendRequest($connector): mixed
     {
         $request = new ReserveAccountNumberRequest([
             'account_name' => $this->profile->lastname,
             'bvn' => $this->kyc->bvn,
         ]);
 
-        $response = $this->connector->send($request);
+        $response = $connector->send($request);
 
         return $response->json();
     }

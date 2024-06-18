@@ -3,6 +3,9 @@
 namespace App\Jobs;
 
 use App\Support\Firebase;
+use ExpoSDK\Exceptions\ExpoException;
+use ExpoSDK\Exceptions\ExpoMessageException;
+use ExpoSDK\Exceptions\InvalidTokensException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -29,8 +32,13 @@ class SendFireBaseNotificationQueue implements ShouldQueue
     public function handle(): void
     {
         if (! is_null($this->token)) {
-            $firebase = new Firebase($this->token);
-            $firebase->sendMessageWithToken($this->notification, $this->notification);
+            try {
+                $firebase = new Firebase($this->token);
+                $firebase->sendMessageWithToken($this->notification, $this->notification);
+            }
+            catch (ExpoException|ExpoMessageException|InvalidTokensException $e) {
+                logExceptionErrorMessage('SendFireBaseNotificationQueue',$e,[],'error');
+            }
         }
     }
 }

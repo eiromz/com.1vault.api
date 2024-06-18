@@ -2,9 +2,12 @@
 
 use App\Models\Customer;
 use App\Models\KnowYourCustomer;
+use App\Support\Firebase;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Src\Merchant\Domain\Services\GenerateAccountNumber;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
@@ -42,12 +45,22 @@ describe('ProvidusBank Routes', function () {
     });
 
     test("Service class can check if a customer has a valid bvn account", function(){
-        $customers = Customer::query()->where('email','crayolu@gmail.com')
+
+        $customer = Customer::query()->where('email','crayolu@gmail.com')
             ->whereHas('profile')
             ->whereHas('knowYourCustomer',function(Builder $query){
                 $query->where('status', '=', 1);
             })->first();
 
-        dd($customers?->knowYourCustomer);
+        $generateAccountService = new GenerateAccountNumber($customer, $customer->profile, $customer->knowYourCustomer);
+
+        if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
+            $generateAccountService->notify("You cannot generate an account number");
+        }
+
+
+//        if($generateAccountService->save()){
+//            $generateAccountService->notify();
+//        }
     });
 });

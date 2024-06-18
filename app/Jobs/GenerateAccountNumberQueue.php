@@ -21,7 +21,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     public $tries = 1;
-    const DEFAULT_SERVICE_FAILURE = 'We could not generate an account number';
+    const DEFAULT_SERVICE_FAILURE = 'Ooops failed, account number not created';
     public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
     {
     }

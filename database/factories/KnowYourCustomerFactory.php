@@ -19,7 +19,7 @@ class KnowYourCustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'bvn' => '222333'.fake()->randomNumber(5, true),
+            'bvn' => "22219452436",
             'doc_type' => 'drivers_license',
             'doc_image' => fake()->imageUrl,
             'selfie' => fake()->imageUrl,
