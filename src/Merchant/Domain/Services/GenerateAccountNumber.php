@@ -30,7 +30,16 @@ class GenerateAccountNumber
     }
     public function save()
     {
+        if($this?->profile){
+            return null;
+        }
+
+        if($this->profile && !is_null($this->profile->account_number)){
+            return null;
+        }
+
         $this->profile->account_number = $this->payload['account_number'];
+        //save the payload from the api response.
         return $this->profile->save();
     }
     /**
@@ -50,7 +59,7 @@ class GenerateAccountNumber
     }
     public function notify($defaultMessage=null): void
     {
-        if(!is_null($defaultMessage)){
+        if(!is_null($defaultMessage)) {
             $this->notification['body'] = $defaultMessage;
         }
         SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $this->notification)->delay(now()->addMinute());

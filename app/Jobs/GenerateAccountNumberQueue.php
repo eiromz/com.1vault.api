@@ -39,7 +39,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
-            else{
+            else {
                 $generateAccountService->save();
                 $generateAccountService->notify();
             }

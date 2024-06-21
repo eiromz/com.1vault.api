@@ -19,7 +19,7 @@ class KnowYourCustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'bvn' => "22219452436",
+            'bvn' => base64_encode("22219452436"),
             'doc_type' => 'drivers_license',
             'doc_image' => fake()->imageUrl,
             'selfie' => fake()->imageUrl,
