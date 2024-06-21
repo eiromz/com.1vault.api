@@ -3,6 +3,8 @@
 namespace Src\Merchant\Domain\Services;
 
 use App\Jobs\SendFireBaseNotificationQueue;
+use App\Models\KnowYourCustomer;
+use App\Models\Profile;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
@@ -30,8 +32,17 @@ class GenerateAccountNumber
     }
     public function save()
     {
-        $this->profile->account_number = $this->payload['account_number'];
-        return $this->profile->save();
+        $kyc = KnowYourCustomer::query()->find($this->kyc->id);
+        $profile =  Profile::query()->find($this->profile->id);
+
+        $profile->fill([
+            'account_number' => $this->payload['account_number']
+        ])->save();
+
+        $kyc->fill([
+            "date_attempted_account_generation" => now(),
+            "bvn_validation_payload" => $this->payload,
+        ])->save();
     }
     /**
      * @param $connector
@@ -44,13 +55,18 @@ class GenerateAccountNumber
             'bvn' => $this->kyc->bvn,
         ]);
 
+        logger('error',[
+            'account_name'  => $this->profile->lastname,
+            'bvn'           => $this->kyc->bvn,
+        ]);
+
         $response = $connector->send($request);
 
         return $response->json();
     }
     public function notify($defaultMessage=null): void
     {
-        if(!is_null($defaultMessage)){
+        if(!is_null($defaultMessage)) {
             $this->notification['body'] = $defaultMessage;
         }
         SendFireBaseNotificationQueue::dispatch($this->customer->firebase_token, $this->notification)->delay(now()->addMinute());

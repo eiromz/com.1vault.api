@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,12 @@ class KnowYourCustomer extends Model
         'selfie',
         'status',
         'utility_bill',
+        'bvn_validation_payload',
+        'date_attempted_account_generation'
+    ];
+
+    protected $casts = [
+        'date_attempted_account_generation' => 'datetime'
     ];
 
     const STATUS_CODES = [
@@ -44,7 +51,11 @@ class KnowYourCustomer extends Model
     {
         return $this->belongsTo(Customer::class);
     }
-}
 
-//Service can be added to cart
-//Cart can be paid for using
+    protected function bvn(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => base64_decode($value),
+        );
+    }
+}

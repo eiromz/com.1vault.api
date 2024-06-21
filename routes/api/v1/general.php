@@ -46,21 +46,3 @@ Route::get('/business/sectors', function () {
 });
 
 Route::post('download/pdf', [ReportCtrl::class, 'index'])->middleware('auth:sanctum');
-
-Route::post('/testing', function (Request $request) {
-
-    $request->validate([
-        'type' => ['required', 'in:sales,debtors,invoice,receipt,pos'],
-        'identifier' => ['required'],
-    ]);
-
-    $url = config('app.url').'/api/v1/download/pdf';
-
-    return Browsershot::url($url)
-        ->noSandbox()
-        ->post([
-            'type' => $request->type,
-            'identifier' => $request->identifier,
-        ])
-        ->screenshot();
-});

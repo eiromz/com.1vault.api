@@ -46,6 +46,8 @@ describe('ProvidusBank Routes', function () {
 
     test("Service class can check if a customer has a valid bvn account", function(){
 
+        logger('error',['message', "here"]);
+
         $customer = Customer::query()->where('email','crayolu@gmail.com')
             ->whereHas('profile')
             ->whereHas('knowYourCustomer',function(Builder $query){
@@ -59,4 +61,5 @@ describe('ProvidusBank Routes', function () {
         }
 
     });
+
 });
