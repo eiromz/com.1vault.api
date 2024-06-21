@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
 
         Profile::factory()->create([
             'customer_id' => $customer->id,
-            'account_number' => '9977581536',
+            //'account_number' => '9977581536',
             'state_id' => $state->id,
         ]);
 

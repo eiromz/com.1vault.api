@@ -26,6 +26,7 @@ class KnowYourCustomerFactory extends Factory
             'utility_bill' => fake()->imageUrl,
             'approved_by_admin' => Customer::query()->where('role', '=', 'admin')->first()->id,
             'status' => KnowYourCustomer::ACTIVE,
+            'date_attempted_account_generation' => null
         ];
     }
 }

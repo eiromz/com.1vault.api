@@ -32,17 +32,18 @@ class GenerateAccountNumberQueue implements ShouldQueue
     public function handle(): void
     {
         try {
+            if(!is_null($this->kyc->date_attempted_account_generation) && $this->kyc->date_attempted_account_generation->isToday()){
+                return;
+            }
+
             $generateAccountService = new GenerateAccountNumber($this->customer, $this->profile, $this->kyc);
 
-            if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] === '00') {
+            if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
                 $generateAccountService->notify(self::DEFAULT_SERVICE_FAILURE);
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
-            else {
-                $generateAccountService->save();
-                $generateAccountService->notify();
-            }
+            $generateAccountService->save();
         } catch (Exception|JsonException|FatalRequestException|RequestException $e) {
             logExceptionErrorMessage('GenerateAccountNumberQueue', $e,[],'critical');
         }

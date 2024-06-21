@@ -3,6 +3,8 @@
 namespace Src\Merchant\Domain\Services;
 
 use App\Jobs\SendFireBaseNotificationQueue;
+use App\Models\KnowYourCustomer;
+use App\Models\Profile;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
@@ -30,17 +32,17 @@ class GenerateAccountNumber
     }
     public function save()
     {
-        if($this?->profile){
-            return null;
-        }
+        $kyc = KnowYourCustomer::query()->find($this->kyc->id);
+        $profile =  Profile::query()->find($this->profile->id);
 
-        if($this->profile && !is_null($this->profile->account_number)){
-            return null;
-        }
+        $profile->fill([
+            'account_number' => $this->payload['account_number']
+        ])->save();
 
-        $this->profile->account_number = $this->payload['account_number'];
-        //save the payload from the api response.
-        return $this->profile->save();
+        $kyc->fill([
+            "date_attempted_account_generation" => now(),
+            "bvn_validation_payload" => $this->payload,
+        ])->save();
     }
     /**
      * @param $connector
@@ -51,6 +53,11 @@ class GenerateAccountNumber
         $request = new ReserveAccountNumberRequest([
             'account_name' => $this->profile->lastname,
             'bvn' => $this->kyc->bvn,
+        ]);
+
+        logger('error',[
+            'account_name'  => $this->profile->lastname,
+            'bvn'           => $this->kyc->bvn,
         ]);
 
         $response = $connector->send($request);

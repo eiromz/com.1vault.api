@@ -35,6 +35,12 @@ class KnowYourCustomer extends Model
         'selfie',
         'status',
         'utility_bill',
+        'bvn_validation_payload',
+        'date_attempted_account_generation'
+    ];
+
+    protected $casts = [
+        'date_attempted_account_generation' => 'datetime'
     ];
 
     const STATUS_CODES = [
@@ -53,6 +59,3 @@ class KnowYourCustomer extends Model
         );
     }
 }
-
-//Service can be added to cart
-//Cart can be paid for using

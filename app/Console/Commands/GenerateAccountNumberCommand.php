@@ -17,7 +17,9 @@ class GenerateAccountNumberCommand extends Command
 
     public function handle()
     {
-        $customers = Customer::query()->whereHas('profile')->whereHas('knowYourCustomer', function(Builder $query){
+        $customers = Customer::query()
+            ->whereHas('profile', function(Builder $query){$query->whereNull('account_number');})
+            ->whereHas('knowYourCustomer', function(Builder $query){
             $query->where('status','=',KnowYourCustomer::ACTIVE)->whereNotNull('bvn');
         })->get();
 
