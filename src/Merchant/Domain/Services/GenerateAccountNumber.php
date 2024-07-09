@@ -19,7 +19,7 @@ class GenerateAccountNumber
         'title' => 'Account Number Generation',
         'body' => 'Your account number has been generated',
     ];
-    public $connector;
+    public object $connector;
 
     /**
      * @throws FatalRequestException
@@ -28,39 +28,43 @@ class GenerateAccountNumber
      */
     public function __construct(public $customer, public $profile, public $kyc)
     {
-        $this->payload = $this->sendRequest($connector = new ProvidusConnector);
+        $this->payload = $this->sendRequest();
     }
-    public function save()
+    public function save(): void
     {
-        $kyc = KnowYourCustomer::query()->find($this->kyc->id);
-        $profile =  Profile::query()->find($this->profile->id);
+        $this->kyc = KnowYourCustomer::query()->find($this->kyc->id);
+        $this->profile =  Profile::query()->find($this->profile->id);
 
-        $profile->fill([
+        $this->profile->fill([
             'account_number' => $this->payload['account_number']
         ])->save();
 
-        $kyc->fill([
+        $this->kyc->fill([
             "date_attempted_account_generation" => now(),
             "bvn_validation_payload" => $this->payload,
         ])->save();
     }
+
     /**
-     * @param $connector
      * @return mixed
+     * @throws FatalRequestException
+     * @throws JsonException
+     * @throws RequestException
      */
-    public function sendRequest($connector): mixed
+    public function sendRequest(): mixed
     {
-        $request = new ReserveAccountNumberRequest([
-            'account_name' => $this->profile->lastname,
+        $params = [
+            'account_name' => $this->profile->fullname,
             'bvn' => $this->kyc->bvn,
-        ]);
+        ];
 
-        logger('error',[
-            'account_name'  => $this->profile->lastname,
-            'bvn'           => $this->kyc->bvn,
-        ]);
+        $this->connector = new ProvidusConnector;
 
-        $response = $connector->send($request);
+        $payload = new ReserveAccountNumberRequest($params);
+
+        logger('error',$params);
+
+        $response = $this->connector->send($payload);
 
         return $response->json();
     }

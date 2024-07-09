@@ -14,7 +14,18 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
 describe('ProvidusBank Routes', function () {
     beforeEach(function () {
-        $this->customer = Customer::query()->where('email', '=', 'crayolu@gmail.com')->with(['profile','knowYourCustomer'])->first();
+        $this->customer = Customer::query()
+            ->where('email', '=', 'crayolu@gmail.com')->with(['profile','knowYourCustomer'])
+            ->first();
+
+        $sample_response = [
+            "account_number" => "9636287810",
+              "account_name" => "EE SOLUTIONS LIMTED(Tyshawn R)",
+              "bvn" => "22219452436",
+              "requestSuccessful" => true,
+              "responseMessage" => "Reserved Account Generated Successfully",
+              "responseCode" => "00",
+        ];
     });
 
     test('Customers can reserve a bank account', function () {
@@ -59,6 +70,8 @@ describe('ProvidusBank Routes', function () {
         if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
             $generateAccountService->notify("You cannot generate an account number");
         }
+
+        $generateAccountService->save();
 
     });
 

@@ -26,9 +26,6 @@ class GenerateAccountNumberQueue implements ShouldQueue
     {
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         try {
@@ -43,6 +40,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
+
             $generateAccountService->save();
         } catch (Exception|JsonException|FatalRequestException|RequestException $e) {
             logExceptionErrorMessage('GenerateAccountNumberQueue', $e,[],'critical');
