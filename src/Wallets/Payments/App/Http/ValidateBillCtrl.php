@@ -24,6 +24,7 @@ class ValidateBillCtrl extends DomainBaseCtrl
 
         $connector = new ProvidusBills;
         $response = $connector->send(new ValidateBill($request->all(), $bill));
+
         if ($response->failed()) {
             throw new BaseException(
                 'We could not process this bill at this time',
@@ -31,8 +32,6 @@ class ValidateBillCtrl extends DomainBaseCtrl
             );
         }
 
-        return $response->json();
-
-        //return jsonResponse(Response::HTTP_OK, $data);
+        return jsonResponse(Response::HTTP_OK, $response->json());
     }
 }
