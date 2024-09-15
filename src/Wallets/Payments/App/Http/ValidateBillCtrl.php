@@ -27,7 +27,7 @@ class ValidateBillCtrl extends DomainBaseCtrl
 
         if ($response->failed()) {
             throw new BaseException(
-                'We could not process this bill at this time',
+                'Invalid Customer Details',
                 Response::HTTP_BAD_REQUEST
             );
         }

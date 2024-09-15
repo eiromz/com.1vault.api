@@ -3,6 +3,7 @@
 use Src\Wallets\Payments\App\Http\BeneficiaryCtrl;
 use Src\Wallets\Payments\App\Http\CartCtrl;
 use Src\Wallets\Payments\App\Http\JournalCtrl;
+use Src\Wallets\Payments\App\Http\PayBillCtrl;
 use Src\Wallets\Payments\App\Http\PayNowCtrl;
 use Src\Wallets\Payments\App\Http\Providus\Bills\BillCtrl;
 use Src\Wallets\Payments\App\Http\Providus\Bills\CategoriesCtrl;
@@ -43,6 +44,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::get('/categories/{category}', [CategoriesCtrl::class, 'view']);
             Route::get('/fields/{bill}', [BillCtrl::class, 'index']);
             Route::post('/fields/validate/{bill}', ValidateBillCtrl::class);
+            Route::post('/pay/bills', PayBillCtrl::class);
         });
     });
 });
