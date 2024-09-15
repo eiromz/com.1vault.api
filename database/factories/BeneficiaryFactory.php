@@ -23,7 +23,7 @@ class BeneficiaryFactory extends Factory
             'bank_code' => Journal::BANK_CODE,
             'bank_account_number' => fake()->iban('NG'),
             'bank_account_name' => fake()->firstName,
-            'type' => fake()->randomElement(['nip','1vault'])
+            'type' => fake()->randomElement(['nip', '1vault']),
         ];
     }
 }

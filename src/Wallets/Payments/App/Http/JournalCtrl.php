@@ -2,11 +2,11 @@
 
 namespace Src\Wallets\Payments\App\Http;
 
-use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Src\Template\Application\Exceptions\InsufficientBalance;
 use Src\Wallets\Payments\App\Requests\CreateJournalRequest;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Src\Wallets\Payments\Domain\Repository\Interfaces\JournalRepositoryInterface;
@@ -63,6 +63,7 @@ class JournalCtrl extends DomainBaseCtrl
 
     /**
      * TODO : refactor the process into a service class
+     *
      * @throws InsufficientBalance
      * @throws Exception
      */

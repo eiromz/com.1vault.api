@@ -8,7 +8,6 @@ use Spatie\LaravelData\Attributes\Validation\Email;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\StringType;
-use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
 use Src\Merchant\App\Enum\AccountStatus;
 use Src\Merchant\App\Enum\Role;
@@ -44,7 +43,7 @@ class RegisterCustomerData extends Data
 
     public function newCustomerInstance(): ?object
     {
-        return $this->customer = (new Customer())->fill([
+        return $this->customer = (new Customer)->fill([
             'email' => $this->email,
             'role' => $this->role,
             'is_owner' => $this->is_owner,

@@ -19,5 +19,6 @@ class GetFieldsForBills extends Request
     {
         return "/field/byBillId/{$this->bill}";
     }
+
     public function __construct(protected string $bill) {}
 }

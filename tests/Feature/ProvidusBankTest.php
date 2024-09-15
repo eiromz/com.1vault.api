@@ -1,13 +1,9 @@
 <?php
 
 use App\Models\Customer;
-use App\Models\KnowYourCustomer;
-use App\Support\Firebase;
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Src\Merchant\Domain\Services\GenerateAccountNumber;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
@@ -15,16 +11,16 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 describe('ProvidusBank Routes', function () {
     beforeEach(function () {
         $this->customer = Customer::query()
-            ->where('email', '=', 'crayolu@gmail.com')->with(['profile','knowYourCustomer'])
+            ->where('email', '=', 'crayolu@gmail.com')->with(['profile', 'knowYourCustomer'])
             ->first();
 
         $sample_response = [
-            "account_number" => "9636287810",
-              "account_name" => "EE SOLUTIONS LIMTED(Tyshawn R)",
-              "bvn" => "22219452436",
-              "requestSuccessful" => true,
-              "responseMessage" => "Reserved Account Generated Successfully",
-              "responseCode" => "00",
+            'account_number' => '9636287810',
+            'account_name' => 'EE SOLUTIONS LIMTED(Tyshawn R)',
+            'bvn' => '22219452436',
+            'requestSuccessful' => true,
+            'responseMessage' => 'Reserved Account Generated Successfully',
+            'responseCode' => '00',
         ];
     });
 
@@ -55,24 +51,44 @@ describe('ProvidusBank Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test("Service class can check if a customer has a valid bvn account", function(){
-
-        logger('error',['message', "here"]);
-
-        $customer = Customer::query()->where('email','crayolu@gmail.com')
+    test('Service class can check if a customer has a valid bvn account', function () {
+        $customer = Customer::query()->where('email', 'crayolu@gmail.com')
             ->whereHas('profile')
-            ->whereHas('knowYourCustomer',function(Builder $query){
+            ->whereHas('knowYourCustomer', function (Builder $query) {
                 $query->where('status', '=', 1);
             })->first();
 
         $generateAccountService = new GenerateAccountNumber($customer, $customer->profile, $customer->knowYourCustomer);
 
-        if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
-            $generateAccountService->notify("You cannot generate an account number");
+        if (! $generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
+            $generateAccountService->notify('You cannot generate an account number');
         }
 
         $generateAccountService->save();
 
     });
 
+    test('Webhooks can send messages to the api', function () {
+        $response = $this->post('/api/v1/providus/webhook', [
+            'sessionId' => '0000042103011805345648005069266636442357859508',
+            'accountNumber' => '9977581536',
+            'tranRemarks' => 'FROM UBA/ CASAFINA CREDIT-EASY LOAN-NIP/SEYI OLUFEMI/CASAFINA CAP/0000042103015656180548005069266636',
+            'transactionAmount' => '1',
+            'settledAmount' => '1',
+            'feeAmount' => '0',
+            'vatAmount' => '0',
+            'currency' => 'NGN',
+            'initiationTranRef' => '',
+            'settlementId' => '202210301006807600001432',
+            'sourceAccountNumber' => '2093566866',
+            'sourceAccountName' => 'CASAFINA CREDIT-EASY LOAN',
+            'sourceBankName' => 'UNITED BANK FOR AFRICA',
+            'channelId' => '1',
+            'tranDateTime' => '2021-03-01 18:06:20.000',
+        ]);
+
+        expect($response->status())->toBe(200);
+    });
+
+    test('Nip Transfer Validation Service', function () {});
 });

@@ -2,11 +2,10 @@
 
 namespace Src\Wallets\Payments\Domain\Services;
 
-use App\Exceptions\BaseException;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
-use App\Models\Customer;
 use App\Models\Journal;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletCreditService
@@ -29,7 +28,7 @@ class JournalWalletCreditService
 
     public function calculateNewBalance()
     {
-        return ($this->accountInstance->balance_after + $this->request->amount);
+        return $this->accountInstance->balance_after + $this->request->amount;
     }
 
     /**
@@ -40,20 +39,20 @@ class JournalWalletCreditService
         $fullname = auth()->user()->profile->fullname;
 
         $this->request->merge([
-            'balance_before'    => $this->accountInstance->balance_after,
-            'balance_after'     => $this->calculateNewBalance(),
-            'customer_id'       => $this->accountInstance->customer_id,
-            'trx_ref'           => generateTransactionReference(),
-            'debit'             => false,
-            'credit'            => true,
-            'label'             => 'Transfer',
-            'source'        => $fullname,
-            'remark' => "Transfer from {$fullname}"
+            'balance_before' => $this->accountInstance->balance_after,
+            'balance_after' => $this->calculateNewBalance(),
+            'customer_id' => $this->accountInstance->customer_id,
+            'trx_ref' => generateTransactionReference(),
+            'debit' => false,
+            'credit' => true,
+            'label' => 'Transfer',
+            'source' => $fullname,
+            'remark' => "Transfer from {$fullname}",
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (!$this->journal) {
+        if (! $this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
@@ -69,7 +68,7 @@ class JournalWalletCreditService
 
     private function firebase(): void
     {
-        if(!is_null($this->request?->profile?->firebase_token)){
+        if (! is_null($this->request?->profile?->firebase_token)) {
             $notification = [
                 'title' => 'Credit Notification',
                 'body' => "Your account has been credited the sum of {$this->request->amount}",

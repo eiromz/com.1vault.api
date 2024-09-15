@@ -62,7 +62,6 @@ describe('Profile Routes', function () {
             'pin_confirmation' => '123455',
         ]);
 
-
         expect($response->status())->toBe(200);
     });
     test('Customers can change their transaction pin', function () {

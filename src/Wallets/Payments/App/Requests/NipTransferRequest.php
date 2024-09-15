@@ -2,9 +2,9 @@
 
 namespace Src\Wallets\Payments\App\Requests;
 
-use App\Exceptions\BaseException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class NipTransferRequest extends FormRequest
@@ -13,6 +13,7 @@ class NipTransferRequest extends FormRequest
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -21,17 +22,18 @@ class NipTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'transaction_pin'           => ['bail','required'],
-            'narration'                 => ['nullable'],
-            'currencyCode'              => ['required'],
-            'beneficiaryBank'           => ['required'],
-            'beneficiaryBankName'       => ['required'],
-            'transactionAmount'         => ['required'],
-            'beneficiaryAccountName'    => ['required'],
-            'beneficiaryAccountNumber'  => ['required'],
-            'saveBeneficiary'           => ['required','boolean']
+            'transaction_pin' => ['bail', 'required'],
+            'narration' => ['nullable'],
+            'currencyCode' => ['required'],
+            'beneficiaryBank' => ['required'],
+            'beneficiaryBankName' => ['required'],
+            'transactionAmount' => ['required'],
+            'beneficiaryAccountName' => ['required'],
+            'beneficiaryAccountNumber' => ['required'],
+            'saveBeneficiary' => ['required', 'boolean'],
         ];
     }
+
     /**
      * @throws \Exception
      */
@@ -39,17 +41,18 @@ class NipTransferRequest extends FormRequest
     {
         $this->verifyTransactionPin();
         $this->merge([
-            'userName'              => config('providus-bank.rest_api_username'),
-            'password'              => config('providus-bank.rest_api_password'),
-            'sourceAccountName'     => auth()->user()->profile->fullname ?? 'N/A',
-            'transactionReference'  => generateProvidusTransactionRef(),
-            'amount'                => $this->transactionAmount,
-            'remark'                => $this->narration,
-            'saveBeneficiary'       => $this->saveBeneficiary ?? 0,
-            'trx_type'              => 'nip'
+            'userName' => config('providus-bank.rest_api_username'),
+            'password' => config('providus-bank.rest_api_password'),
+            'sourceAccountName' => auth()->user()->profile->fullname ?? 'N/A',
+            'transactionReference' => generateProvidusTransactionRef(),
+            'amount' => $this->transactionAmount,
+            'remark' => $this->narration,
+            'saveBeneficiary' => $this->saveBeneficiary ?? 0,
+            'trx_type' => 'nip',
         ]);
         $this->validated();
     }
+
     /**
      * @throws BaseException
      */
@@ -64,12 +67,13 @@ class NipTransferRequest extends FormRequest
 
     private function handleNullRemark(): void
     {
-        $fullname =  auth()->user()->profile->fullname;
+        $fullname = auth()->user()->profile->fullname;
 
-        if(is_null($this->remark)){
+        if (is_null($this->remark)) {
             $this->remark = "Transfer from {$fullname}";
         }
     }
+
     public function messages()
     {
         return [

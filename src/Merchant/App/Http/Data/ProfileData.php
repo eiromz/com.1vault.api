@@ -15,6 +15,5 @@ class ProfileData extends Data
         public string $processed_at,
         public string $created_at,
         public string $updated_at,
-    ) {
-    }
+    ) {}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models\Attributes;
 
-use App\Exceptions\BaseException;
+use Src\Template\Application\Exceptions\BaseException;
 
 class ServiceAmount
 {

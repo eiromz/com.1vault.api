@@ -11,7 +11,9 @@ use ExpoSDK\ExpoMessage;
 class Firebase
 {
     public object $message;
+
     public $recipients = [];
+
     private string $channelName = 'default';
 
     public function __construct($token)

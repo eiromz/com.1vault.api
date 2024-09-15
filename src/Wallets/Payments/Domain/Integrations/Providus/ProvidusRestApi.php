@@ -9,12 +9,18 @@ class ProvidusRestApi extends Connector
 {
     use AcceptsJson;
 
+    private string $prod = 'providus-bank.base_url';
+
+    private string $stag = 'providus-bank.base_url_bills';
+
     /**
      * The Base URL of the API
      */
     public function resolveBaseUrl(): string
     {
-        return (string) config('providus-bank.base_url_rest_api');
+        $base_url_string = (app()->environment('production')) ? $this->prod : $this->stag;
+
+        return (string) config($base_url_string);
     }
 
     /**

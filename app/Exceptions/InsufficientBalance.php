@@ -2,6 +2,4 @@
 
 namespace App\Exceptions;
 
-class InsufficientBalance extends BaseException
-{
-}
+class InsufficientBalance extends BaseException {}

@@ -19,6 +19,8 @@ class BaseException extends Exception
             'code' => $this->getCode(),
         ];
 
+        logger('BaseException', $this->payload);
+
         if ($request->is('api/*')) {
             return jsonResponse(
                 $this->getCode(),

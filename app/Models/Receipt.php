@@ -56,5 +56,4 @@ class Receipt extends Model
             get: fn (mixed $value, array $attributes) => ($attributes['total'] - $attributes['amount_received']),
         );
     }
-
 }

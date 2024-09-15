@@ -2,10 +2,10 @@
 
 namespace Src\Wallets\Payments\App\Http\Providus;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
+use Src\Template\Application\Exceptions\BaseException;
 use Src\Wallets\Payments\App\Enum\Messages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusRestApi;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetNipBanks;
@@ -21,8 +21,8 @@ class FetchBankCtrl extends DomainBaseCtrl
      */
     public function __invoke()
     {
-        $connector = new ProvidusRestApi();
-        $request = new GetNipBanks();
+        $connector = new ProvidusRestApi;
+        $request = new GetNipBanks;
         $response = $connector->send($request);
 
         if ($response->status() !== 200) {

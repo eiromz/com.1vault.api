@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Service;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Src\Services\App\Enum\BillingCycle;
 
@@ -12,13 +11,13 @@ class StoreFrontSubscriptionSeeder extends Seeder
     public function run(): void
     {
         $quarterly = $this->quarterly();
-        $yearly  = $this->yearly();
+        $yearly = $this->yearly();
 
-        foreach($quarterly as $quarter) {
+        foreach ($quarterly as $quarter) {
             Service::query()->create($quarter);
         }
 
-        foreach($yearly as $year) {
+        foreach ($yearly as $year) {
             Service::query()->create($year);
         }
     }
