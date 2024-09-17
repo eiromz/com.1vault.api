@@ -2,8 +2,8 @@
 
 namespace Src\Merchant\App\Http;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use App\Models\Customer as Merchant;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,8 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Src\Merchant\App\Http\Data\RegisterCustomerData;
 use Src\Merchant\Domain\Mail\VerificationEmail;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Customer as Merchant;
 
 class RegisterCustomerCtrl extends DomainBaseCtrl
 {
@@ -21,12 +21,13 @@ class RegisterCustomerCtrl extends DomainBaseCtrl
      */
     public function store(RegisterCustomerData $request): JsonResponse
     {
-        if($merchantExists = $this->customerExistsAndIsNotVerified($request->email)){
-            if(!is_null($merchantExists->email_verified_at)) {
+        if ($merchantExists = $this->customerExistsAndIsNotVerified($request->email)) {
+            if (! is_null($merchantExists->email_verified_at)) {
                 throw new BaseException('Email has already been taken', Response::HTTP_BAD_REQUEST);
             }
 
             Mail::to($merchantExists->email)->queue(new VerificationEmail($merchantExists->otp));
+
             return jsonResponse(Response::HTTP_OK, $merchantExists);
         }
 
@@ -41,7 +42,7 @@ class RegisterCustomerCtrl extends DomainBaseCtrl
     private function customerExistsAndIsNotVerified($email): Model|Builder|null
     {
         return Merchant::query()
-            ->where('email','=',$email)
+            ->where('email', '=', $email)
             ->first();
     }
 }

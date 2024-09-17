@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class GenerateAccountNumberCommand extends Command
 {
-
     protected $signature = 'app:generate-account-number-command';
 
     protected $description = 'Generate account number for approved customers';
@@ -18,10 +17,16 @@ class GenerateAccountNumberCommand extends Command
     public function handle()
     {
         $customers = Customer::query()
-            ->whereHas('profile', function(Builder $query){$query->whereNull('account_number');})
-            ->whereHas('knowYourCustomer', function(Builder $query){
-            $query->where('status','=',KnowYourCustomer::ACTIVE)->whereNotNull('bvn');
-        })->get();
+            ->whereHas('profile', function (Builder $query) {
+                $query->whereNull('account_number');
+            })
+            ->whereHas('knowYourCustomer', function (Builder $query) {
+                $query->whereNotNull('bvn')->where('status', '=', KnowYourCustomer::ACTIVE);
+            })->get();
+
+        if (is_null($customers)) {
+            logger('GenerateAccountNumberCommand', ['customers' => $customers]);
+        }
 
         foreach ($customers as $customer) {
             GenerateAccountNumberQueue::dispatch($customer, $customer->profile, $customer->knowYourCustomer)->delay(now()->addMinute());

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Service;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Src\Services\App\Enum\BillingCycle;
 
@@ -13,7 +12,7 @@ class BusinessRegistrationSeeder extends Seeder
     {
         $packages = $this->packages();
 
-        foreach($packages as $package) {
+        foreach ($packages as $package) {
             Service::query()->create($package);
         }
     }
@@ -32,7 +31,7 @@ class BusinessRegistrationSeeder extends Seeder
                 'billing_cycle' => BillingCycle::ONETIME->value,
                 'is_request' => 1,
                 'discount' => 0,
-                'has_discount' =>0,
+                'has_discount' => 0,
                 'status' => 1,
                 'category' => 'business_registration',
                 'benefit' => [

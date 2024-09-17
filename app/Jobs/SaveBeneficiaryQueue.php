@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Beneficiaries;
 use App\Models\Beneficiary;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -15,17 +14,17 @@ class SaveBeneficiaryQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public array $beneficiary){}
+    public function __construct(public array $beneficiary) {}
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        try{
+        try {
             Beneficiary::query()->create($this->beneficiary);
-        }catch (Exception $e) {
-            logExceptionErrorMessage('SaveBeneficiaryQueue',$e,[],'error');
+        } catch (Exception $e) {
+            logExceptionErrorMessage('SaveBeneficiaryQueue', $e, [], 'error');
         }
     }
 }

@@ -38,7 +38,7 @@ class KnowYourCustomerCtrl extends DomainBaseCtrl
             $request->user()->save();
         }
 
-        $kyc = new KnowYourCustomer();
+        $kyc = new KnowYourCustomer;
         $kyc->fill($request->only(['bvn', 'doc_type', 'doc_image', 'selfie', 'utility_bill']));
         $kyc->customer_id = $request->user()->id;
         $kyc->save();

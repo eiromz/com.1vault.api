@@ -30,7 +30,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $customer = Customer::query()
             ->where('ACCOUNTID', '=', $user->ACCOUNTID)
-            ->where('is_owner','=',1)
+            ->where('is_owner', '=', 1)
             ->firstOrFail();
 
         $this->customer = $customer->id;

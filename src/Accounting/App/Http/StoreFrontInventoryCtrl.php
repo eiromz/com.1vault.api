@@ -2,13 +2,13 @@
 
 namespace Src\Accounting\App\Http;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\StoreFront;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateStoreFrontInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreFrontInventoryCtrl extends DomainBaseCtrl

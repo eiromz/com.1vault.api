@@ -36,6 +36,7 @@ return new class extends Migration
         });
 
         //journal id,service_id,trx_ref,amount, commission, debit, credit,balance_before,balance_after,label,charge_type:one-time,recurring
+        //dispacht
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Src\Merchant\App\Http\Data;
 
-use App\Exceptions\BaseException;
 use App\Models\Customer;
 use App\Models\Profile;
 use Exception;
@@ -16,6 +15,7 @@ use Spatie\LaravelData\Attributes\Validation\Password;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CompleteCustomerProfileData extends Data

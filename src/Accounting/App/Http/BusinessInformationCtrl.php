@@ -2,7 +2,6 @@
 
 namespace Src\Accounting\App\Http;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Business;
 use Exception;
@@ -10,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateBusinessInformationRequest;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class BusinessInformationCtrl extends DomainBaseCtrl

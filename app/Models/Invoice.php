@@ -17,10 +17,13 @@ class Invoice extends Model
         'due_date' => 'datetime',
         'items' => 'array',
         'created_at' => 'datetime',
-        'payment_status' => 'boolean'
+        'payment_status' => 'boolean',
     ];
+
     protected $with = ['client'];
+
     protected $guarded = [];
+
     protected $appends = ['invoice_number', 'balance_due'];
 
     protected function invoiceNumber(): Attribute

@@ -2,7 +2,6 @@
 
 namespace Src\Merchant\App\Http\Data;
 
-use App\Exceptions\BaseException;
 use App\Models\Customer;
 use Exception;
 use Spatie\LaravelData\Attributes\Validation\Email;
@@ -10,6 +9,7 @@ use Spatie\LaravelData\Attributes\Validation\Exists;
 use Spatie\LaravelData\Attributes\Validation\Nullable;
 use Spatie\LaravelData\Data;
 use Src\Merchant\App\Enum\AccountStatus;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 

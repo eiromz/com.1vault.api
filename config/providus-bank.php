@@ -9,5 +9,5 @@ return [
     'base_url_bills' => env('BANK_BASE_URL_BILLS'),
     'rest_api_username' => env('PROVIDUS_USERNAME'),
     'rest_api_password' => env('PROVIDUS_PASSWORD'),
-    'main_merchant_account' => env('MAIN_MERCHANT_ACCOUNT')
+    'main_merchant_account' => env('MAIN_MERCHANT_ACCOUNT'),
 ];

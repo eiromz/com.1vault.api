@@ -1,9 +1,9 @@
 <?php
 
-use App\Exceptions\BaseException;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Src\Services\App\Enum\BillingCycle;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 if (! function_exists('generateCode')) {

@@ -20,22 +20,23 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class GenerateAccountNumberQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     public int $tries = 1;
+
     const DEFAULT_SERVICE_FAILURE = 'Ooops failed, account number not created';
-    public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc)
-    {
-    }
+
+    public function __construct(public Customer $customer, public Profile $profile, public KnowYourCustomer $kyc) {}
 
     public function handle(): void
     {
         try {
-            if(!is_null($this->kyc->date_attempted_account_generation) && $this->kyc->date_attempted_account_generation->isToday()){
+            if (! is_null($this->kyc->date_attempted_account_generation) && $this->kyc->date_attempted_account_generation->isToday()) {
                 return;
             }
 
             $generateAccountService = new GenerateAccountNumber($this->customer, $this->profile, $this->kyc);
 
-            if (!$generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
+            if (! $generateAccountService->payload['requestSuccessful'] || $generateAccountService->payload['responseCode'] !== '00') {
                 $generateAccountService->notify(self::DEFAULT_SERVICE_FAILURE);
                 logExceptionErrorMessage('GenerateAccountNumber-Service', null, $generateAccountService->payload);
                 throw new Exception('Requests service was not successful', ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
@@ -43,7 +44,7 @@ class GenerateAccountNumberQueue implements ShouldQueue
 
             $generateAccountService->save();
         } catch (Exception|JsonException|FatalRequestException|RequestException $e) {
-            logExceptionErrorMessage('GenerateAccountNumberQueue', $e,[],'critical');
+            logExceptionErrorMessage('GenerateAccountNumberQueue', $e, [], 'critical');
         }
     }
 }

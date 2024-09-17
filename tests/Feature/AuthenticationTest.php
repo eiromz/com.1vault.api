@@ -23,7 +23,7 @@ describe('Auth Routes', function () {
             'phone_number' => $this->phone_number,
             'otp_expires_at' => now()->addMinutes(15),
             'email' => 'crayoluauth@gmail.com',
-            'email_verified_at' => null
+            'email_verified_at' => null,
         ]);
 
         $this->profile = Profile::factory()->create([

@@ -6,8 +6,5 @@ use App\Http\Controllers\DomainBaseCtrl;
 
 class DestroySessionCtrl extends DomainBaseCtrl
 {
-    public function store()
-    {
-
-    }
+    public function store() {}
 }

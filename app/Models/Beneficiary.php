@@ -13,5 +13,5 @@ class Beneficiary extends Model
 
     protected $table = 'beneficiaries';
 
-    protected $guarded= [];
+    protected $guarded = [];
 }

@@ -103,7 +103,7 @@ class ServiceRequest extends FormRequest
 
     public function registerPosRequestRules(): array
     {
-        $new = new PosRequest();
+        $new = new PosRequest;
 
         return [
             'type' => ['required', 'in:business_name,business_llc,pos,legal'],

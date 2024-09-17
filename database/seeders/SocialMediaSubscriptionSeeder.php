@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Service;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Src\Services\App\Enum\BillingCycle;
 
@@ -15,13 +14,13 @@ class SocialMediaSubscriptionSeeder extends Seeder
     public function run(): void
     {
         $monthly = $this->monthly();
-        $yearly  = $this->yearly();
+        $yearly = $this->yearly();
 
-        foreach($monthly as $month) {
+        foreach ($monthly as $month) {
             Service::query()->create($month);
         }
 
-        foreach($yearly as $year) {
+        foreach ($yearly as $year) {
             Service::query()->create($year);
         }
     }
@@ -94,7 +93,7 @@ class SocialMediaSubscriptionSeeder extends Seeder
                     'Posting across Instagram,Facebook and Twitter',
                 ],
                 'quantity' => 16,
-            ]
+            ],
         ];
     }
 

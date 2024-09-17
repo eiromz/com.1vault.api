@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Business;
-use App\Models\PosRequest;
 use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Inventory;
 use App\Models\Invoice;
 use App\Models\Journal;
+use App\Models\PosRequest;
 use App\Models\Receipt;
 use App\Models\State;
 
@@ -14,7 +14,7 @@ uses()->beforeEach(function () {
     $this->state = State::query()->where('country_id', '=', 160)
         ->where('name', '=', 'Lagos')->first();
 
-    $this->customer = Customer::query()->where('email','=','crayolu@gmail.com')->with('profile')->first();
+    $this->customer = Customer::query()->where('email', '=', 'crayolu@gmail.com')->with('profile')->first();
 
     $this->business = Business::factory()->create([
         'state_id' => $this->state->id,
@@ -29,9 +29,9 @@ uses()->beforeEach(function () {
     ]);
 
     $this->invoice = Invoice::factory()->count(3)->create([
-        'business_id'   => $this->business->id,
-        'customer_id'   => $this->customer->id,
-        'client_id'     => $this->client->id,
+        'business_id' => $this->business->id,
+        'customer_id' => $this->customer->id,
+        'client_id' => $this->client->id,
         'items' => [
             [
                 'inventory_id' => fake()->uuid,
@@ -51,9 +51,9 @@ uses()->beforeEach(function () {
     ]);
 
     $this->receipt = Receipt::factory()->count(3)->create([
-        'business_id'   =>      $this->business->id,
-        'customer_id'   =>      $this->customer->id,
-        'client_id'     =>      $this->client->id,
+        'business_id' => $this->business->id,
+        'customer_id' => $this->customer->id,
+        'client_id' => $this->client->id,
         'items' => [
             [
                 'inventory_id' => fake()->uuid,
@@ -83,8 +83,8 @@ uses()->beforeEach(function () {
     ]);
 
     $this->business = Business::query()
-        ->where('customer_id','=',$this->customer->id)
-        ->where('is_store_front','=',false)
+        ->where('customer_id', '=', $this->customer->id)
+        ->where('is_store_front', '=', false)
         ->first();
 
     $this->client = Client::query()->where([
@@ -99,11 +99,6 @@ uses()->beforeEach(function () {
         'client_id' => $this->client->id,
     ])->first();
 
-//    $this->receipt = Receipt::query()->where([
-//        'business_id' => $this->business->id,
-//        'customer_id' => $this->customer->id,
-//        'client_id' => $this->client->id,
-//    ])->first();
     $this->journal = Journal::latest()->first();
 });
 
@@ -112,7 +107,7 @@ describe('Business Routes', function () {
     /*************Business******************/
     test('Merchant can create a business', function () {
         Business::query()
-            ->where('customer_id','=',$this->customer->id)
+            ->where('customer_id', '=', $this->customer->id)
             ->delete();
 
         $response = $this->actingAs($this->customer)->post('/api/v1/business', [
@@ -433,8 +428,8 @@ describe('Business Routes', function () {
     });
     test('Business can Download Pdf Pos Report', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/download/pdf', [
-            'type'          => 'pos',
-            'identifier'    => $this->pos->id,
+            'type' => 'pos',
+            'identifier' => $this->pos->id,
         ]);
         expect($response->status())->toBe(200);
     });
@@ -519,7 +514,6 @@ describe('Business Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('Merchant can update a single inventory', function () {
-        dd($this->inventory);
         $link = "/api/v1/store-front/inventory/edit/{$this->inventory->first()->id}";
         $response = $this->actingAs($this->customer)->post($link, [
             'name' => 'wella health',

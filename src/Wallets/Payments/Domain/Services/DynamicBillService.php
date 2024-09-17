@@ -2,7 +2,4 @@
 
 namespace Src\Wallets\Payments\Domain\Services;
 
-class DynamicBillService
-{
-
-}
+class DynamicBillService {}

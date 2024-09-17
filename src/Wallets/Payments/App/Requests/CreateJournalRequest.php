@@ -2,12 +2,12 @@
 
 namespace Src\Wallets\Payments\App\Requests;
 
-use App\Exceptions\BaseException;
 use App\Models\Profile;
 use Exception;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateJournalRequest extends FormRequest
@@ -27,11 +27,11 @@ class CreateJournalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'account_number'    => ['required', 'exists:App\Models\Profile,account_number'],
-            'amount'            => ['required'],
-            'transaction_pin'   => ['required'],
-            'remark'            => ['nullable'],
-            'saveBeneficiary'   => ['required','boolean']
+            'account_number' => ['required', 'exists:App\Models\Profile,account_number'],
+            'amount' => ['required'],
+            'transaction_pin' => ['required'],
+            'remark' => ['nullable'],
+            'saveBeneficiary' => ['required', 'boolean'],
         ];
     }
 
@@ -48,9 +48,9 @@ class CreateJournalRequest extends FormRequest
     public function execute()
     {
         $this->merge([
-            'trx_ref'           => generateTransactionReference(),
-            'saveBeneficiary'   => $this->saveBeneficiary ?? 0,
-            'trx_type'          => '1vault'
+            'trx_ref' => generateTransactionReference(),
+            'saveBeneficiary' => $this->saveBeneficiary ?? 0,
+            'trx_type' => '1vault',
         ]);
 
         $this->verifyTransactionPin();
@@ -61,8 +61,8 @@ class CreateJournalRequest extends FormRequest
 
     private function handleNullRemark(): void
     {
-        $remark =  "Transfer to {$this->profile->fullname}";
-        if(is_null($this->remark)){
+        $remark = "Transfer to {$this->profile->fullname}";
+        if (is_null($this->remark)) {
             $this->remark = $remark;
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Src\Merchant\App\Http;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Customer;
 use Exception;
@@ -10,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ChangePasswordCtrl extends DomainBaseCtrl

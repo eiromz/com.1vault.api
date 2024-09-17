@@ -19,6 +19,7 @@ class PayNowCtrl extends DomainBaseCtrl
      */
     public function store(Request $request): JsonResponse
     {
+        //expand pay now for bills
         $request->merge([
             'source' => 'wallet',
             'amount' => $request->total,

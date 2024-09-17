@@ -16,13 +16,13 @@ return new class extends Migration
             $table->foreignUuid('customer_id');
             $table->string('business_name');
             $table->string('merchant_trade_name');
-            $table->string('business_type',50)
+            $table->string('business_type', 50)
                 ->nullable()
                 ->comment('sole_owner,partnership,limted_liability_company,public_limited_company');
-            $table->string('category',100);
+            $table->string('category', 100);
 
-            $table->string('office_address',150);
-            $table->string('local_govt_area',150);
+            $table->string('office_address', 150);
+            $table->string('local_govt_area', 150);
             $table->foreignId('state_id');
 
             $table->jsonb('primary_contact_person')->nullable();
@@ -35,8 +35,8 @@ return new class extends Migration
             $table->string('notification_phone_number')->nullable();
             $table->boolean('real_time_transaction_viewing')->default(0);
 
-            $table->string('settlement_account_name',150)->nullable();
-            $table->string('settlement_account_number',30)->nullable();
+            $table->string('settlement_account_name', 150)->nullable();
+            $table->string('settlement_account_number', 30)->nullable();
             $table->string('settlement_branch')->nullable();
 
             $table->longText('other_information')->nullable();

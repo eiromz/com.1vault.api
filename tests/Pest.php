@@ -1,17 +1,8 @@
 <?php
 
-use App\Models\PosRequest;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Business;
-use App\Models\Client;
-use App\Models\Customer;
-use App\Models\Inventory;
-use App\Models\Invoice;
-use App\Models\Journal;
-use App\Models\Receipt;
-use App\Models\State;
 
 /*
 |--------------------------------------------------------------------------

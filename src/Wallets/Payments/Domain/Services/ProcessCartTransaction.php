@@ -17,10 +17,7 @@ class ProcessCartTransaction
         $this->params = $params;
     }
 
-    public function process()
-    {
-
-    }
+    public function process() {}
 
     private function subscription()
     {
@@ -36,13 +33,7 @@ class ProcessCartTransaction
         //get the cart
     }
 
-    private function service()
-    {
+    private function service() {}
 
-    }
-
-    private function saveOrderNumber()
-    {
-
-    }
+    private function saveOrderNumber() {}
 }

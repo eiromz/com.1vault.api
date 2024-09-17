@@ -22,14 +22,14 @@ class UploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required','max:2048','mimetypes:application/pdf,image/jpg,image/jpeg,image/png'],
+            'file' => ['required', 'max:2048', 'mimetypes:application/pdf,image/jpg,image/jpeg,image/png'],
         ];
     }
 
     public function messages()
     {
         return [
-            'file.max' => 'File size too large. Allowed file size: 2mb'
+            'file.max' => 'File size too large. Allowed file size: 2mb',
         ];
     }
 }

@@ -36,11 +36,11 @@ class KnowYourCustomer extends Model
         'status',
         'utility_bill',
         'bvn_validation_payload',
-        'date_attempted_account_generation'
+        'date_attempted_account_generation',
     ];
 
     protected $casts = [
-        'date_attempted_account_generation' => 'datetime'
+        'date_attempted_account_generation' => 'datetime',
     ];
 
     const STATUS_CODES = [
