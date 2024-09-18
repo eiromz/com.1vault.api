@@ -8,7 +8,6 @@ use Illuminate\Http\JsonResponse;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Src\Template\Application\Exceptions\BaseException;
 use Src\Wallets\Payments\App\Requests\NipTransferRequest;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
@@ -19,7 +18,6 @@ class TransferCtrl extends DomainBaseCtrl
 {
     /**
      * @throws FatalRequestException
-     * @throws BaseException
      * @throws RequestException
      * @throws JsonException
      * @throws Exception

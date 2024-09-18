@@ -12,7 +12,8 @@ class GetAccountInstance
      * Check if a customer has made any transaction
      * once there is no transaction go and get the account model object
      *
-     * @param  $account_number
+     * @param $profile
+     * @return Model
      */
     public static function getActiveInstance($profile): Model
     {
