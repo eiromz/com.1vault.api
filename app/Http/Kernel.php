@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            JsonResponse::class
         ],
     ];
 
@@ -81,7 +82,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'json.response' => JsonResponse::class,
         'email.hasBeenVerified' => EnsureEmailHasBeenVerified::class,
         'kyc.completed' => KycCompleted::class,
         'providus.origin.verification' => ProvidusBankOriginVerification::class,
