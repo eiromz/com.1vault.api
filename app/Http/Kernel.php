@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Http\Middleware\InvalidTransactionPinMiddleware;
 use App\Http\Middleware\JsonResponse;
 use App\Http\Middleware\KycCompleted;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -85,5 +86,6 @@ class Kernel extends HttpKernel
         'kyc.completed' => KycCompleted::class,
         'providus.origin.verification' => ProvidusBankOriginVerification::class,
         'invalid.accountNumber' => InvalidAccountNumber::class,
+        'invalid.transaction.pin' => InvalidTransactionPinMiddleware::class,
     ];
 }

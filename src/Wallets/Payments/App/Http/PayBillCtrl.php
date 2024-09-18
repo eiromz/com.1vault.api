@@ -2,24 +2,47 @@
 
 namespace Src\Wallets\Payments\App\Http;
 
+use App\Exceptions\BaseException;
+use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
 use App\Models\Cart;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Src\Wallets\Payments\App\Requests\PayBillRequest;
+use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
+use Src\Wallets\Payments\Domain\Services\JournalWalletDebitService;
 use Symfony\Component\HttpFoundation\Response;
 
 class PayBillCtrl extends DomainBaseCtrl
 {
+    //validate pin sent via the api
+    //validate the account balance of the customer
+    //debit the account
+    //store bills data for processing
+    //dispatch bills data for creating the daily limit
+    //Also create the daily limit for a customer's account for
     /**
-     * @throws Exception
+     * @param PayBillRequest $request
+     * @return JsonResponse
+     * @throws InsufficientBalance
+     * @throws BaseException
      */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(PayBillRequest $request): JsonResponse
     {
-        //debit user
-        //send request to the service
+        $data = $request->validated();
 
-        $data = Cart::query()->create($request->only(['service_id', 'request_id', 'price', 'customer_id', 'account_id']));
+        $request->merge(['transactionReference' => $request->bill_params['transaction_ref']]);
+
+
+        (new JournalWalletDebitService(
+            GetAccountInstance::getActiveInstance(auth()->user()->profile),
+            $request
+        ))->checkBalance()->debit('Bills')->notify()->updateBalanceQueue();
+
+
+        //paybill api
+        //paybill confirm query
+
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

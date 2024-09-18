@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UploadRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Src\Wallets\Payments\App\Requests\UploadRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class UploadCtrl extends DomainBaseCtrl

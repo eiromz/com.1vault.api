@@ -7,6 +7,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Illuminate\Http\JsonResponse;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
 use Src\Wallets\Payments\App\Enum\Messages;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusBills;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\GetBillsCategory;
@@ -47,11 +48,11 @@ class CategoriesCtrl extends DomainBaseCtrl
     }
 
     /**
-     * @throws FatalRequestException
      * @throws BaseException
-     * @throws RequestException|JsonException
+     * @throws FatalRequestException
+     * @throws RequestException
      */
-    public function view($category)
+    public function view($category): JsonResponse
     {
         $connector = new ProvidusBills;
         $request = new GetBillsCategory($category);

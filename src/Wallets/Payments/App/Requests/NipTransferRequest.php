@@ -53,9 +53,6 @@ class NipTransferRequest extends FormRequest
         $this->validated();
     }
 
-    /**
-     * @throws BaseException
-     */
     public function verifyTransactionPin(): void
     {
         if (Hash::check($this->transaction_pin, auth()->user()->transaction_pin)) {

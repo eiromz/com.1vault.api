@@ -2,23 +2,23 @@
 
 namespace Src\Wallets\Payments\Domain\Services;
 
+use App\Exceptions\BaseException;
+use App\Exceptions\InsufficientBalance;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SaveBeneficiaryQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Beneficiary;
 use App\Models\Journal;
 use Illuminate\Support\Facades\Hash;
-use Src\Template\Application\Exceptions\BaseException;
-use Src\Template\Application\Exceptions\InsufficientBalance;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletDebitService
 {
     public object $accountInstance;
 
-    public $request;
+    public mixed $request;
 
-    public $journal;
+    public mixed $journal;
 
     public array $creationKeys = [
         'amount', 'trx_ref',
@@ -34,7 +34,7 @@ class JournalWalletDebitService
     /**
      * @throws InsufficientBalance
      */
-    public function checkBalance()
+    public function checkBalance(): static
     {
         if ($this->request->amount > $this->accountInstance->balance_after) {
             throw new InsufficientBalance('Insufficient Balance', Response::HTTP_BAD_REQUEST);
@@ -51,7 +51,7 @@ class JournalWalletDebitService
     /**
      * @throws BaseException
      */
-    public function debit()
+    public function debit($label='Transfer Out'): static
     {
         $this->request->merge([
             'balance_before' => $this->accountInstance->balance_after,
@@ -60,20 +60,20 @@ class JournalWalletDebitService
             'debit' => true,
             'credit' => false,
             'trx_ref' => $this->request->transactionReference ?? generateTransactionReference(),
-            'label' => 'Transfer Out',
+            'label' => $label,
             'source' => auth()->user()->profile->fullname,
         ]);
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (! $this->journal) {
+        if (!$this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 
         return $this;
     }
 
-    public function notify()
+    public function notify(): static
     {
         $this->firebase();
         $this->email();
@@ -105,9 +105,6 @@ class JournalWalletDebitService
         );
     }
 
-    /**
-     * @throws BaseException
-     */
     public function validateTransactionPin(): void
     {
         if (! Hash::check($this->request->transaction_pin, auth()->user()->transaction_pin)) {
@@ -115,9 +112,8 @@ class JournalWalletDebitService
         }
     }
 
-    public function saveBeneficiary()
+    public function saveBeneficiary(): static
     {
-
         $beneficiary = ($this->request->trx_type === '1vault') ? $this->providusBankBeneficiary() : $this->nipBankBeneficiary();
 
         $beneficiaryExist = Beneficiary::query()->where($beneficiary)->exists();

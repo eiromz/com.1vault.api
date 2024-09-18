@@ -163,6 +163,18 @@ describe('Payment Routes', function () {
         ]);
         expect($response->status())->toBe(200);
     });
+    test('Merchant can pay for a bill', function(){
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/bills/pay', [
+            'transaction_pin' => '123456',
+            'amount'=>  1000,
+            'bill_params' => [
+                'billId'            => 3,
+                'customerAccountNo' => '5900085856',
+                'transaction_ref'   => '5900085856',
+            ]
+        ]);
+        expect($response->status())->toBe(200);
+    });
     //check if there is a validation
 
     /************ BENEFICIARIES **************/

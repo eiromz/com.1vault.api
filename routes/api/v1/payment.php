@@ -44,7 +44,7 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::get('/categories/{category}', [CategoriesCtrl::class, 'view']);
             Route::get('/fields/{bill}', [BillCtrl::class, 'index']);
             Route::post('/fields/validate/{bill}', ValidateBillCtrl::class);
-            Route::post('/pay/bills', PayBillCtrl::class);
+            Route::post('/pay', PayBillCtrl::class)->middleware('invalid.transaction.pin');
         });
     });
 });

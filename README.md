@@ -49,7 +49,13 @@
 
 ### GENERATE SHA1 READ ME 
 * THIS IS FOR VERIFYING TRANSACTIONS.
+* Verify the transactions coming into the system.
 
+
+### JOBS
+* providus queue handles all jobs for providus
+* account processing queue handles all jobs for internal accounting features
+* email notification handles every thing for email notification and firebase notifcation.
 
 DEPLOYMENT
 * RUN THE COMMAND  `composer install` this will install laravel app dependencies
