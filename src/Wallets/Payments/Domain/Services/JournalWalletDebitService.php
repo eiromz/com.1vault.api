@@ -31,9 +31,6 @@ class JournalWalletDebitService
         $this->request = $request;
     }
 
-    /**
-     * @throws InsufficientBalance
-     */
     public function checkBalance(): static
     {
         if ($this->request->amount > $this->accountInstance->balance_after) {
@@ -48,9 +45,6 @@ class JournalWalletDebitService
         return $this->accountInstance->balance_after - $this->request->amount;
     }
 
-    /**
-     * @throws BaseException
-     */
     public function debit($label='Transfer Out'): static
     {
         $this->request->merge([

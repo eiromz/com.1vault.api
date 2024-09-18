@@ -33,16 +33,10 @@ class PayBillCtrl extends DomainBaseCtrl
 
         $request->merge(['transactionReference' => $request->bill_params['transaction_ref']]);
 
-
         (new JournalWalletDebitService(
             GetAccountInstance::getActiveInstance(auth()->user()->profile),
             $request
         ))->checkBalance()->debit('Bills')->notify()->updateBalanceQueue();
-
-
-        //paybill api
-        //paybill confirm query
-
 
         return jsonResponse(Response::HTTP_OK, $data);
     }
