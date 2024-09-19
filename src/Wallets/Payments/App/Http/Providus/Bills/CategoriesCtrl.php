@@ -49,8 +49,8 @@ class CategoriesCtrl extends DomainBaseCtrl
 
             return jsonResponse($response->status(), $data);
         } catch (Exception $e) {
-            dd($e->getMessage());
-            //logExceptionErrorMessage('GenerateAccountNumberQueue', $e, [], 'critical');
+            logExceptionErrorMessage('Bills Category', $e, [], 'critical');
+            return jsonResponse(Response::HTTP_BAD_REQUEST,["message" => "we could not complete the request"]);
         }
     }
 
@@ -80,8 +80,8 @@ class CategoriesCtrl extends DomainBaseCtrl
 
             return jsonResponse($response->status(), $response->collect());
         } catch (Exception $e) {
-            dd($e->getMessage());
-            //logExceptionErrorMessage('GenerateAccountNumberQueue', $e, [], 'critical');
+            logExceptionErrorMessage('Bills Category Controller', $e, [], 'critical');
+            return jsonResponse(Response::HTTP_BAD_REQUEST,["message" => "we could not complete the request"]);
         }
     }
 }
