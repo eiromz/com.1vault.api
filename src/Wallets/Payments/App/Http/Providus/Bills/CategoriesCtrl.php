@@ -4,6 +4,7 @@ namespace Src\Wallets\Payments\App\Http\Providus\Bills;
 
 use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use JsonException;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -30,21 +31,27 @@ class CategoriesCtrl extends DomainBaseCtrl
         $request = new GetCatgories;
         $response = $connector->send($request);
 
-        if (! $response->ok()) {
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
+        try{
+            if (!$response->ok()) {
+                throw new BaseException(Messages::TRANSACTION_FAILED->value,
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+
+            if ($response->collect()->isEmpty()) {
+                throw new BaseException(Messages::TRANSACTION_FAILED->value,
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $data = $response->collect()->filter(fn ($array) => ! in_array($array['name'], $this->excludeBills));
+
+            return jsonResponse($response->status(), $data);
+        } catch (Exception $e) {
+            logExceptionErrorMessage('GenerateAccountNumberQueue', $e, [], 'critical');
+            return jsonResponse(Response::HTTP_BAD_REQUEST, []);
         }
-
-        if ($response->collect()->isEmpty()) {
-            throw new BaseException(Messages::TRANSACTION_FAILED->value,
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        $data = $response->collect()->filter(fn ($array) => ! in_array($array['name'], $this->excludeBills));
-
-        return jsonResponse($response->status(), $data);
     }
 
     /**
