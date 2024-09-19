@@ -4,10 +4,11 @@ namespace Src\Wallets\Payments\Domain\Integrations\Providus;
 
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 
 class ProvidusBills extends Connector
 {
-    use AcceptsJson;
+    use AcceptsJson, AlwaysThrowOnErrors;
 
     private string $prod = 'providus-bank.base_url';
 
