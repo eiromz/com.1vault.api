@@ -161,6 +161,7 @@ describe('Payment Routes', function () {
                 ['key' => 'amount', 'value' => '1000'],
             ],
         ]);
+        $response->dump();
         expect($response->status())->toBe(200);
     });
     test('Merchant can pay for a bill', function(){
