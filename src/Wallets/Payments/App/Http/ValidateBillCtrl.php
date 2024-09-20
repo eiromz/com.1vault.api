@@ -31,20 +31,14 @@ class ValidateBillCtrl extends DomainBaseCtrl
             $connector = new ProvidusBills;
             $this->response = $connector->send(new ValidateBill($request->all(), $bill));
 
-            if ($this->response->failed()) {
-                logger()->error('ValidateBillCtrl',[$this->response->body()]);
-                throw new BaseException(
-                    'Invalid Customer Details',
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
+            logger('ValidateBillLogResponse',[$this->response]);
 
             return jsonResponse(Response::HTTP_OK, $this->response->json());
-        }catch (Exception|FatalRequestException $e){
-            logger('ValidateBillCtrl',[$e->getMessage()]);
+        }catch (Exception $e){
+            logger('ValidateBillCtrlException',[$e->getMessage()]);
 
             return jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => 'We could not process your request at this time'
+                'message' => $e->getMessage()
             ]);
         }
     }
