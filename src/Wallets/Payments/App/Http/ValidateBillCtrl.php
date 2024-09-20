@@ -18,6 +18,8 @@ class ValidateBillCtrl extends DomainBaseCtrl
      */
     public function __invoke($bill, Request $request): JsonResponse
     {
+        $request->merge(['bill' => $bill]);
+
         $request->validate([
             'inputs' => 'required|array',
         ]);
@@ -26,6 +28,7 @@ class ValidateBillCtrl extends DomainBaseCtrl
         $response = $connector->send(new ValidateBill($request->all(), $bill));
 
         if ($response->failed()) {
+            logger()->error('ValidateBillCtrl',[$response->body()]);
             throw new BaseException(
                 'Invalid Customer Details',
                 Response::HTTP_BAD_REQUEST
