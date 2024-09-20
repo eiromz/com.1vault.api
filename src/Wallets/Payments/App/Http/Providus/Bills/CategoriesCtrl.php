@@ -45,6 +45,8 @@ class CategoriesCtrl extends DomainBaseCtrl
                 );
             }
 
+            logger('Logging Categories Errors',[$response->body]);
+
             $data = $response->collect()->filter(fn ($array) => ! in_array($array['name'], $this->excludeBills));
 
             return jsonResponse($response->status(), $data);
