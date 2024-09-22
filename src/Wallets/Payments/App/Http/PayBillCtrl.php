@@ -31,12 +31,14 @@ class PayBillCtrl extends DomainBaseCtrl
     {
         $data = $request->validated();
 
-        $request->merge(['transactionReference' => $request->bill_params['transaction_ref']]);
+        $request->merge(['transactionReference' => generateTransactionReference()]);
 
         (new JournalWalletDebitService(
             GetAccountInstance::getActiveInstance(auth()->user()->profile),
             $request
         ))->checkBalance()->debit('Bills')->notify()->updateBalanceQueue();
+
+        //
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

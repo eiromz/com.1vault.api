@@ -2,7 +2,6 @@
 
 namespace Src\Wallets\Payments\App\Http;
 
-use App\Exceptions\BaseException;
 use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +28,7 @@ class ValidateBillCtrl extends DomainBaseCtrl
             ]);
 
             $connector = new ProvidusBills;
-            $this->response = $connector->send(new ValidateBill($request->all(), $bill));
+            $this->response = $connector->debug()->send(new ValidateBill(['inputs' => $request->inputs], $request->bill));
 
             logger('ValidateBillLogResponse',[$this->response]);
 

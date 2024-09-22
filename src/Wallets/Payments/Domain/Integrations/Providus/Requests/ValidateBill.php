@@ -20,6 +20,7 @@ class ValidateBill extends Request implements HasBody
 
     protected function defaultBody(): array
     {
+        logger()->info('ValidateBillPayload',$this->payload);
         return $this->payload;
     }
 
