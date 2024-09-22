@@ -19,7 +19,7 @@ class InvalidTransactionPinMiddleware
     {
         $check = Hash::check($request?->transaction_pin, $request?->user()?->transaction_pin);
 
-        abort_if(!$check,Response::HTTP_BAD_REQUEST);
+        abort_if(!$check,Response::HTTP_BAD_REQUEST,'Invalid transaction pin');
 
         return $next($request);
     }
