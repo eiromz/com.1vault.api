@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\BaseException;
 use App\Models\KnowYourCustomer;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Src\Template\Application\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class KycCompleted

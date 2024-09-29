@@ -153,7 +153,7 @@ describe('Payment Routes', function () {
         expect($response->status())->toBe(200);
     });
     test('Merchant can validate a bill before payment', function () {
-        $response = $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/27', [
+        $response = $this->actingAs($this->customer)->post('/api/v1/providus/bills/fields/validate/4', [
             'inputs' => [
                 ['key' => 'customer_id', 'value' => '4190013914'],
                 ['key' => 'email', 'value' => 'aquadri@providusbank.com'],
@@ -164,15 +164,15 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    test('Merchant can pay for a bill', function(){
+    test('Merchant can pay for a bill', function () {
         $response = $this->actingAs($this->customer)->post('/api/v1/providus/bills/pay', [
             'transaction_pin' => '123456',
-            'amount'=>  1000,
+            'amount' => 1000,
             'bill_params' => [
-                'billId'            => 3,
+                'billId' => 3,
                 'customerAccountNo' => '5900085856',
-                'transaction_ref'   => '5900085856',
-            ]
+                'transaction_ref' => '5900085856',
+            ],
         ]);
         expect($response->status())->toBe(200);
     });

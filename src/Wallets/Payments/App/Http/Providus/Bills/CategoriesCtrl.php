@@ -27,17 +27,16 @@ class CategoriesCtrl extends DomainBaseCtrl
      */
     public function index(): JsonResponse
     {
-        try{
+        try {
             $connector = new ProvidusBills;
             $request = new GetCatgories;
             $response = $connector->send($request);
 
-            if (!$response->ok()) {
+            if (! $response->ok()) {
                 throw new BaseException(Messages::TRANSACTION_FAILED->value,
                     Response::HTTP_BAD_REQUEST
                 );
             }
-
 
             if ($response->collect()->isEmpty()) {
                 throw new BaseException(Messages::TRANSACTION_FAILED->value,
@@ -45,14 +44,15 @@ class CategoriesCtrl extends DomainBaseCtrl
                 );
             }
 
-            logger('Logging Categories Errors',[$response->body()]);
+            logger('Logging Categories Errors', [$response->body()]);
 
             $data = $response->collect()->filter(fn ($array) => ! in_array($array['name'], $this->excludeBills));
 
             return jsonResponse($response->status(), $data);
         } catch (Exception $e) {
             logExceptionErrorMessage('Bills Category', $e, [], 'critical');
-            return jsonResponse(Response::HTTP_BAD_REQUEST,["message" => "we could not complete the request"]);
+
+            return jsonResponse(Response::HTTP_BAD_REQUEST, ['message' => 'we could not complete the request']);
         }
     }
 
@@ -83,7 +83,8 @@ class CategoriesCtrl extends DomainBaseCtrl
             return jsonResponse($response->status(), $response->collect());
         } catch (Exception $e) {
             logExceptionErrorMessage('Bills Category Controller', $e, [], 'critical');
-            return jsonResponse(Response::HTTP_BAD_REQUEST,["message" => "we could not complete the request"]);
+
+            return jsonResponse(Response::HTTP_BAD_REQUEST, ['message' => 'we could not complete the request']);
         }
     }
 }

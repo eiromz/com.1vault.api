@@ -6,16 +6,18 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class JsonResponse
+class CustomerHasProvidusAccountNumber
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param Closure(Request): (Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $request->headers->set('Accept', 'application/json');
+        if (is_null($request->user()?->profile?->account_number)) {
+            abort(400, "You dont have an account number");
+        }
 
         return $next($request);
     }

@@ -45,7 +45,7 @@ class JournalWalletDebitService
         return $this->accountInstance->balance_after - $this->request->amount;
     }
 
-    public function debit($label='Transfer Out'): static
+    public function debit($label = 'Transfer Out'): static
     {
         $this->request->merge([
             'balance_before' => $this->accountInstance->balance_after,
@@ -60,7 +60,7 @@ class JournalWalletDebitService
 
         $this->journal = Journal::query()->create($this->request->only($this->creationKeys));
 
-        if (!$this->journal) {
+        if (! $this->journal) {
             throw new BaseException('Failed to process transaction', Response::HTTP_BAD_REQUEST);
         }
 

@@ -5,8 +5,6 @@ namespace Src\Wallets\Payments\App\Http;
 use App\Exceptions\BaseException;
 use App\Exceptions\InsufficientBalance;
 use App\Http\Controllers\DomainBaseCtrl;
-use App\Models\Cart;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Src\Wallets\Payments\App\Requests\PayBillRequest;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
@@ -22,23 +20,23 @@ class PayBillCtrl extends DomainBaseCtrl
     //dispatch bills data for creating the daily limit
     //Also create the daily limit for a customer's account for
     /**
-     * @param PayBillRequest $request
-     * @return JsonResponse
-     * @throws InsufficientBalance
-     * @throws BaseException
      */
     public function __invoke(PayBillRequest $request): JsonResponse
     {
         $data = $request->validated();
 
-        $request->merge(['transactionReference' => generateTransactionReference()]);
+        //$request->merge(['transactionReference' => generateTransactionReference()]);
 
-        (new JournalWalletDebitService(
-            GetAccountInstance::getActiveInstance(auth()->user()->profile),
-            $request
-        ))->checkBalance()->debit('Bills')->notify()->updateBalanceQueue();
+        //$request->bill_params['transaction_ref'] = generateTransactionReference();
 
-        //
+        dd($request->all());
+
+        //send the data to the
+
+        //        (new JournalWalletDebitService(
+        //            GetAccountInstance::getActiveInstance(auth()->user()->profile),
+        //            $request
+        //        ))->checkBalance()->debit('Bills')->notify()->updateBalanceQueue();
 
         return jsonResponse(Response::HTTP_OK, $data);
     }

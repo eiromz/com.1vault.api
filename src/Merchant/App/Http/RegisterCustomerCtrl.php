@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Src\Merchant\App\Http\Data\RegisterCustomerData;
 use Src\Merchant\Domain\Mail\VerificationEmail;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class RegisterCustomerCtrl extends DomainBaseCtrl

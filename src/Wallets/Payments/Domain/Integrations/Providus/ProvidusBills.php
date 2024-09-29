@@ -9,6 +9,7 @@ use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 class ProvidusBills extends Connector
 {
     use AcceptsJson, AlwaysThrowOnErrors;
+
     private string $base_url = 'providus-bank.base_url_bills';
 
     /**

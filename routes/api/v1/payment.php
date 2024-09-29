@@ -46,5 +46,5 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::post('/fields/validate/{bill}', ValidateBillCtrl::class);
             Route::post('/pay', PayBillCtrl::class)->middleware('invalid.transaction.pin');
         });
-    });
+    })->middleware(['customer.has.account']);
 });

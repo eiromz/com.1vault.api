@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CustomerHasProvidusAccountNumber;
 use App\Http\Middleware\EnsureEmailIsVerified;
 use App\Http\Middleware\InvalidTransactionPinMiddleware;
 use App\Http\Middleware\JsonResponse;
@@ -59,7 +60,7 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            JsonResponse::class
+            JsonResponse::class,
         ],
     ];
 
@@ -87,5 +88,6 @@ class Kernel extends HttpKernel
         'providus.origin.verification' => ProvidusBankOriginVerification::class,
         'invalid.accountNumber' => InvalidAccountNumber::class,
         'invalid.transaction.pin' => InvalidTransactionPinMiddleware::class,
+        'customer.has.account' => CustomerHasProvidusAccountNumber::class
     ];
 }

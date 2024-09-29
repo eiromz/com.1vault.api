@@ -15,7 +15,7 @@ use Spatie\LaravelData\Attributes\Validation\Password;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\Validation\Unique;
 use Spatie\LaravelData\Data;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CompleteCustomerProfileData extends Data

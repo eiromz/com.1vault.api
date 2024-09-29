@@ -27,4 +27,23 @@ class PayBillRequest extends FormRequest
             'bill_params' => 'required',
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $bill_params = $this->bill_params;
+
+        $bill_params['transaction_ref'] = generateTransactionReference();
+
+        $this->merge([
+            'bill_params' => $bill_params,
+        ]);
+    }
+
+    private function modifyTransactionReference($params): string {
+        $params['transaction_ref'] = generateTransactionReference();
+    }
+
+    private function addCustomerAccountNumber($params): string {
+        $params[''] =
+    }
 }

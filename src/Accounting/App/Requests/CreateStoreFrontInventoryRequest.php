@@ -4,7 +4,7 @@ namespace Src\Accounting\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Src\Accounting\App\Enum\Messages;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CreateStoreFrontInventoryRequest extends FormRequest

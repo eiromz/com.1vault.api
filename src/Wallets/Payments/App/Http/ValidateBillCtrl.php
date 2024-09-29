@@ -6,14 +6,13 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Saloon\Exceptions\Request\FatalRequestException;
 use Src\Wallets\Payments\Domain\Integrations\Providus\ProvidusBills;
 use Src\Wallets\Payments\Domain\Integrations\Providus\Requests\ValidateBill;
 use Symfony\Component\HttpFoundation\Response;
 
 class ValidateBillCtrl extends DomainBaseCtrl
 {
-    private $response;
+
     /**
      * @throws Exception
      */
@@ -28,16 +27,16 @@ class ValidateBillCtrl extends DomainBaseCtrl
             ]);
 
             $connector = new ProvidusBills;
-            $this->response = $connector->debug()->send(new ValidateBill(['inputs' => $request->inputs], $request->bill));
+            logger('ValidateBillLogResponse', [$connector->debug()]);
 
-            logger('ValidateBillLogResponse',[$this->response]);
+            $response = $connector->send(new ValidateBill(['inputs' => $request->inputs], $request->bill));
 
-            return jsonResponse(Response::HTTP_OK, $this->response->json());
-        }catch (Exception $e){
-            logger('ValidateBillCtrlException',[$e->getMessage()]);
+            return jsonResponse(Response::HTTP_OK, $response->json());
+        } catch (Exception $e) {
+            logger('ValidateBillCtrlException', [$e->getMessage()]);
 
-            return jsonResponse(Response::HTTP_BAD_REQUEST,[
-                'message' => $e->getMessage()
+            return jsonResponse(Response::HTTP_BAD_REQUEST, [
+                'message' => $e->getMessage(),
             ]);
         }
     }

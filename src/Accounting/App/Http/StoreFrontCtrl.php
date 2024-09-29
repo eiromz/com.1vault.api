@@ -7,7 +7,7 @@ use App\Models\StoreFront;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\Domain\Repository\Interfaces\BusinessRepositoryInterface;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreFrontCtrl extends DomainBaseCtrl
