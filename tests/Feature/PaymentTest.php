@@ -146,7 +146,6 @@ describe('Payment Routes', function () {
         $response->dump();
         expect($response->status())->toBe(200);
     });
-    //pass the variables to the api that needs it
     test('Merchant can get bills fields', function () {
         $response = $this->actingAs($this->customer)->get('/api/v1/providus/bills/fields/27');
         $response->dump();

@@ -6,7 +6,7 @@ use App\Http\Controllers\DomainBaseCtrl;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Template\Application\Exceptions\InsufficientBalance;
+use App\Exceptions\InsufficientBalance;
 use Src\Wallets\Payments\App\Requests\CreateJournalRequest;
 use Src\Wallets\Payments\Domain\Actions\GetAccountInstance;
 use Src\Wallets\Payments\Domain\Repository\Interfaces\JournalRepositoryInterface;

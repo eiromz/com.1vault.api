@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\Journal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Src\Merchant\Domain\Services\GenerateAccountNumber;
@@ -11,8 +12,15 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 describe('ProvidusBank Routes', function () {
     beforeEach(function () {
         $this->customer = Customer::query()
-            ->where('email', '=', 'crayolu@gmail.com')->with(['profile', 'knowYourCustomer'])
+            ->where('email', '=', 'crayolu@gmail.com')->with(['profile', 'knowYourCustomer','account'])
             ->first();
+
+        $this->customer->profile->account_number = '9977581536';
+        $this->customer->profile->save();
+
+        $this->journal = Journal::factory()->count(3)->create([
+            'customer_id' => $this->customer->id,
+        ]);
 
         $sample_response = [
             'account_number' => '9636287810',
@@ -90,5 +98,7 @@ describe('ProvidusBank Routes', function () {
         expect($response->status())->toBe(200);
     });
 
-    test('Nip Transfer Validation Service', function () {});
+    test('Credit customer using webhook data', function () {
+        dd($this->customer);
+    });
 });

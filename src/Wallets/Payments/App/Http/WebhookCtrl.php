@@ -34,6 +34,7 @@ class WebhookCtrl extends DomainBaseCtrl
     {
         $this->response_base['sessionId'] = $request->sessionId;
 
+        //add this to a class and throw an exception if it fails to find the information
         $queries = [
             'userExists' => Profile::query()->where('account_number', $request->account_number)->exists(),
             'settlementIdExists' => ProvidusDataStore::query()->where('settlement_id', $request->settlementId)->exists(),
@@ -47,7 +48,7 @@ class WebhookCtrl extends DomainBaseCtrl
             $this->response_base = $this->modifyResponse($this->response_base, '02', 'rejected transaction');
         }
 
-        SaveProvidusWebhookDataStore::dispatch($request->all())->delay(now()->addMinutes(2));
+        SaveProvidusWebhookDataStore::dispatch($this->modifyRequestData($request->all()))->delay(now()->addMinutes(2));
 
         return response()->json($this->response_base, ResponseAlias::HTTP_OK);
     }
@@ -58,6 +59,7 @@ class WebhookCtrl extends DomainBaseCtrl
             'session_id' => $request['sessionId'],
             'settlement_id' => $request['settlementId'],
             'payload' => json_encode($request),
+            'account_number' => $request['accountNumber'],
             'processed' => false,
         ];
     }
@@ -118,5 +120,10 @@ class WebhookCtrl extends DomainBaseCtrl
         //            'responseMessage' => 'success',
         //            'responseCode' => '00',
         //        ], ResponseAlias::HTTP_OK);
+
+
+        //loop through the database table
+        //look for any records that has not been processed
+        //once a record has been processed please delete it so that the records cant be read
     }
 }

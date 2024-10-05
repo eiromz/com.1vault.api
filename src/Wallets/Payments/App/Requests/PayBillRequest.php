@@ -32,18 +32,13 @@ class PayBillRequest extends FormRequest
     {
         $bill_params = $this->bill_params;
 
-        $bill_params['transaction_ref'] = generateTransactionReference();
+        $transaction_ref = generateTransactionReference();
+
+        $bill_params['transaction_ref'] = $transaction_ref;
 
         $this->merge([
             'bill_params' => $bill_params,
+            'customer_account_number' => config('providus-bank.main_merchant_account'),
         ]);
-    }
-
-    private function modifyTransactionReference($params): string {
-        $params['transaction_ref'] = generateTransactionReference();
-    }
-
-    private function addCustomerAccountNumber($params): string {
-        $params[''] =
     }
 }

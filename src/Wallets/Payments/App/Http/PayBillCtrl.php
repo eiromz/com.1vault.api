@@ -25,11 +25,9 @@ class PayBillCtrl extends DomainBaseCtrl
     {
         $data = $request->validated();
 
-        //$request->merge(['transactionReference' => generateTransactionReference()]);
-
-        //$request->bill_params['transaction_ref'] = generateTransactionReference();
-
         dd($request->all());
+
+        //i need to make changes to the request
 
         //send the data to the
 

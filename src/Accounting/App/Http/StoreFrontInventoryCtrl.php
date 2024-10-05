@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Accounting\App\Requests\CreateStoreFrontInventoryRequest;
 use Src\Accounting\Domain\Repository\Interfaces\InventoryRepositoryInterface;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreFrontInventoryCtrl extends DomainBaseCtrl

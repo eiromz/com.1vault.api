@@ -13,6 +13,7 @@ use Src\Merchant\App\Http\StaffCtrl;
 use Src\Merchant\App\Http\TransactionPinCtrl;
 use Src\Merchant\App\Http\VerifyEmailCtrl;
 use Src\Merchant\App\Http\VerifyOtpCtrl;
+use Illuminate\Support\Facades\Route;
 
 Route::post('auth/register', [RegisterCustomerCtrl::class, 'store']);
 Route::post('auth/verify-email', [VerifyEmailCtrl::class, 'store']);

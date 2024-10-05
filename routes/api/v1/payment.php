@@ -13,6 +13,7 @@ use Src\Wallets\Payments\App\Http\Providus\TransferCtrl;
 use Src\Wallets\Payments\App\Http\ValidateBillCtrl;
 use Src\Wallets\Payments\App\Http\WalletAccountSearchCtrl;
 use Src\Wallets\Payments\App\Http\WebhookCtrl;
+use Illuminate\Support\Facades\Route;
 
 //Route::post('/providus/webhook', WebhookCtrl::class);
 Route::post('/providus/webhook', [WebhookCtrl::class, 'index']);
@@ -39,12 +40,12 @@ Route::middleware(['email.hasBeenVerified', 'auth:sanctum'])->group(function () 
             Route::post('/enquiry', FetchBankAccountInformationCtrl::class);
             Route::post('/transfer', TransferCtrl::class)->middleware('invalid.accountNumber');
         });
-        Route::prefix('/bills')->group(function () {
+        Route::prefix('/bills')->middleware('customer.has.account')->group(function () {
             Route::get('/categories', [CategoriesCtrl::class, 'index']);
             Route::get('/categories/{category}', [CategoriesCtrl::class, 'view']);
             Route::get('/fields/{bill}', [BillCtrl::class, 'index']);
             Route::post('/fields/validate/{bill}', ValidateBillCtrl::class);
             Route::post('/pay', PayBillCtrl::class)->middleware('invalid.transaction.pin');
         });
-    })->middleware(['customer.has.account']);
+    });
 });

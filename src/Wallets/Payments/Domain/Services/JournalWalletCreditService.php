@@ -5,7 +5,7 @@ namespace Src\Wallets\Payments\Domain\Services;
 use App\Jobs\AccountBalanceUpdateQueue;
 use App\Jobs\SendFireBaseNotificationQueue;
 use App\Models\Journal;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class JournalWalletCreditService

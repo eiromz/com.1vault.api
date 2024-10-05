@@ -4,7 +4,7 @@ namespace Src\Wallets\Payments\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
-use Src\Template\Application\Exceptions\BaseException;
+use App\Exceptions\BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
 class NipTransferRequest extends FormRequest

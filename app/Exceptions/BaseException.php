@@ -16,7 +16,7 @@ class BaseException extends Exception
     {
         $this->payload = [
             'message' => $this->getMessage(),
-            'code' => $this->getCode(),
+            'code' => $this->getCod
         ];
 
         logExceptionErrorMessage('BaseException', null, $this->payload, 'critical');
